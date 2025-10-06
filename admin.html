@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>관리자 로그인 | 천태산 용화사</title>
+<style>
+  /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-width: 1280px; overflow-x: auto; }
+    body { font-family:'Noto Sans KR',sans-serif; background:#fafafa; color:#333; line-height:1.6; }
+    img, video { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+    #wrapper { width: clamp(1280px, 100%, 1920px); min-width: 1280px; max-width: 1440px;
+               height: clamp(860px, 100%, 1080px ); min-height: 740px; max-height: 1080px; 
+               margin: 0 auto;}
+
+    /* Header */
+    .header-top { background:#fff; padding:0.75rem 2rem;
+              display:flex; align-items:center; justify-content:center;
+              gap:0.5rem; font-size: 1rem; color: #333;
+              border-bottom: 1px solid #eaeaea;
+            }
+    .header-top img{ justify-content: center; width: 250px; height: 105px;}
+    .header-top .divider {color: #ccc; margin: 0 0.75rem;}
+    .header-top .temple-name {font-weight: 700;}
+    :root { --menu-width: 1200px; --menu-gap: 10rem; }
+    nav.main-nav {
+      background:#fff; position: relative;
+      padding:0.5rem 2rem; overflow: visible;
+    }
+    nav.main-nav > ul { display:flex; justify-content: center; flex-wrap: nowrap;
+                        list-style:none; gap: 10rem; white-space: nowrap;
+                        font-weight: 500; max-width: 1200px; margin: 0 auto;
+                        position: relative;}
+    nav.main-nav ul li { position:relative; padding: 0; }
+    nav.main-nav > ul > li:not(:last-child)::after{
+      content: "|"; font-size: larger;
+      position: absolute;
+      right: -5rem;
+      color: #333;
+    }
+    nav.main-nav ul li > a{
+      color: #333; white-space: nowrap;
+      padding: 1rem;
+      transition: color 0.2s;
+      font-size: larger;
+    }
+    nav.main-nav ul li > a:hover{
+      color: #B9A26A;
+    }
+    nav.main-nav > ul.menu{
+  max-width: var(--menu-width);
+  margin: 0 auto;
+  gap: var(--menu-gap);                  
+}
+nav.main-nav > ul.menu > li + li::after{
+  right: calc(-0.5 * var(--menu-gap));   
+}
+nav.main-nav .mega-submenu{
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--menu-width);
+  max-width: var(--menu-width);          
+}
+
+
+    nav.main-nav .mega-submenu { display: grid; grid-template-columns: repeat(5, max-content);  column-gap: 8rem;                             
+                                 position: absolute; top: 100%; left: 0; justify-content: center;
+                                 width: 100%; max-width: 1920px; padding: 2rem;
+                                 background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box;
+                                 opacity: 0; pointer-events: none; transform: translateY(-10px);
+                                 transition: opacity 0.3s ease, transform 0.3s ease-out; z-index: 50;}
+
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    nav.main-nav .mega-submenu .group { text-align: left; padding: 0 0.25rem; box-sizing: border-box; }
+    nav.main-nav .mega-submenu .group ul { list-style: none; padding: 0; margin: 0; }
+    nav.main-nav .mega-submenu .group ul li + li { margin-top: 0.35rem;  padding-left: 0; }
+    nav.main-nav .mega-submenu .group a { color: #333; text-decoration: none; transition: color 0.2s; }
+    nav.main-nav .mega-submenu .group a:hover { color: #B9A26A; }
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    @media (max-width: 1360px){
+  nav.main-nav .mega-submenu{ grid-template-columns: repeat(5, 1fr); gap: 3.5rem; }
+}
+   
+  /* Login card */
+  .wrap{max-width:1200px;margin:2rem auto;padding:0 1rem}
+  .auth-card{max-width:520px;margin:3rem auto;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.06);padding:2rem}
+  .auth-card h1{font-size:1.8rem;margin-bottom:.25rem}
+  .muted{color:#666;margin-bottom:1.25rem}
+  .form-row{display:flex;flex-direction:column;gap:.35rem;margin:.75rem 0}
+  .form-row label{font-weight:600}
+  .form-row input{width:100%;height:46px;border:1px solid #e5e7eb;border-radius:10px;padding:0 14px;font-size:1rem;outline:0;transition:border-color .15s}
+  .form-row input:focus{border-color:#B9A26A}
+  .pw-wrap{position:relative}
+  .pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:0;cursor:pointer;color:#666}
+  .row-inline{display:flex;justify-content:space-between;align-items:center;margin:.25rem 0 1rem}
+  .btn{height:46px;border:0;border-radius:10px;cursor:pointer;font-weight:700;font-size:1rem}
+  .btn-primary{background:#B9A26A;color:#fff;width:100%}
+  .btn-primary:hover{filter:brightness(.98)}
+  .btn-outline{background:#fff;border:1px solid #ddd;color:#333;padding:0 14px;height:40px;border-radius:8px}
+  .error{color:#d44;margin-top:.5rem;min-height:24px}
+  .alert{margin-top:10px;padding:10px;border-radius:8px;background:#fff5f5;color:#b91c1c;border:1px solid #fecaca;display:none}
+
+/* Footer Links Bar*/
+    .footer-links{
+      background: #B9A26A;
+      padding: 0.75rem 1rem;
+    }
+    .footer-links ul{
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.65rem;
+      padding-left: 0.75rem;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    .footer-links ul li{
+      position: relative;
+    }
+    .footer-links ul li:not(:last-child)::after{
+      content: "/";
+      margin: 0 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-links ul li a{
+      color: #fff;
+      transition:color 0.2s;
+    }
+    .footer-links ul li a:hover{
+      color: #333;
+    }
+
+    /*Footer Info */
+    .footer-info{
+      background: #333;
+      color: #fff;
+      text-align: start;
+      padding: 1.5rem 1.5rem;
+      line-height: 1.4;
+    }
+    .footer-info .account{
+      color: #efc964;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .footer-info .address{
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .footer-info .name{
+      text-align: right;
+      padding-right: 4rem;
+      font-size: larger;
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /*Footer Bottom */
+    .footer-bottom{
+      background: #222;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+
+    /* Back to Top */
+    #toTop { position:fixed; bottom:20px; right:20px;
+             background:#fff; color:#222; padding:0;
+             border-radius:50%; cursor:pointer; display:none;
+             box-shadow:0 2px 6px rgba(0,0,0,0.2); width: 32px; height: 32px;
+             display: flex; align-items: center; justify-content: center; }
+
+</style>
+</head>
+<body>
+<!-- Header -->
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+         <a href="try.html"> 
+          <img src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-001.png" alt="천태산 용화사 마크">  
+          <span class="divider"></span>
+          <span class="temple-name"></span>
+         </a>
+      </div>
+      <nav class="main-nav">
+        <ul class="menu">
+          <li><a href="yonghasa.html#greeting">천태산 용화사</a></li>
+          <li><a href="jM.html#notice">종무행정</a></li>
+          <li><a href="sI.html#events-photo">사찰소식</a></li>
+          <li><a href="bMG.html#weekend">법회 및 기도</a></li>
+          <li><a href="tMC.html#g-intro">불교 교실</a></li>
+        </ul>
+        <div class="mega-submenu">
+          <div class="group">
+            <ul>
+              <li><a href="yonghasa.html#greeting">주자스님 인사말</a></li>
+              <li><a href="yonghasa.html#heritage">성보 문화재</a></li>
+              <li><a href="yonghasa.html#visit">찾아오시는 길</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="jM.html#notice">공지사항</a></li>
+              <li><a href="jM.html#events">행사일정</a></li>
+              <li><a href="jM.html#regular">정기법회 안내</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="sI.html#events-photo">행사 사진</a></li>
+              <li><a href="sI.html#gallery">포토 갤러리</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="bMG.html#weekend">주말법회</a></li>
+              <li><a href="bMG.html#prayer">기도안내</a></li>
+              <li><a href="bMG.html#memorial">49제 및 제사</a></li>
+              <li><a href="bMG.html#sunday">일요법회</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="tMC.html#g-intro">불교 교실 소개</a></li>
+              <li><a href="tMC.html#g-schedule">강의 시간 안내</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+<main class="wrap">
+  <div class="auth-card">
+    <h1>관리자 로그인</h1>
+    <p class="muted">관리자 전용 페이지입니다. 발급된 계정으로 로그인해 주세요.</p>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="form-row">
+        <label for="email">이메일</label>
+        <input id="email" type="email" placeholder="example@admin.com" required />
+      </div>
+
+      <div class="form-row pw-wrap">
+        <label for="password">비밀번호</label>
+        <input id="password" type="password" placeholder="••••••••" required />
+        <button type="button" class="pw-toggle" id="togglePw">표시</button>
+      </div>
+
+      <div class="row-inline">
+        <label style="display:flex;align-items:center;gap:.5rem">
+          <input type="checkbox" id="remember" /> 자동 로그인 유지
+        </label>
+        
+      </div>
+
+      <button class="btn btn-primary" type="submit">로그인</button>
+      <div class="error" id="errorBox"></div>
+      <div class="alert" id="notAdminBox">관리자 권한이 없는 계정입니다.</div>
+    </form>
+  </div>
+</main>
+
+  <!-- Footer -->
+   <footer>
+      <div class="footer-links">
+        <ul>
+        <li><a href="try.html">홈</a></li>
+        <li><a href="yonghasa.html#greeting">사찰소개</a></li>
+        <li><a href="admin.html">관리자 로그인</a></li>
+        <li><a href="sI.html#events-photo">소식</a></li>
+        <li><a href="jM.html#notice">공지사항</a></li>
+        <li><a href="yonghasa.html#visit">오시는길</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <p class="account">계좌번호: 기업 000000000 (예금주 : 용화사)</p>
+        <p class="name">천태산 용화사</p>
+        <p class="address">
+          (우:12531) 경기 양평군 청운면 하고론길 38<br>
+          종무소: 031-773-1148
+        </p>
+
+      </div>
+     <div class="footer-bottom">
+       <p class="copyright">© 2025 Yonghwasa. All rights reserved.</p>
+      
+      </div>
+    </footer>
+
+<!-- Back to Top Button -->
+    <div id="toTop">
+      <img src="/Users/junjun/Downloads/Project/아이콘/제목을 입력해주세요_-010.png" alt="TOP" style="width: 27px; height: 27px;">
+    
+    </div>
+
+<!-- Firebase SDKs (한 번만) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* =========================
+   설정 & Firebase 초기화
+========================= */
+const DEMO_MODE = false; // 데모 테스트 시 true
+const DEFAULT_AFTER_LOGIN = 'admin-dashboard.html';
+
+// returnTo 지원 (대시보드에서 ?returnTo=... 로 넘겨줌)
+const params   = new URLSearchParams(location.search);
+const returnTo = params.get('returnTo') ? decodeURIComponent(params.get('returnTo')) : DEFAULT_AFTER_LOGIN;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFh2Z7DKG9a8Q0GJk065FrN3NXnOrVFr4",
+  authDomain: "yonghwasa-web.firebaseapp.com",
+  projectId: "yonghwasa-web",
+  storageBucket: "yonghwasa-web.appspot.com",
+  appId: "1:853312665810:web:ad06badcb0f23ad42d950b",
+  measurementId: "G-JFHHD2E2F2"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/* =========================
+   유틸 & UI
+========================= */
+const $ = (sel) => document.querySelector(sel);
+
+$('#togglePw').addEventListener('click', ()=>{
+  const i = $('#password');
+  i.type = i.type === 'password' ? 'text' : 'password';
+  $('#togglePw').textContent = i.type === 'password' ? '표시' : '숨김';
+});
+
+// Back to Top
+const toTopBtn = document.getElementById('toTop');
+window.addEventListener('scroll', ()=>{ toTopBtn.style.display = window.scrollY > 300 ? 'flex' : 'none'; });
+toTopBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+function showError(msg){ $('#errorBox').textContent = msg || ''; }
+
+/* =========================
+   관리자 여부 확인
+========================= */
+async function isAdmin(uid){
+  if(!uid) return false;
+  try{
+    const snap = await db.collection('_meta_admins').doc(uid).get();
+    return snap.exists && snap.data()?.enabled !== false;
+  }catch(e){
+    console.warn('[isAdmin] error', e);
+    return false;
+  }
+}
+
+/* =========================
+   세션 변화 처리 (루프 방지)
+========================= */
+auth.onAuthStateChanged(async (user)=>{
+  if(user){
+    if(await isAdmin(user.uid)){
+      // 관리자인 경우에만 이동 (replace로 루프/뒤로가기 깔끔)
+      location.replace(returnTo);
+    }else{
+      // 비관리자: 안내 후 로그아웃, 여기서 멈춤
+      document.getElementById('notAdminBox').style.display = 'block';
+      try{ await auth.signOut(); }catch(_){}
+    }
+  }
+});
+
+/* =========================
+   로그인 제출
+========================= */
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  showError('');
+  document.getElementById('notAdminBox').style.display = 'none';
+
+  const email = document.getElementById('email').value.trim();
+  const pw    = document.getElementById('password').value;
+  const remember = document.getElementById('remember').checked;
+
+  // 데모 모드 (백엔드 없이 테스트)
+  if (DEMO_MODE) {
+    localStorage.setItem('isAdmin','1');
+    if (remember) localStorage.setItem('remember','1');
+    location.replace(returnTo);
+    return;
+  }
+
+  try{
+    await auth.setPersistence(remember ? firebase.auth.Auth.Persistence.LOCAL
+                                       : firebase.auth.Auth.Persistence.SESSION);
+    const cred = await auth.signInWithEmailAndPassword(email, pw);
+
+    if(await isAdmin(cred.user.uid)){
+      location.replace(returnTo);
+    }else{
+      document.getElementById('notAdminBox').style.display = 'block';
+      await auth.signOut();
+    }
+  }catch(err){
+    let msg = '로그인에 실패했습니다.';
+    if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') msg = '이메일 또는 비밀번호를 확인해 주세요.';
+    else if (err.code === 'auth/user-not-found') msg = '등록되지 않은 계정입니다.';
+    else if (err.code === 'auth/network-request-failed') msg = '네트워크 연결을 확인해 주세요.';
+    showError(msg);
+    console.error('[login error]', err);
+  }
+});
+
+</script>
+
+</body>
+</html>

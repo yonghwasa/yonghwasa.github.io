@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>사찰 소식</title>
+
+<style>
+   /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-width: 1280px; overflow-x: auto; }
+    body { font-family:'Noto Sans KR',sans-serif; background:#fafafa; color:#333; line-height:1.6; }
+    img, video { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+    #wrapper { width: clamp(1280px, 100%, 1920px); min-width: 1280px; max-width: 1440px;
+               height: clamp(860px, 100%, 1080px ); min-height: 740px; max-height: 1080px; 
+               margin: 0 auto;}
+
+    /* Header */
+    .header-top { background:#fff; padding:0.75rem 2rem;
+              display:flex; align-items:center; justify-content:center;
+              gap:0.5rem; font-size: 1rem; color: #333;
+              border-bottom: 1px solid #eaeaea;
+            }
+    .header-top img{ justify-content: center; width: 250px; height: 105px;}
+    .header-top .divider {color: #ccc; margin: 0 0.75rem;}
+    .header-top .temple-name {font-weight: 700;}
+    :root { --menu-width: 1200px; --menu-gap: 10rem; }
+    nav.main-nav {
+      background:#fff; position: relative;
+      padding:0.5rem 2rem; overflow: visible;
+    }
+    nav.main-nav > ul { display:flex; justify-content: center; flex-wrap: nowrap;
+                        list-style:none; gap: 10rem; white-space: nowrap;
+                        font-weight: 500; max-width: 1200px; margin: 0 auto;
+                        position: relative;}
+    nav.main-nav ul li { position:relative; padding: 0; }
+    nav.main-nav > ul > li:not(:last-child)::after{
+      content: "|"; font-size: larger;
+      position: absolute;
+      right: -5rem;
+      color: #333;
+    }
+    nav.main-nav ul li > a{
+      color: #333; white-space: nowrap;
+      padding: 1rem;
+      transition: color 0.2s;
+      font-size: larger;
+    }
+    nav.main-nav ul li > a:hover{
+      color: #B9A26A;
+    }
+    nav.main-nav > ul.menu{
+  max-width: var(--menu-width);
+  margin: 0 auto;
+  gap: var(--menu-gap);                  
+}
+nav.main-nav > ul.menu > li + li::after{
+  right: calc(-0.5 * var(--menu-gap));   
+}
+nav.main-nav .mega-submenu{
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--menu-width);
+  max-width: var(--menu-width);          
+}
+
+
+    nav.main-nav .mega-submenu { display: grid; grid-template-columns: repeat(5, max-content);  column-gap: 8rem;                             
+                                 position: absolute; top: 100%; left: 0; justify-content: center;
+                                 width: 100%; max-width: 1920px; padding: 2rem;
+                                 background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box;
+                                 opacity: 0; pointer-events: none; transform: translateY(-10px);
+                                 transition: opacity 0.3s ease, transform 0.3s ease-out; z-index: 50;}
+
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    nav.main-nav .mega-submenu .group { text-align: left; padding: 0 0.25rem; box-sizing: border-box; }
+    nav.main-nav .mega-submenu .group ul { list-style: none; padding: 0; margin: 0; }
+    nav.main-nav .mega-submenu .group ul li + li { margin-top: 0.35rem;  padding-left: 0; }
+    nav.main-nav .mega-submenu .group a { color: #333; text-decoration: none; transition: color 0.2s; }
+    nav.main-nav .mega-submenu .group a:hover { color: #B9A26A; }
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    @media (max-width: 1360px){
+  nav.main-nav .mega-submenu{ grid-template-columns: repeat(5, 1fr); gap: 3.5rem; }
+}
+
+  /* ===== 히어로 + 빵크럼 + 서브탭(원위치) ===== */
+  .page-hero{
+    position:relative; min-height:360px;
+    background-image:var(--hero, url('/Users/junjun/Downloads/Project/2/003.png'));
+    background-size:cover; background-position:center;
+  }
+  .page-hero::before{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,.08) 35%, rgba(0,0,0,.5) 100%);
+  }
+  .ph-inner{
+    position:absolute; inset:0; left:50%; transform:translateX(-50%);
+    max-width:var(--menu-width); display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:2rem 1rem; color:#fff; text-align:center;
+  }
+  .ph-title{ font-size:clamp(1.8rem,2.4vw + 1rem,3rem); font-weight:800; text-shadow:0 3px 12px rgba(0,0,0,.35); margin-bottom:.8rem; }
+  .breadcrumbs{ display:flex; gap:.5rem; align-items:center; font-size:.95rem; opacity:.95; margin-bottom:.9rem; }
+  .breadcrumbs a{ color:#fff; } .breadcrumbs .sep{ opacity:.6; }
+
+  /* 서브탭: 히어로 하단 오버레이(한 줄, 필요 시 가로 스크롤) */
+  .subnav{
+      position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+      display:flex; flex-wrap: nowrap; justify-content:center; align-items:center; gap:1rem 2rem;
+      max-width:var(--menu-width); padding:.25rem .75rem;
+  }
+  .subnav li{ list-style:none; position:relative; }
+  .subnav li+li::before{ content:"•"; position:absolute; left:-1.2rem; top:50%; transform:translateY(-50%); color:rgba(255,255,255,.65); }
+  .subnav a{ color:#fff; padding:.35rem .6rem; border-radius:999px; transition:.2s; white-space:nowrap; }
+  .subnav a:hover{ background:rgba(255,255,255,.12); }
+  .subnav a.active{ background:rgba(0,0,0,.28); box-shadow:inset 0 0 0 1px rgba(255,255,255,.35); }
+
+  /* ===== 본문 공통 ===== */
+  .sheet{ max-width:var(--menu-width); margin:2rem auto; padding:2rem; background:#fff; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,.08); position:relative; }
+  .sheet::after{ content:""; position:absolute; left:2rem; right:2rem; bottom:-10px; height:8px; border-radius:999px; }
+  .tab-panel{ display:none; } .tab-panel.is-active{ display:block; }
+
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+  .card{ background:#fff; border-radius:8px; padding:1rem; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+  .muted{ color:#777; font-size:.95rem; }
+  .lead{ font-size:1.05rem; color:#555; }
+
+  /* 갤러리/포토 카드 */
+  .thumb{ border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+  .thumb img{ width:100%; height:160px; object-fit:cover; }
+  .thumb .meta{ display:flex; justify-content:space-between; align-items:center; margin-top:.5rem; color:#777; font-size:.9rem; }
+
+  /* Footer Links Bar*/
+    .footer-links{
+      background: #B9A26A;
+      padding: 0.75rem 1rem;
+    }
+    .footer-links ul{
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.65rem;
+      padding-left: 0.75rem;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    .footer-links ul li{
+      position: relative;
+    }
+    .footer-links ul li:not(:last-child)::after{
+      content: "/";
+      margin: 0 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-links ul li a{
+      color: #fff;
+      transition:color 0.2s;
+    }
+    .footer-links ul li a:hover{
+      color: #333;
+    }
+
+    /*Footer Info */
+    .footer-info{
+      background: #333;
+      color: #fff;
+      text-align: start;
+      padding: 1.5rem 1.5rem;
+      line-height: 1.4;
+    }
+    .footer-info .account{
+      color: #efc964;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .footer-info .address{
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .footer-info .name{
+      text-align: right;
+      padding-right: 4rem;
+      font-size: larger;
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /*Footer Bottom */
+    .footer-bottom{
+      background: #222;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+
+    /* Back to Top */
+    #toTop { position:fixed; bottom:20px; right:20px;
+             background:#fff; color:#222; padding:0;
+             border-radius:50%; cursor:pointer; display:none;
+             box-shadow:0 2px 6px rgba(0,0,0,0.2); width: 32px; height: 32px;
+             display: flex; align-items: center; justify-content: center; }
+  /* 반응형 */
+  @media(max-width:1280px){
+    .grid-4{ grid-template-columns:repeat(3,1fr); }
+  }
+  @media(max-width:1024px){
+    .grid-4{ grid-template-columns:repeat(2,1fr); }
+    .page-hero{ min-height:300px; }
+  }
+
+  /* admin-inline.css */
+.admin-only{display:none!important}
+body.admin-logged-in .admin-only{display:initial!important}
+
+/* 오른쪽 하단 툴바 */
+.admin-rail{
+  position:fixed; right:16px; bottom:16px; z-index:9999;
+  display:flex; gap:8px; align-items:center;
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08); padding:8px 10px;
+}
+.admin-rail .btn{height:36px; padding:0 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer}
+.admin-rail .btn-primary{background:#B9A26A; color:#fff; border:0}
+
+/* 편집 모드 시 시각화 */
+body.is-editing [contenteditable="true"]{
+  outline:2px dashed #B9A26A; outline-offset:2px; border-radius:6px;
+}
+.edit-actions{
+  position:absolute; right:6px; top:6px; z-index:5;
+  display:flex; gap:6px;
+}
+.edit-actions .btn-mini{
+  height:28px; padding:0 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:.9rem
+}
+
+/* dialog 기본 */
+.dialog{border:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);width:min(560px,90vw);padding:18px}
+.dialog::backdrop{background:rgba(0,0,0,.45)}
+.form-row{display:flex;flex-direction:column;gap:.35rem;margin:.5rem 0}
+.form-row input,.form-row textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px}
+.row{display:flex;gap:8px;align-items:center}
+
+/* ===== 사진 게시판 ===== */
+.board-wrap{ margin-top:18px; }
+.board-toolbar{
+  display:flex; justify-content:flex-end; align-items:center; gap:.5rem;
+  padding:12px 0; border-top:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5;
+}
+.board-toolbar select,.board-toolbar input{
+  height:34px; padding:0 10px; border:1px solid #ccc; border-radius:4px; font-size:14px;
+}
+.board-toolbar button{
+  height:34px; padding:0 14px; border:0; border-radius:4px; background:#8f7b45; color:#fff; cursor:pointer;
+}
+
+/* 한 행(3개 카드) 단위로 공간 나누기 */
+.bw-row{ padding:30px 0; border-bottom:1px solid #eee; }
+.bw-row:first-of-type{ border-top:1px solid #eee; }
+
+/* 3열 그리드 */
+.bw-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  column-gap:44px; row-gap:0; max-width:1080px; margin:0 auto;
+}
+
+/* 카드 자체는 깔끔하게 (그림자/테두리 없이) */
+.bw-card{ display:block; }
+.bw-thumb{
+  width:100%; aspect-ratio:4/3; border-radius:4px; overflow:hidden;
+}
+.bw-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* 텍스트 */
+.bw-title{ margin-top:10px; font-weight:600; color:#222; font-size:16px; }
+.bw-date{ margin-top:4px; color:#777; font-size:13px; }
+
+/* 페이지네이션 (하단 분리선 포함) */
+.board-pagination{ border-top:1px solid #e5e5e5; padding-top:18px; margin-top:24px; text-align:center; }
+.board-pagination ul{ display:inline-flex; list-style:none; gap:8px; padding:0; margin:0; }
+.board-pagination a{
+  display:block; min-width:28px; height:28px; line-height:28px; padding:0 6px;
+  font-size:14px; color:#555; border:1px solid #ddd; border-radius:4px; text-decoration:none; transition:.15s;
+}
+.board-pagination a:hover{ background:#f5f5f5; }
+.board-pagination a.active{ background:#8f7b45; color:#fff; border-color:#8f7b45; }
+
+/* 살짝 더 작게 원하면 여기 값만 줄이면 됨 (썸네일 전체 축소) */
+@media (max-width:1280px){
+  .bw-grid{ grid-template-columns:repeat(2, 1fr); column-gap:32px; }
+}
+
+/* === [행사 사진] 제목 아래 선 제거 === */
+.sheet .board-toolbar{
+  border-top: none !important;      /* 제목 아래 구분선 제거 */
+  padding-top: 0.25rem;              /* 선 없어지면서 뜨는 공간 살짝 줄임(선택) */
+  box-shadow: none !important;       /* 혹시 그림자로 선처럼 보일 때 대비 */
+}
+
+/* 혹시 <hr>를 쓰는 경우 대비 */
+.sheet h2 + hr{ display: none !important; }
+
+/* 일부 테마에서 제목 바로 아래에 가짜 선을 ::before로 그리는 경우 대비 */
+.sheet h2::after,
+.sheet h2::before{ display:none !important; content:none !important; }
+
+/* ===== 항상 전체화면 3열 유지 ===== */
+
+/* 페이지 전체 최소 폭 고정 */
+html, body {
+  min-width: 1280px;   /* 최소 1280px 이하로 줄어들면 가로스크롤 생김 */
+  overflow-x: auto;
+}
+
+/* 카드 그리드 고정 (항상 3열) */
+.bw-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+/* 반응형 깨기: media query 무시 */
+@media (max-width: 1920px) {
+  .bw-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+@media (max-width: 1920px) {
+  .bw-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+
+</style>
+</head>
+<body>
+<!-- Header -->
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+         <a href="try.html"> 
+          <img src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-001.png" alt="천태산 용화사 마크">  
+          <span class="divider"></span>
+          <span class="temple-name"></span>
+         </a>
+      </div>
+      <nav class="main-nav">
+        <ul class="menu">
+          <li><a href="yonghasa.html#greeting">천태산 용화사</a></li>
+          <li><a href="jM.html#notice">종무행정</a></li>
+          <li><a href="sI.html#events-photo">사찰소식</a></li>
+          <li><a href="bMG.html#weekend">법회 및 기도</a></li>
+          <li><a href="tMC.html#g-intro">불교 교실</a></li>
+        </ul>
+        <div class="mega-submenu">
+          <div class="group">
+            <ul>
+              <li><a href="yonghasa.html#greeting">주자스님 인사말</a></li>
+              <li><a href="yonghasa.html#heritage">성보 문화재</a></li>
+              <li><a href="yonghasa.html#visit">찾아오시는 길</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="jM.html#notice">공지사항</a></li>
+              <li><a href="jM.html#events">행사일정</a></li>
+              <li><a href="jM.html#regular">정기법회 안내</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="sI.html#events-photo">행사 사진</a></li>
+              <li><a href="sI.html#gallery">포토 갤러리</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="bMG.html#weekend">주말법회</a></li>
+              <li><a href="bMG.html#prayer">기도안내</a></li>
+              <li><a href="bMG.html#memorial">49제 및 제사</a></li>
+              <li><a href="bMG.html#sunday">일요법회</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="tMC.html#g-intro">불교 교실 소개</a></li>
+              <li><a href="tMC.html#g-schedule">강의 시간 안내</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+  <!-- ===== 히어로 ===== -->
+  <section class="page-hero" style="--hero:url('/Users/junjun/Downloads/Project/subheropic/x-16 .JPG')">
+    <div class="ph-inner">
+      <h1 class="ph-title">사찰 소식</h1>
+
+      <nav class="breadcrumbs" aria-label="breadcrumb">
+        <a href="/Users/junjun/Downloads/Project/try.html" class="home" aria-label="홈">HOME</a>
+        <span class="sep">›</span>
+        <a href="/Users/junjun/Downloads/Project/sI.html">사찰 소식</a>
+        <span class="sep">›</span>
+        <span class="current" id="bc-current">행사 사진</span>
+      </nav>
+
+      <!-- 서브탭(히어로 하단 그대로) -->
+      <ul class="subnav" id="subnav" role="tablist">
+        <li><a class="active"  href="#events-photo" data-panel="events-photo">행사 사진</a></li>
+        <li><a href="#gallery" data-panel="gallery">포토 갤러리</a></li>
+      </ul>
+    </div>
+  </section>
+
+    <section id="events-photo" class="sheet tab-panel is-active">
+  <h2>행사 사진</h2>
+
+  <!-- 상단 검색바 -->
+  <div class="board-wrap">
+    <div class="board-toolbar">
+      <select id="photoField">
+        <option value="title">제목</option>
+        <option value="date">날짜</option>
+      </select>
+      <input id="photoQuery" type="text" placeholder="검색어를 입력하세요">
+      <button type="button" id="photoSearchBtn">검색</button>
+    </div>
+
+    <!-- 1행 -->
+    <div class="bw-row">
+      <div class="bw-grid"id="eventsList">
+        
+      </div>
+    </div>
+
+    <!-- 2행 (예시) -->
+    <div class="bw-row">
+      <div class="bw-grid" id="eventsList">
+      
+      </div>
+    </div>
+
+    <!-- 하단 페이지네이션 -->
+    <nav class="board-pagination" aria-label="페이지">
+      <ul id="photoPager">
+        <li><a href="#" data-page="prev">‹</a></li>
+        <li><a href="#" class="active" data-page="1">1</a></li>
+        <li><a href="#" data-page="2">2</a></li>
+        <li><a href="#" data-page="3">3</a></li>
+        <li><a href="#" data-page="next">›</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+
+
+    
+    <!-- 포토 갤러리 -->
+<section id="gallery" class="sheet tab-panel">
+  <h2>포토 갤러리</h2>
+
+  <div class="board-wrap">
+    <!-- 상단 검색바 -->
+    <div class="board-toolbar">
+      <select id="galleryField">
+        <option value="title">제목</option>
+        <option value="date">날짜</option>
+      </select>
+      <input id="galleryQuery" type="text" placeholder="검색어를 입력하세요">
+      <button type="button" id="gallerySearchBtn">검색</button>
+    </div>
+
+    <!-- 1행 -->
+    <div class="bw-row" id="galleryList">
+      <div class="bw-grid">
+      
+      </div>
+    </div>
+
+    <!-- 2행 (예시) -->
+    <div class="bw-row">
+      <div class="bw-grid" id="galleryList">
+        
+      </div>
+    </div>
+
+    <!-- 하단 페이지네이션 -->
+    <nav class="board-pagination" aria-label="페이지">
+      <ul id="galleryPager">
+        <li><a href="#" data-page="prev">‹</a></li>
+        <li><a href="#" class="active" data-page="1">1</a></li>
+        <li><a href="#" data-page="2">2</a></li>
+        <li><a href="#" data-page="3">3</a></li>
+        <li><a href="#" data-page="next">›</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+
+  <!-- 관리자 툴바: 로그인 시에만 보임 -->
+<div class="admin-rail admin-only" id="adminRail">
+  <span id="adminEmail" style="color:#666;font-size:.95rem"></span>
+  <button class="btn" id="btnToggleEdit">편집 모드</button>
+  <button class="btn" id="btnAddNotice">+ 공지</button>
+  <button class="btn" id="btnAddEvent">+ 일정</button>
+  <button class="btn" id="btnLogout">로그아웃</button>
+</div>
+
+<!-- 공지 등록 다이얼로그 -->
+<dialog class="dialog" id="dlgNotice">
+  <form method="dialog" id="frmNotice">
+    <h3>새 공지</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>링크(선택) <input name="fileUrl" placeholder="https://..." /></label></div>
+    <div class="form-row"><label>게시일(선택) <input type="date" name="date" /></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 일정 등록 다이얼로그 (간단 버전) -->
+<dialog class="dialog" id="dlgEvent">
+  <form method="dialog" id="frmEvent">
+    <h3>새 일정</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>날짜<input type="date" name="date" required /></label></div>
+    <div class="form-row"><label>비고<textarea name="memo" rows="3" placeholder="선택"></textarea></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+  <!-- Back to Top Button -->
+    <div id="toTop">
+      <img src="/Users/junjun/Downloads/Project/아이콘/제목을 입력해주세요_-010.png" alt="TOP" style="width: 27px; height: 27px;">
+    
+    </div>
+
+  <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <ul>
+        <li><a href="try.html">홈</a></li>
+        <li><a href="yonghasa.html#greeting">사찰소개</a></li>
+        <li><a href="admin.html">관리자 로그인</a></li>
+        <li><a href="sI.html#events-photo">소식</a></li>
+        <li><a href="jM.html#notice">공지사항</a></li>
+        <li><a href="yonghasa.html#visit">오시는길</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <p class="account">계좌번호: 기업 000000000 (예금주 : 용화사)</p>
+        <p class="name">천태산 용화사</p>
+        <p class="address">
+          (우:12531) 경기 양평군 청운면 하고론길 38<br>
+          종무소: 031-773-1148
+        </p>
+
+      </div>
+     <div class="footer-bottom">
+       <p class="copyright">© 2025 Yonghwasa. All rights reserved.</p>
+      
+      </div>
+    </footer>
+
+<!-- ===== 스크립트: BackToTop + 탭 전환 ===== -->
+<script>
+// Back to Top Logic
+      const toTopBtn = document.getElementById('toTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) toTopBtn.style.display = 'block';
+        else toTopBtn.style.display = 'none';
+    });
+      toTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+/* 탭 전환 */
+(function(){
+  var sub=document.getElementById('subnav'); if(!sub) return;
+  function activate(id){
+    sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
+    var cur=sub.querySelector('a[data-panel="'+id+'"]'); if(cur) cur.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+    var panel=document.getElementById(id); if(panel) panel.classList.add('is-active');
+    var bc=document.getElementById('bc-current'); if(bc&&cur) bc.textContent=cur.textContent;
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('#subnav a'); if(!a) return;
+    e.preventDefault(); var id=a.getAttribute('data-panel'); if(id) activate(id);
+  });
+  var init=location.hash?location.hash.slice(1):'notices';
+  if(document.getElementById(init)) activate(init);
+})();
+(function(){
+  var sub=document.getElementById('subnav'); if(!sub) return;
+  function activate(id){
+    sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
+    var cur=sub.querySelector('a[data-panel="'+id+'"]'); if(cur) cur.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+    var panel=document.getElementById(id); if(panel) panel.classList.add('is-active');
+    var bc=document.getElementById('bc-current'); if(bc&&cur) bc.textContent=cur.textContent;
+    // (선택) 해시 동기화
+    history.replaceState(null, "", "#" + id);
+  }
+  // ⬇️ 이 한 줄에서 해시를 읽어 초기 탭을 정함
+  var init = location.hash ? location.hash.slice(1) : 'notices';
+  if(document.getElementById(init)) activate(init);
+})();
+</script>
+<script>
+(function(){
+  var sub = document.getElementById('subnav'); if(!sub) return;
+
+  function activate(id){
+    sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
+    var cur = sub.querySelector('a[data-panel="'+id+'"]'); if(cur) cur.classList.add('active');
+
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+    var panel = document.getElementById(id); if(panel) panel.classList.add('is-active');
+
+    var bc=document.getElementById('bc-current'); if(bc&&cur) bc.textContent=cur.textContent;
+  }
+
+  function activateFromHash(){
+    var id = location.hash.slice(1) || 'events';
+    if(!document.getElementById(id)) id = 'events';
+    activate(id);
+  }
+
+  window.addEventListener('hashchange', activateFromHash);     // 해시 바뀔 때마다
+  document.addEventListener('DOMContentLoaded', activateFromHash); // 첫 로드
+})();
+
+/* ===== 탭 전환 (단일 버전) ===== */
+(function(){
+  const sub = document.getElementById('subnav'); if(!sub) return;
+
+  function activate(id){
+    // 탭 버튼 상태
+    sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
+    const cur=sub.querySelector(`a[data-panel="${id}"]`);
+    if(cur) cur.classList.add('active');
+
+    // 패널 표시
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+    const panel=document.getElementById(id);
+    if(panel) panel.classList.add('is-active');
+
+    // 빵크럼 텍스트
+    const bc=document.getElementById('bc-current');
+    if(bc && cur) bc.textContent = cur.textContent;
+
+    // 해시 동기화
+    history.replaceState(null, "", "#" + id);
+  }
+
+  function activateFromHash(){
+    let id = (location.hash || '').replace('#','') || 'events-photo';
+    if(!document.getElementById(id)) id = 'events-photo';
+    activate(id);
+  }
+
+  // 탭 클릭
+  document.addEventListener('click', e=>{
+    const a=e.target.closest('#subnav a'); if(!a) return;
+    e.preventDefault();
+    const id=a.getAttribute('data-panel'); if(id) activate(id);
+  });
+
+  window.addEventListener('hashchange', activateFromHash);
+  document.addEventListener('DOMContentLoaded', activateFromHash);
+})();
+
+/* ===== 행사 사진: 간단 검색/페이지 (기존과 동일) ===== */
+(function(){
+  const q = document.getElementById('photoQuery');
+  const f = document.getElementById('photoField');
+  const btn = document.getElementById('photoSearchBtn');
+
+  function filter(){
+    const kw = (q.value||'').trim();
+    const field = f.value;
+    document.querySelectorAll('#events-photo .bw-card').forEach(card=>{
+      const title = card.querySelector('.bw-title')?.textContent || '';
+      const date  = card.querySelector('.bw-date')?.textContent || '';
+      const hay   = (field==='date') ? date : title;
+      card.style.display = (!kw || hay.includes(kw)) ? '' : 'none';
+    });
+  }
+  btn.addEventListener('click', filter);
+  q.addEventListener('keydown', e=>{ if(e.key==='Enter') filter(); });
+
+  const pager = document.getElementById('photoPager');
+  pager?.addEventListener('click', e=>{
+    const a = e.target.closest('a'); if(!a) return; e.preventDefault();
+    const cur = pager.querySelector('a.active');
+    if(a.dataset.page==='prev'){
+      const prev = cur?.parentElement?.previousElementSibling?.querySelector('a');
+      if(prev && prev.dataset.page!=='prev'){ cur.classList.remove('active'); prev.classList.add('active'); }
+    }else if(a.dataset.page==='next'){
+      const next = cur?.parentElement?.nextElementSibling?.querySelector('a');
+      if(next && next.dataset.page!=='next'){ cur.classList.remove('active'); next.classList.add('active'); }
+    }else{
+      cur?.classList.remove('active'); a.classList.add('active');
+    }
+  });
+})();
+
+/* ===== 포토 갤러리: 간단 검색/페이지 (행사 사진과 동일) ===== */
+(function(){
+  const q = document.getElementById('galleryQuery');
+  const f = document.getElementById('galleryField');
+  const btn = document.getElementById('gallerySearchBtn');
+
+  function filter(){
+    const kw = (q.value||'').trim();
+    const field = f.value;
+    document.querySelectorAll('#gallery .bw-card').forEach(card=>{
+      const title = card.querySelector('.bw-title')?.textContent || '';
+      const date  = card.querySelector('.bw-date')?.textContent || '';
+      const hay   = (field==='date') ? date : title;
+      card.style.display = (!kw || hay.includes(kw)) ? '' : 'none';
+    });
+  }
+  btn.addEventListener('click', filter);
+  q.addEventListener('keydown', e=>{ if(e.key==='Enter') filter(); });
+
+  const pager = document.getElementById('galleryPager');
+  pager?.addEventListener('click', e=>{
+    const a = e.target.closest('a'); if(!a) return; e.preventDefault();
+    const cur = pager.querySelector('a.active');
+    if(a.dataset.page==='prev'){
+      const prev = cur?.parentElement?.previousElementSibling?.querySelector('a');
+      if(prev && prev.dataset.page!=='prev'){ cur.classList.remove('active'); prev.classList.add('active'); }
+    }else if(a.dataset.page==='next'){
+      const next = cur?.parentElement?.nextElementSibling?.querySelector('a');
+      if(next && next.dataset.page!=='next'){ cur.classList.remove('active'); next.classList.add('active'); }
+    }else{
+      cur?.classList.remove('active'); a.classList.add('active');
+    }
+  });
+})();
+</script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  // ===== 공통 Firebase 초기화 =====
+  const DEMO_MODE = false; // 데모 모드면 true (백엔드 없이 버튼 테스트 가능)
+
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  
+  const ts   = firebase.firestore.FieldValue.serverTimestamp;
+</script>
+
+<script>
+  // 대시보드와 같은 설정
+  const firebaseConfig = {
+    apiKey:"AIzaSyBFh2Z7DKG9a8Q0GJk065FrN3NXnOrVFr4",
+    authDomain:"yonghwasa-web.firebaseapp.com",
+    projectId:"yonghwasa-web",
+    storageBucket:"yonghwasa-web.appspot.com",
+    appId:"1:853312665810:web:ad06badcb0f23ad42d950b",
+    measurementId:"G-JFHHD2E2F2"
+  };
+  if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+(function(){
+  // 목록 어디든지: .item-link 를 클릭하면 view.html?col=...&id=...으로 이동
+  document.addEventListener('click', (e)=>{
+    const link = e.target.closest('.item-link');
+    if(!link) return;
+    const row = link.closest('[data-col][data-id]');
+    if(!row) return;
+    const col = row.getAttribute('data-col');
+    const id  = row.getAttribute('data-id');
+    // 상세페이지로 이동
+    location.href = `view.html?col=${encodeURIComponent(col)}&id=${encodeURIComponent(id)}`;
+  });
+})();
+
+  // 공용 포매터
+  function fmt(ts){
+    try{
+      const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+      if(!d) return '-';
+      const y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
+      return `${y}.${m}.${da}`;
+    }catch(_){ return '-'; }
+  }
+  
+
+</script>
+
+<script>
+(function(){
+  // ===== 유틸 =====
+  const $  = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const esc = s => String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const toDate = v => v?.toDate ? v.toDate() : (v ? new Date(v) : null);
+  const ymd = d => { const y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2); return `${y}-${m}-${da}` };
+
+  // Cloudinary 썸네일 최적화(빠른 로드)
+  const thumb = (url, w=480, h=360) => {
+    if(!url) return '';
+    return url.replace('/upload/','/upload/f_auto,q_auto,c_fill,w_'+w+',h_'+h+'/');
+  };
+
+  // 공통 렌더러
+  function renderCards({mountSel, items, colName}){
+  const mount = document.querySelector(mountSel);
+  if(!mount) return;
+
+  mount.innerHTML = items.map(it=>{
+    const raw   = it.imageUrl || (Array.isArray(it.attachments) && it.attachments[0]?.url) || '';
+    const tmb   = thumb(raw);
+    const title = esc(it.title||'(제목없음)');
+    const date  = it.date ? ymd(toDate(it.date)) : (it.createdAt ? ymd(toDate(it.createdAt)) : '');
+
+    // ✅ 이미지 링크가 아니라 view.html로 연결
+    return `
+      <div class="bw-card" data-col="${colName}" data-id="${it.id}">
+        <a class="item-link" href="view.html?col=${colName}&id=${it.id}">
+          <div class="bw-thumb"><img src="${tmb}" alt="${title}"></div>
+          <div class="bw-title">${title}</div>
+          <div class="bw-date">${date||''}</div>
+        </a>
+      </div>`;
+  }).join('');
+}
+
+
+  // 페이징 + 검색 컨트롤 바인딩
+  function bindBoard({scopeSel, querySel, fieldSel, pagerSel, fetchFn, pageSize=12, colName}){
+    const scope = document.querySelector(scopeSel);
+    if(!scope) return;
+
+    const qEl     = scope.querySelector(querySel);
+    const fEl     = scope.querySelector(fieldSel);
+    const pagerEl = scope.querySelector(pagerSel);
+    const gridSel = '.bw-grid'; // 카드가 들어갈 3열 그리드 컨테이너
+
+    let all=[], filtered=[], page=1;
+
+    function applyFilter(){
+      const kw = (qEl?.value||'').trim();
+      const field = fEl?.value || 'title';
+      filtered = all.filter(it=>{
+        const hay = field==='date'
+          ? (it.date ? ymd(toDate(it.date)) : '')
+          : (it.title||'');
+        return !kw || String(hay).includes(kw);
+      });
+      page = 1;
+      renderPage();
+    }
+
+    function renderPage(){
+    const total = filtered.length;
+    const start = (page-1)*pageSize;
+    const slice = filtered.slice(start, start+pageSize);
+    renderCards({mountSel: scopeSel+' .bw-grid', items: slice, colName}); // ← colName 전달
+    renderPager(total);
+  }
+
+    function renderPager(total){
+      if(!pagerEl) return;
+      const totalPages = Math.max(1, Math.ceil(total/pageSize));
+      const windowSize = 2;
+      const s = Math.max(1, page-windowSize);
+      const e = Math.min(totalPages, page+windowSize);
+
+      let html = `<li><a href="#" data-page="prev">‹</a></li>`;
+      if(s>1){ html += `<li><a href="#" data-page="1">1</a></li>${s>2?`<li><span style="padding:0 6px;color:#999">…</span></li>`:''}`; }
+      for(let p=s; p<=e; p++){
+        html += `<li><a href="#" data-page="${p}" class="${p===page?'active':''}">${p}</a></li>`;
+      }
+      if(e<totalPages){
+        if(e<totalPages-1) html += `<li><span style="padding:0 6px;color:#999">…</span></li>`;
+        html += `<li><a href="#" data-page="${totalPages}">${totalPages}</a></li>`;
+      }
+      html += `<li><a href="#" data-page="next">›</a></li>`;
+      pagerEl.innerHTML = html;
+    }
+
+    pagerEl?.addEventListener('click', e=>{
+      const a = e.target.closest('a'); if(!a) return;
+      e.preventDefault();
+      const totalPages = Math.max(1, Math.ceil(filtered.length/pageSize));
+      const val = a.getAttribute('data-page');
+      if(val==='prev') page = Math.max(1, page-1);
+      else if(val==='next') page = Math.min(totalPages, page+1);
+      else page = parseInt(val,10) || 1;
+      renderPage();
+    });
+
+    qEl?.addEventListener('keydown', e=>{ if(e.key==='Enter') applyFilter(); });
+    fEl?.addEventListener('change', applyFilter);
+    scope.querySelector('button[type="button"]')?.addEventListener('click', applyFilter);
+
+    // 최초 로드
+    (async ()=>{
+      all = await fetchFn();     // Firestore에서 배열 받아옴
+      filtered = all.slice();    // 초기 필터: 전체
+      renderPage();
+    })();
+  }
+
+  // Firestore에서 컬렉션 로드(공통)
+  async function fetchCollection(colName){
+    const snap = await db.collection(colName).get();
+    const arr = snap.docs
+      .map(d=>({ id:d.id, ...d.data() }))
+      .filter(x=> x.seed!==true && x.visible!==false);
+    // 최신순 정렬: date > createdAt > createdAtMs
+    arr.sort((a,b)=>{
+      const da = toDate(a.date) || toDate(a.createdAt) || new Date(a.createdAtMs||0);
+      const dbb= toDate(b.date) || toDate(b.createdAt) || new Date(b.createdAtMs||0);
+      return (dbb - da);
+    });
+    return arr;
+  }
+
+  // 행사 사진
+bindBoard({
+  scopeSel: '#events-photo',
+  querySel: '#photoQuery',
+  fieldSel: '#photoField',
+  pagerSel: '#photoPager',
+  pageSize: 12,
+  fetchFn: async ()=> await fetchCollection('photos_events'),
+  colName: 'photos_events'
+});
+
+// 포토 갤러리
+bindBoard({
+  scopeSel: '#gallery',
+  querySel: '#galleryQuery',
+  fieldSel: '#galleryField',
+  pagerSel: '#galleryPager',
+  pageSize: 12,
+  fetchFn: async ()=> await fetchCollection('photos_gallery'),
+  colName: 'photos_gallery'
+});
+
+
+})();
+
+
+</script>
+
+
+<script src="admin-inline.js"></script>
+<link rel="stylesheet" href="admin-inline.css">
+
+</body>
+</html>

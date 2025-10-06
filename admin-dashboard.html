@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>관리자 대시보드 | 천태산 용화사</title>
+
+<style>
+/* ------------ Reset & Base ------------ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brand:#B9A26A; --ink:#222; --muted:#666; --bg:#fafafa;
+  --card:#fff; --line:#e9e9e9; --red:#dc3a3a; --green:#1a7f37;
+  --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.06);
+  --w:1200px;
+}
+html,body{min-width:1280px;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',system-ui,-apple-system,'Segoe UI',Roboto,AppleColorEmoji,Segoe UI Emoji;line-height:1.55}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+
+/* ------------ Header ------------ */
+.header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:50}
+.header .inner{max-width:var(--w);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;gap:12px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{width:132px;height:auto}
+
+/* ------------ Layout ------------ */
+.wrap{max-width:var(--w);margin:24px auto;padding:0 16px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.card h3{font-size:18px;margin-bottom:2px}
+.muted{color:var(--muted);font-size:14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.space-between{justify-content:space-between}
+.kbd{font:12px/1 Consolas,monaco,monospace;background:#f2f2f2;border:1px solid #ddd;border-radius:6px;padding:2px 6px}
+
+/* ------------ Buttons ------------ */
+.btn{height:40px;padding:0 14px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
+.btn:hover{background:#f8f8f8}
+.btn:active{transform:translateY(0.5px)}
+.btn-primary{background:var(--brand);color:#fff;border:0}
+.btn-danger{background:var(--red);color:#fff;border:0}
+.badge{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:999px;font-size:12px;background:#f3efe5;color:#856b2b;border:1px solid #eadfbf}
+.btn.input-xs{height:26px;padding:0 8px;font-size:12px}
+
+/* ------------ Table ------------ */
+.table{width:100%;border-collapse:collapse;font-size:15px}
+.table th,.table td{top:0; padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.table th{background:#fff;position:sticky;top:0;z-index:5}
+.tr{transition:background .15s}
+.tr:hover{background:#faf9f5}
+.cell-right{text-align:right}
+.card .table th{top:0!important}
+
+/* ------------ Search bar ------------ */
+.toolbar{display:flex;gap:8px;align-items:center;margin:14px 0 10px}
+.input{height:40px;padding:0 12px;border:1px solid #ddd;border-radius:10px;background:#fff;min-width:140px}
+.input:focus{outline:2px solid #e8dcc0;border-color:#e8dcc0}
+select.input{padding-right:32px}
+.input.wide{min-width:280px;width:380px}
+.input-xs{height:34px}
+
+/* ------------ Modal (composer) ------------ */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.38);display:none;align-items:center;justify-content:center;z-index:100}
+.modal.open{display:flex}
+.sheet{width:min(880px,calc(100vw - 40px));max-height:86vh;background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.sheet header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+.sheet main{padding:16px 16px 6px;overflow:auto}
+.sheet footer{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.form{display:grid;grid-template-columns:130px 1fr;gap:10px 14px}
+.form label{align-self:center;color:var(--muted)}
+.form .input, .form textarea{width:100%}
+textarea.input{height:160px;resize:vertical}
+
+/* ------------ Toast ------------ */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:200}
+.toast.show{opacity:1}
+
+/* ------------ Chips ------------ */
+.chip{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:999px;padding:2px 8px;font-size:12px;background:#fff}
+.chip.green{border-color:#cfe6d8;background:#f2fbf6;color:#1a7f37}
+.chip.red{border-color:#f4c6c6;background:#fff5f5;color:#c62d2d}
+
+/*----------etc--------*/
+.modal.open{ display:flex !important; }
+.btn[disabled]{ opacity:.6; pointer-events:none; }
+
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="inner">
+    <div class="logo">
+      <a href="try.html" aria-label="홈으로">
+        <img src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-001.png" alt="천태산 용화사 로고">
+      </a>
+      <strong>관리자 대시보드</strong>
+    </div>
+    <div class="row">
+      <span id="adminEmail" class="muted"></span>
+      <button id="logoutBtn" class="btn" type="button">로그아웃</button>
+    </div>
+  </div>
+</header>
+
+<!-- Main -->
+<main class="wrap">
+
+  <!-- Summary cards -->
+  <section class="grid" aria-label="요약">
+    <article class="card">
+      <h3>공지사항</h3>
+      <p class="muted">등록/수정/삭제</p>
+      <div class="row" style="margin-top:8px">
+        <span class="chip"><span id="statNotices">-</span> 건</span>
+        <span class="chip"><span id="statPinned">-</span> 건 고정</span>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <a class="btn" href="jM.html#notice" target="_blank" rel="noopener">목록 보기</a>
+        <button class="btn btn-primary" id="btnNew" type="button">새 공지 작성</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>정기법회 안내</h3>
+      <p class="muted">등록/수정/삭제</p>
+      <div class="row" style="margin-top:8px">
+        <span class="chip"><span id="statRegularCnt">-</span> 건</span>
+        <span class="chip"><span id="statRegularUpdated">-</span> 최근 수정</span>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <a class="btn" href="jM.html#regular" target="_blank" rel="noopener">공개 페이지 보기</a>
+        <button class="btn btn-primary" id="rNew" type="button">새 등록</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>행사일정</h3>
+      <p class="muted">달력 일정 등록/변경</p>
+      <div class="row" style="margin-top:8px">
+        <span class="chip"><span id="statUpcoming">-</span>건 예정</span>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <a class="btn" href="jM.html#events" target="_blank" rel="noopener">달력 보기</a>
+        <button class="btn btn-primary" id="eNew" type="button">새 일정</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>행사 사진 · 포토 갤러리</h3>
+      <p class="muted">이미지 등록/수정/삭제</p>
+      <div class="row" style="margin-top:8px">
+        <span class="chip"><span id="statMediaEvents">-</span> 행사</span>
+        <span class="chip"><span id="statMediaGallery">-</span> 갤러리</span>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <a class="btn" href="jM.html#photos" target="_blank" rel="noopener">갤러리 보기</a>
+        <button class="btn btn-primary" id="mNewTop" type="button">새 항목</button>
+      </div>
+    </article>
+  </section>
+
+  <!-- Notices list & tools -->
+  <section class="card" style="margin-top:16px" aria-label="공지 목록">
+    <div class="row space-between">
+      <h3>공지 목록</h3>
+      <div class="toolbar">
+        <select id="filterPinned" class="input input-xs" aria-label="고정 필터">
+          <option value="">전체</option>
+          <option value="1">고정만</option>
+          <option value="0">고정 아님</option>
+        </select>
+        <input id="q" class="input input-xs" placeholder="제목 검색…" aria-label="검색어">
+        <button id="btnSearch" class="btn" type="button">검색</button>
+        <button id="btnReload" class="btn" type="button">새로고침</button>
+        <button id="btnNew2" class="btn btn-primary" type="button">새 공지</button>
+      </div>
+    </div>
+
+    <div style="overflow:auto;margin-top:8px">
+      <table class="table" aria-describedby="공지 목록">
+        <thead>
+          <tr>
+            <th style="width:110px">상태</th>
+            <th>제목</th>
+            <th style="width:120px">작성일</th>
+            <th style="width:160px" class="cell-right">작업</th>
+          </tr>
+        </thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+
+    <div class="row" style="justify-content:center;margin-top:12px">
+      <button id="btnMore" class="btn" type="button" style="min-width:160px">더 보기</button>
+    </div>
+  </section>
+
+  <!-- Regular list & tools -->
+  <section class="card" style="margin-top:16px" aria-label="정기법회 안내 목록">
+    <div class="row space-between">
+      <h3>정기법회 안내 목록</h3>
+      <div class="toolbar">
+        <select id="rFilterCat" class="input input-xs" aria-label="분류 필터">
+          <option value="">전체</option>
+          <option value="weekend">주말법회</option>
+          <option value="prayer">기도안내</option>
+          <option value="memorial">49제 및 제사</option>
+          <option value="sunday">일요법회</option>
+        </select>
+        <select id="rFilterPinned" class="input input-xs" aria-label="고정 필터">
+          <option value="">전체</option>
+          <option value="1">고정만</option>
+          <option value="0">고정 아님</option>
+        </select>
+        <input id="rq" class="input input-xs" placeholder="제목 검색…" aria-label="검색어">
+        <button id="rSearch" class="btn" type="button">검색</button>
+        <button id="rReload" class="btn" type="button">새로고침</button>
+        <button id="rNew2" class="btn btn-primary" type="button">새 등록</button>
+      </div>
+    </div>
+
+    <div style="overflow:auto;margin-top:8px">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:130px">분류</th>
+            <th>제목</th>
+            <th style="width:120px">작성일</th>
+            <th style="width:160px" class="cell-right">작업</th>
+          </tr>
+        </thead>
+        <tbody id="rList"></tbody>
+      </table>
+    </div>
+
+    <div class="row" style="justify-content:center;margin-top:12px">
+      <button id="rMore" class="btn" type="button" style="min-width:160px">더 보기</button>
+    </div>
+  </section>
+
+  <!-- Events list & tools -->
+  <section class="card" style="margin-top:16px" aria-label="행사일정 목록">
+    <div class="row space-between">
+      <h3>행사일정 목록</h3>
+      <div class="toolbar">
+        <input id="eq" class="input input-xs" placeholder="제목 검색…" aria-label="검색어">
+        <input id="eFrom" type="date" class="input input-xs" aria-label="시작일">
+        <input id="eTo" type="date" class="input input-xs" aria-label="종료일">
+        <button id="eSearch" class="btn" type="button">검색</button>
+        <button id="eReload" class="btn" type="button">새로고침</button>
+        <button id="eNew2" class="btn btn-primary" type="button">새 일정</button>
+      </div>
+    </div>
+
+    <div style="overflow:auto;margin-top:8px">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>제목</th>
+            <th style="width:130px">일자</th>
+            <th style="width:110px">시간</th>
+            <th style="width:160px">장소</th>
+            <th style="width:160px" class="cell-right">작업</th>
+          </tr>
+        </thead>
+        <tbody id="eList"></tbody>
+      </table>
+    </div>
+
+    <div class="row" style="justify-content:center;margin-top:12px">
+      <button id="eMore" class="btn" type="button" style="min-width:160px">더 보기</button>
+    </div>
+  </section>
+
+  <!-- Media (행사 사진/포토 갤러리) -->
+  <section class="card" style="margin-top:16px" aria-label="사진/갤러리">
+    <div class="row space-between">
+      <h3>행사 사진 · 포토 갤러리</h3>
+      <div class="toolbar">
+        <select id="mediaType" class="input input-xs" aria-label="분류 선택">
+          <option value="events">행사 사진</option>
+          <option value="gallery">포토 갤러리</option>
+        </select>
+        <input id="mq" class="input input-xs" placeholder="제목 검색…" aria-label="검색어">
+        <button id="mSearch" class="btn" type="button">검색</button>
+        <button id="mReload" class="btn" type="button">새로고침</button>
+        <button id="mNew" class="btn btn-primary" type="button">새 항목</button>
+      </div>
+    </div>
+
+    <div style="overflow:auto;margin-top:8px">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:100px">이미지</th>
+            <th>제목</th>
+            <th style="width:120px">촬영일</th>
+            <th style="width:160px" class="cell-right">작업</th>
+          </tr>
+        </thead>
+        <tbody id="mediaList"></tbody>
+      </table>
+    </div>
+
+    <div class="row" style="justify-content:center;margin-top:12px">
+      <button id="mMore" class="btn" type="button" style="min-width:160px">더 보기</button>
+    </div>
+  </section>
+</main>
+
+<!-- Notice Composer Modal -->
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="composerTitle">
+  <div class="sheet">
+    <header>
+      <strong id="composerTitle">공지 작성</strong>
+      <button id="closeModal" class="btn" type="button" aria-label="닫기">닫기</button>
+    </header>
+    <main>
+      <form id="form" class="form" autocomplete="off">
+        <label for="title">제목</label>
+        <input class="input" id="title" required placeholder="제목을 입력하세요">
+
+        <label for="isPinned">공지(상단 고정)</label>
+        <div class="row">
+          <input type="checkbox" id="isPinned" />
+          <span class="muted">메인/목록 상단에 고정</span>
+        </div>
+
+        <label for="content">내용</label>
+        <textarea class="input" id="content" placeholder="내용을 입력하세요(마크다운/일반 텍스트)"></textarea>
+
+        <label>첨부</label>
+        <div class="row" style="align-items:flex-start">
+          <input class="input" id="fileUrl" placeholder="첨부 URL (선택)" style="flex:1">
+          <input type="file" id="fileInput" class="input" style="width:280px" multiple>
+          <button class="btn" id="btnUpload" type="button">업로드</button>
+        </div>
+      </form>
+    </main>
+    <footer>
+      <button class="btn" id="btnDelete" type="button" style="margin-right:auto;display:none">삭제</button>
+      <button class="btn" id="btnCancel" type="button">취소</button>
+      <button class="btn btn-primary" id="btnSave" type="button">저장</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Regular Composer Modal -->
+<div id="rModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="rTitle">
+  <div class="sheet">
+    <header>
+      <strong id="rTitle">정기법회 안내 작성</strong>
+      <button id="rClose" class="btn" type="button" aria-label="닫기">닫기</button>
+    </header>
+    <main>
+      <form id="rForm" class="form" autocomplete="off">
+        <label for="rCat">분류</label>
+        <select id="rCat" class="input" required>
+          <option value="weekend">주말법회</option>
+          <option value="prayer">기도안내</option>
+          <option value="memorial">49제 및 제사</option>
+          <option value="sunday">일요법회</option>
+        </select>
+
+        <label for="rTitleInput">제목</label>
+        <input class="input" id="rTitleInput" required placeholder="제목을 입력하세요">
+
+        <label for="rPinned">상단 고정</label>
+        <div class="row"><input type="checkbox" id="rPinned"><span class="muted">목록 상단 고정</span></div>
+
+        <label for="rContent">내용</label>
+        <textarea class="input" id="rContent" placeholder="내용을 입력하세요"></textarea>
+
+        <label>첨부</label>
+        <div class="row" style="align-items:flex-start">
+          <input class="input" id="rFileUrl" placeholder="첨부 URL (선택)" style="flex:1">
+          <input type="file" id="rFile" class="input" style="width:280px" multiple>
+          <button class="btn" id="rUpload" type="button">업로드</button>
+        </div>
+      </form>
+    </main>
+    <footer>
+      <button class="btn" id="rDelete" type="button" style="margin-right:auto;display:none">삭제</button>
+      <button class="btn" id="rCancel" type="button">취소</button>
+      <button class="btn btn-primary" id="rSave" type="button">저장</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Event Composer Modal -->
+<div id="eModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="eTitle">
+  <div class="sheet">
+    <header>
+      <strong id="eTitle">행사일정 작성</strong>
+      <button id="eClose" class="btn" type="button" aria-label="닫기">닫기</button>
+    </header>
+    <main>
+      <form id="eForm" class="form" autocomplete="off">
+        <label for="eName">제목</label>
+        <input id="eName" class="input" required placeholder="행사명">
+
+        <label for="eDate">일자</label>
+        <input id="eDate" type="date" class="input" required>
+
+        <label for="eTime">시간</label>
+        <input id="eTime" class="input" placeholder="예: 10:30, 오후 2시 (선택)">
+
+        <label for="ePlace">장소</label>
+        <input id="ePlace" class="input" placeholder="장소 (선택)">
+
+        <label for="eDesc">설명</label>
+        <textarea id="eDesc" class="input" placeholder="내용/비고 (선택)"></textarea>
+
+        <label>첨부</label>
+        <div class="row" style="align-items:flex-start">
+          <input id="eFileUrl" class="input" placeholder="첨부 URL (선택)" style="flex:1">
+          <input id="eFile" type="file" class="input" style="width:280px" multiple>
+          <button id="eUpload" type="button" class="btn">업로드</button>
+        </div>
+      </form>
+    </main>
+    <footer>
+      <button id="eDelete" class="btn" type="button" style="margin-right:auto;display:none">삭제</button>
+      <button id="eCancel" class="btn" type="button">취소</button>
+      <button id="eSave" class="btn btn-primary" type="button">저장</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Media Composer Modal -->
+<div id="modalMedia" class="modal" role="dialog" aria-modal="true" aria-labelledby="mediaTitle">
+  <div class="sheet">
+    <header>
+      <strong id="mediaTitle">사진 등록</strong>
+      <button id="closeMedia" class="btn" type="button" aria-label="닫기">닫기</button>
+    </header>
+    <main>
+      <form id="mform" class="form" autocomplete="off">
+        <label for="mtype">분류</label>
+        <select id="mtype" class="input">
+          <option value="events">행사 사진</option>
+          <option value="gallery">포토 갤러리</option>
+        </select>
+
+        <label for="mtitle">제목</label>
+        <input class="input" id="mtitle" required placeholder="제목을 입력하세요">
+
+        <label for="mdate">촬영일</label>
+        <input class="input" id="mdate" type="date">
+
+        <label for="mdesc">설명</label>
+        <textarea class="input" id="mdesc" placeholder="설명을 입력하세요 (선택)"></textarea>
+
+        <label>이미지</label>
+        <div class="row" style="align-items:flex-start">
+          <input class="input" id="mimg" placeholder="이미지 URL" style="flex:1">
+          <input type="file" id="mfile" class="input" accept="image/*" style="width:280px" multiple>
+          <button class="btn" id="mUpload" type="button">업로드</button>
+        </div>
+      </form>
+    </main>
+    <footer>
+      <button class="btn" id="mDelete" type="button" style="margin-right:auto;display:none">삭제</button>
+      <button class="btn" id="mCancel" type="button">취소</button>
+      <button class="btn btn-primary" id="mSave" type="button">저장</button>
+    </footer>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ====== Cloudinary 설정 ====== */
+  const CLOUDINARY = {
+    cloudName: 'df2xqoany',
+    uploadPreset: 'yonghwasa_unsigned',
+    rootFolder: 'yonghwasa'
+  };
+
+  /* ====== 업로드 허용 확장자(accept) ====== */
+  const ACCEPT_ALL = [
+    // 이미지/영상
+    '.jpg','.jpeg','.png','.gif','.webp','.heic','.bmp','.svg',
+    '.mp4','.mov','.m4v','.webm','.avi','.mkv',
+    // 문서류
+    '.pdf','.ppt','.pptx','.hwp','.hwpx','.xls','.xlsx','.csv','.doc','.docx','.txt',
+    // 압축
+    '.zip','.7z','.rar'
+  ].join(',');
+
+  /* ====== 유틸 ====== */
+  function $(sel){ return document.querySelector(sel); }
+  function byId(id){ return document.getElementById(id); }
+  function on(el, ev, fn){ if(el) el.addEventListener(ev, fn); }
+  function lower(v){ return String(v==null ? '' : v).toLowerCase(); }
+  function escapeHtml(s){
+    var v = (s===null || s===undefined) ? '' : String(s);
+    return v.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function fmt(ts){
+    try{
+      var d;
+      if(ts && typeof ts.toDate==="function") d=ts.toDate();
+      else if(ts instanceof Date) d=ts;
+      else if(typeof ts === 'number') d = (ts < 1e12 ? new Date(ts*1000) : new Date(ts));
+      else d=new Date(ts);
+      if(isNaN(d)) return '-';
+      var y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
+      return y+"."+m+"."+da;
+    }catch(_){ return '-'; }
+  }
+  function toInputDate(d){
+    var y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
+    return y+"-"+m+"-"+da;
+  }
+  function tsToMs(v){
+    try{
+      if(!v) return 0;
+      if(typeof v==='number') return v<1e12 ? v*1000 : v;
+      if(v instanceof Date) return v.getTime();
+      if(typeof v.toDate==='function') return v.toDate().getTime();
+      var t = new Date(v).getTime();
+      return isNaN(t) ? 0 : t;
+    }catch(_){ return 0; }
+  }
+  function toast(msg,ms){ ms=ms||1800; var el=byId('toast'); if(!el) return; el.textContent=msg; el.classList.add('show'); setTimeout(function(){ el.classList.remove('show'); }, ms); }
+
+  window.addEventListener('error', e=>{ console.error(e.error||e.message); toast("스크립트 오류: "+(e.message||''), 3000); });
+  window.addEventListener('unhandledrejection', e=>{ const m=(e.reason&&e.reason.message)||String(e.reason); console.error(e.reason); toast("오류: "+m, 3000); });
+
+  /* ====== 업로드 전체 진행 관리(동시 업로드 완료 알림용) ====== */
+  let uploadInFlight = 0;
+  function beginBatch(){ uploadInFlight++; }
+  function endBatch(){
+    uploadInFlight = Math.max(0, uploadInFlight-1);
+    if(uploadInFlight===0) toast('모든 업로드가 완료되었습니다.', 2200);
+  }
+
+  // === 이미지 파일 브라우저 압축 (전역) ===
+async function compressImageFile(file, {maxW=2560, maxH=2560, quality=0.82} = {}){
+  if(!/^image\//.test(file.type)) return file;
+  const dataUrl = await new Promise((res, rej)=>{
+    const fr = new FileReader();
+    fr.onload = () => res(fr.result);
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  });
+  const img = await new Promise((res, rej)=>{
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = dataUrl;
+  });
+  let {width:w, height:h} = img;
+  const ratio = Math.min(maxW / w, maxH / h, 1);
+  const cw = Math.round(w * ratio);
+  const ch = Math.round(h * ratio);
+  const canvas = document.createElement('canvas');
+  canvas.width = cw; canvas.height = ch;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, cw, ch);
+  const blob = await new Promise((res)=> canvas.toBlob(res, 'image/jpeg', quality));
+  return new File([blob], (file.name.replace(/\.[^.]+$/, '') || 'image') + '.jpg', { type:'image/jpeg' });
+}
+
+
+  // ====== Cloudinary 업로드 (모든 파일 공용; 이미지면 사전 압축) ======
+async function uploadManyCloudinary(files, folder){
+  const cloud = String(CLOUDINARY.cloudName||'').trim();
+  const preset = String(CLOUDINARY.uploadPreset||'').trim();
+  if(!cloud || !preset) throw new Error('Cloudinary 설정이 없습니다.');
+
+  const results = [];
+  const fullFolder = [CLOUDINARY.rootFolder, folder].filter(Boolean).join('/');
+
+  for (let file of files){
+    // 10MB 초과 & 이미지면, 먼저 브라우저에서 압축 시도
+    if (/^image\//.test(file.type) && file.size > 10*1024*1024){
+      try{
+        file = await compressImageFile(file, {maxW:2560, maxH:2560, quality:0.82});
+      }catch(e){
+        console.warn('[compressImageFile] 실패, 원본으로 업로드 시도', e);
+      }
+    }
+
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', preset);
+    if(fullFolder) fd.append('folder', fullFolder);
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(cloud)}/auto/upload`, {
+      method:'POST', body: fd
+    });
+    const json = await res.json();
+
+    if (!res.ok || json.error){
+      const msg = (json.error && json.error.message) || '업로드 실패';
+      throw new Error(msg);
+    }
+
+    // Cloudinary 응답을 내부 표준 형태로 매핑
+    results.push({
+      secure_url: json.secure_url,
+      original_filename: json.original_filename || file.name,
+      resource_type: json.resource_type || (file.type||'').split('/')[0] || 'raw',
+      bytes: json.bytes || file.size
+    });
+  }
+  return results;
+}
+
+  /// 이미지/영상 외 파일은 Firebase Storage로 업로드
+  async function uploadManyAny(files, folder){
+  return await uploadManyCloudinary(files, folder);
+}
+
+  // === 공용: inputEl.dataset.attachments 를 UI로 렌더 + 삭제/복사 ===
+function renderAttachmentList(inputEl){
+  const attachments = inputEl.dataset.attachments
+    ? JSON.parse(inputEl.dataset.attachments) : [];
+
+  const box = document.createElement('div');
+  box.className = 'upload-list';
+  box.style.cssText = 'margin-top:6px;font-size:12px;color:#555';
+
+  const rows = attachments.map((r, i) => {
+    const isImg = /\.(jpe?g|png|gif|webp|heic|bmp|svg)$/i.test(r.name||'') || /image\//.test(r.type||'');
+    const thumb = isImg ? `<img src="${r.url}" alt="" style="width:54px;height:36px;object-fit:cover;border-radius:6px;border:1px solid #eee">` : '';
+    return `
+      <div style="display:flex;align-items:center;gap:8px;margin:4px 0">
+        ${thumb}
+        <a href="${r.url}" target="_blank" rel="noopener" style="flex:1;min-width:160px">${escapeHtml(r.name||'file')}</a>
+        <button type="button" class="btn input-xs" data-copy="${r.url}">복사</button>
+        <button type="button" class="btn input-xs btn-danger"
+                data-del-attach="1" data-target="${inputEl.id}" data-index="${i}">삭제</button>
+      </div>`;
+  }).join('');
+
+  const allUrls = attachments.map(a=>a.url).join('\n');
+  const allBtn  = attachments.length ? `
+    <div style="margin-top:6px">
+      <button type="button" class="btn input-sm" data-copy-all="${encodeURIComponent(allUrls)}">모두 복사</button>
+    </div>` : '';
+
+  box.innerHTML = rows + allBtn;
+
+  const wrap = inputEl.parentElement;
+  const old = wrap.querySelector('.upload-list'); if(old) old.remove();
+  wrap.appendChild(box);
+}
+
+function syncFirstAttachmentToField(fileInputEl, urlInputEl){
+  try{
+    const arr = fileInputEl?.dataset?.attachments ? JSON.parse(fileInputEl.dataset.attachments) : [];
+    if(urlInputEl) urlInputEl.value = (arr[0]?.url) || '';
+  }catch(_){}
+}
+
+// === 업로드 결과를 "누적"하고 UI 다시 그림
+function appendUploadResults(inputEl, results){
+  const prev = inputEl.dataset.attachments ? JSON.parse(inputEl.dataset.attachments) : [];
+  const added = results.map(r => ({
+    url: r.secure_url,
+    name: r.original_filename,
+    type: r.resource_type,
+    bytes: r.bytes
+  }));
+  inputEl.dataset.attachments = JSON.stringify(prev.concat(added));
+  renderAttachmentList(inputEl);
+  if (inputEl.id === 'mfile') syncFirstAttachmentToField(inputEl, byId('mimg'));
+
+}
+
+// 개별 삭제
+document.addEventListener('click', (e)=>{
+  const del = e.target.closest && e.target.closest('[data-del-attach]');
+  if(!del) return;
+  const targetId = del.getAttribute('data-target');
+  const index = Number(del.getAttribute('data-index'));
+  const input = document.getElementById(targetId);
+  if(!input) return;
+  const arr = input.dataset.attachments ? JSON.parse(input.dataset.attachments) : [];
+  if(index>=0 && index < arr.length){
+    arr.splice(index,1);
+    input.dataset.attachments = JSON.stringify(arr);
+    renderAttachmentList(input);
+    if (input.id === 'mfile') syncFirstAttachmentToField(input, byId('mimg'));
+
+  }
+});
+
+
+  /* ====== Firebase (Auth/Firestore/Storage) ====== */
+  var firebaseConfig = {
+    apiKey:"AIzaSyBFh2Z7DKG9a8Q0GJk065FrN3NXnOrVFr4",
+    authDomain:"yonghwasa-web.firebaseapp.com",
+    projectId:"yonghwasa-web",
+    storageBucket:"yonghwasa-web.appspot.com",
+    appId:"1:853312665810:web:ad06badcb0f23ad42d950b",
+    measurementId:"G-JFHHD2E2F2"
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    if(!window.firebase){ alert("Firebase SDK 로드 실패"); return; }
+    if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    var auth = firebase.auth();
+    var db   = firebase.firestore();
+
+    /* 여러 개 업로드 허용 + 확장자 허용 + 붙여넣기 대상 표시 */
+    const inputIds = ['fileInput','rFile','eFile','mfile'];
+    inputIds.forEach(id=>{
+      const el=byId(id);
+      if(el){
+        el.setAttribute('multiple','multiple');
+        el.setAttribute('accept', ACCEPT_ALL);
+        el.setAttribute('data-paste-target','1'); // 붙여넣기 업로드 대상
+      }
+    });
+
+
+    
+
+    /* 권한/인증 */
+    async function isAdmin(uid){
+      if(!uid) return false;
+      try{
+        var snap = await db.collection('_meta_admins').doc(uid).get();
+        var data = snap.data();
+        return snap.exists && (data && data.enabled !== false);
+      }catch(e){ console.error('[isAdmin]',e); return false; }
+    }
+    function redirectToLogin(){
+      var here = location.pathname + location.search;
+      location.replace("admin.html?returnTo="+encodeURIComponent(here)+"&reason=auth");
+    }
+
+    auth.onAuthStateChanged(async function(user){
+      if(!user){ redirectToLogin(); return; }
+      if(!(await isAdmin(user.uid))){ alert('관리자 권한이 없습니다.'); await auth.signOut(); return; }
+      var mail = byId('adminEmail'); if(mail) mail.textContent = user.email||'';
+      boot(); // 인증 통과 후 시작
+    });
+
+    on(byId('logoutBtn'), 'click', async function(){
+      if(!confirm('로그아웃할까요?')) return;
+      await auth.signOut(); redirectToLogin();
+    });
+
+    /* ========== 상단 카드 통계 (안전 버전) ========== */
+    var statUnsubs=[];
+    function subscribeStats(){
+      statUnsubs.forEach(u=>{ try{ u&&u(); }catch(_){} });
+      statUnsubs = [];
+
+      // 공지
+      statUnsubs.push(
+        db.collection('notices').onSnapshot(snap=>{
+          let total=0, pinned=0;
+          snap.forEach(d=>{
+            const x=d.data()||{};
+            if(x.visible!==false && x.seed!==true){
+              total++; if(x.isPinned) pinned++;
+            }
+          });
+          const a=byId('statNotices'), b=byId('statPinned');
+          if(a) a.textContent = total;
+          if(b) b.textContent = pinned;
+        }, e=>{ console.error(e); toast('notices(stat) 오류',2500); })
+      );
+
+      // 정기법회
+      statUnsubs.push(
+        db.collection('regular_posts').onSnapshot(snap=>{
+          let total=0;
+          snap.forEach(d=>{ const x=d.data()||{}; if(x.visible!==false && x.seed!==true) total++; });
+          const a=byId('statRegularCnt'); if(a) a.textContent = total;
+        }, e=>{ console.error(e); toast('regular_posts(stat) 오류',2500); })
+      );
+
+      // 정기법회 최근 수정
+      statUnsubs.push(
+        db.collection('regular_posts').orderBy('updatedAt','desc').limit(1)
+          .onSnapshot(snap=>{
+            const last = snap.docs[0]?.data()?.updatedAt;
+            const a=byId('statRegularUpdated'); if(a) a.textContent = last ? fmt(last) : '-';
+          }, e=>{ console.error(e); toast('regular_posts(last) 오류',2500); })
+      );
+
+      // 행사: 오늘 이후(클라이언트 필터)
+      statUnsubs.push(
+        db.collection('events').onSnapshot(snap=>{
+          const today = new Date(); today.setHours(0,0,0,0);
+          let cnt=0;
+          snap.forEach(d=>{
+            const x=d.data()||{};
+            if(x.visible===false || x.seed===true) return;
+            const v=x.date;
+            const dt = v && typeof v.toDate==='function' ? v.toDate() : (v ? new Date(v) : null);
+            if(dt && !isNaN(dt) && dt>=today) cnt++;
+          });
+          const a=byId('statUpcoming'); if(a) a.textContent = cnt;
+        }, e=>{ console.error(e); toast('events(stat) 오류',2500); })
+      );
+
+      // 미디어
+      statUnsubs.push(
+        db.collection('photos_events').onSnapshot(s=>{
+          let total=0; s.forEach(d=>{ const x=d.data()||{}; if(x.seed===true) return; total++; });
+          const el=byId('statMediaEvents'); if(el) el.textContent = total;
+        })
+      );
+      statUnsubs.push(
+        db.collection('photos_gallery').onSnapshot(s=>{
+          let total=0; s.forEach(d=>{ const x=d.data()||{}; if(x.seed===true) return; total++; });
+          const el=byId('statMediaGallery'); if(el) el.textContent = total;
+        })
+      );
+    }
+
+    /* ====== 목록 테이블 탐색 헬퍼 ====== */
+    function pickEl(cands){ for(const s of cands){ const el = document.querySelector(s); if(el) return el; } return null; }
+    function findTbodyByTitle(...titles){
+      const hay = Array.from(document.querySelectorAll('h1,h2,h3,h4,.title,.card-title,.section-title'));
+      const normalized = s => (s||'').replace(/\s+/g,'').trim();
+      const head = hay.find(el => titles.some(t => normalized(el.textContent).includes(normalized(t))));
+      if(!head) return null;
+      const scopes = [ head.closest('section, .section, .card, .panel, .box'), head.parentElement, document ].filter(Boolean);
+      for(const scope of scopes){
+        const tb = scope.querySelector('table tbody') || scope.querySelector('tbody');
+        if(tb) return tb;
+      }
+      return null;
+    }
+
+    const els = {
+      noticeTbody:  pickEl(['#list','#nList','table#notices tbody','.notice-table tbody','tbody[data-role="notices"]']),
+      regularTbody: pickEl(['#rList','#regularList','.regular-table tbody','tbody[data-role="regular"]']),
+      eventTbody:   pickEl(['#eList','#eventList','.events-table tbody','tbody[data-role="events"]']),
+      mediaTbody:   pickEl(['#mediaList','#mList','.media-table tbody','tbody[data-role="media"]']),
+    };
+    els.noticeTbody  = els.noticeTbody  || findTbodyByTitle('공지목록','공지사항','공지');
+    els.regularTbody = els.regularTbody || findTbodyByTitle('정기법회안내','정기법회','법회');
+    els.eventTbody   = els.eventTbody   || findTbodyByTitle('행사일정','행사','이벤트');
+    els.mediaTbody   = els.mediaTbody   || findTbodyByTitle('갤러리','사진','포토');
+
+    /* ====== 붙여넣기 업로드(클립보드 파일) ====== */
+    // 어떤 input으로 붙여넣는지 판단
+    function nearestFileInput(el){
+      if(!el) return null;
+      if(el.tagName==='INPUT' && el.type==='file' && el.dataset.pasteTarget==='1') return el;
+      const cand = el.closest && el.closest('label, .file-wrap, .file, .field, .form-group');
+      if(cand){
+        const f = cand.querySelector('input[type="file"][data-paste-target="1"]');
+        if(f) return f;
+      }
+      // 폼 범위 내 탐색
+      const form = el.closest && el.closest('form');
+      if(form){
+        const f2 = form.querySelector('input[type="file"][data-paste-target="1"]');
+        if(f2) return f2;
+      }
+      return null;
+    }
+
+    async function handleFilesToInput(targetInput, files){
+  if(!targetInput || !files || files.length===0) return;
+
+  const map = {
+    fileInput: 'attachments/notices',
+    rFile:     'attachments/regular',
+    eFile:     'attachments/events',
+    mfile:     'images/events'
+  };
+  let folder = map[targetInput.id] || 'attachments/misc';
+  if(targetInput.id==='mfile'){
+    const t = byId('mtype')?.value || 'events';
+    folder = (t==='gallery') ? 'images/gallery' : 'images/events';
+  }
+
+  beginBatch();
+  try{
+    const results = await uploadManyAny(Array.from(files), folder);
+    appendUploadResults(targetInput, results); // ★ 누적
+    toast(results.length+'개 업로드 완료');
+  }catch(e){
+    alert(e.message||'업로드 실패');
+  }finally{
+    endBatch();
+  }
+}
+
+
+    document.addEventListener('paste', async (ev)=>{
+  const items = (ev.clipboardData && ev.clipboardData.items) || [];
+  const files = [];
+  for(const it of items){ if(it.kind==='file'){ const f = it.getAsFile(); if(f) files.push(f); } }
+  if(files.length===0) return;
+
+  const active = document.activeElement || ev.target;
+  const input  = nearestFileInput(active);
+  if(!input) return;
+  ev.preventDefault();
+  handleFilesToInput(input, files);   // ← 이름만 변경
+});
+['fileInput','rFile','eFile','mfile'].forEach(id=>{
+  const el = byId(id);
+  if(!el) return;
+  el.setAttribute('multiple','multiple');
+  el.setAttribute('accept', ACCEPT_ALL);
+  el.setAttribute('data-paste-target','1');
+  el.dataset.attachments = el.dataset.attachments || '[]';
+  renderAttachmentList(el); // ★ 빈 상태도 렌더
+});
+
+
+
+    /* =========================================================
+       공지 / 정기법회 / 행사 / 미디어 목록
+       (아래 로직은 기존 그대로, 업로드 버튼 처리만 배치 카운터와 accept 반영)
+       ========================================================= */
+
+    /* ---------- 공지 ---------- */
+    var nPageSize=10, nKeyword='', nPinned='';
+    var nAll=[], nFiltered=[], nNext=0;
+
+    function drawNoticeRowFromObj(o, parentTbody){
+      try{
+        var d = o.data||{};
+        var tr = document.createElement('tr'); tr.className='tr';
+        tr.innerHTML =
+          '<td>'+(d.isPinned?'<span class="badge">공지</span>':'')+'</td>'+
+          '<td>'+escapeHtml(d.title||'')+'</td>'+
+          '<td>'+fmt(d.createdAt||d.updatedAt||(d.createdAtMs?new Date(d.createdAtMs):null))+'</td>'+
+          '<td class="cell-right">'+
+            '<button class="btn btn-primary btn-edit" type="button" data-id="'+o.id+'">수정</button> '+
+            '<button class="btn btn-danger btn-del" type="button" data-id="'+o.id+'">삭제</button>'+
+          '</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }catch(err){
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="4" style="color:#c00">[표시불가] '+escapeHtml(o.id)+' – '+escapeHtml(err.message||err)+'</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }
+    }
+    async function fetchAllNotices(){
+      const snap = await db.collection('notices').get();
+      nAll = snap.docs.map(doc=>({ id:doc.id, data: doc.data() || {} }));
+      nAll = nAll.filter(x=> x.data && x.data.seed!==true && x.data.visible!==false);
+      nAll.sort((a,b)=>{
+        const am = tsToMs(a.data.createdAtMs) || tsToMs(a.data.createdAt) || tsToMs(a.data.updatedAt);
+        const bm = tsToMs(b.data.createdAtMs) || tsToMs(b.data.createdAt) || tsToMs(b.data.updatedAt);
+        return bm - am;
+      });
+    }
+    function filterNotices(){
+      const kw=lower(nKeyword||'');
+      nFiltered = nAll.filter(({data})=>{
+        if(nPinned!==''){
+          if( (!!data.isPinned) !== (nPinned==='1') ) return false;
+        }
+        if(kw){
+          const t= lower(data.title||'');
+          if(!t.includes(kw)) return false;
+        }
+        return true;
+      });
+      nNext=0;
+    }
+    function renderNotices(append){
+      const tb=els.noticeTbody;
+      if(!tb){ console.warn('[notices] tbody not found'); return; }
+      if(!append) tb.innerHTML='';
+      const slice = nFiltered.slice(nNext, nNext+nPageSize);
+      slice.forEach(o=>drawNoticeRowFromObj(o, tb));
+      nNext += slice.length;
+      var more=byId('btnMore');
+      if(more) more.style.display = (nNext < nFiltered.length) ? 'inline-flex' : 'none';
+    }
+    async function resetNotices(){
+      await fetchAllNotices(); filterNotices(); renderNotices(false);
+    }
+
+    /* 공지 컴포저 */
+    var modal = byId('modal');
+    var titleEl=byId('title'), contentEl=byId('content'), pinnedEl=byId('isPinned'),
+        fileUrlEl=byId('fileUrl'), fileInput=byId('fileInput');
+    var btnUpload=byId('btnUpload'), btnSave=byId('btnSave'), btnCancel=byId('btnCancel'),
+        btnDelete=byId('btnDelete'), btnClose=byId('closeModal');
+    var editingId = null;
+    function openModal(opts){
+  opts = opts||{};
+  editingId = opts.docId||null;
+  var cap = byId('composerTitle'); if(cap) cap.textContent = editingId?'공지 수정':'공지 작성';
+  if(opts.data){
+    var d=opts.data;
+    if(titleEl) titleEl.value = String(d.title||'');
+    if(contentEl) contentEl.value = String(d.content||'');
+    if(pinnedEl) pinnedEl.checked = !!d.isPinned;
+    if(fileUrlEl) fileUrlEl.value = String(d.fileUrl||'');
+    if(btnDelete) btnDelete.style.display='inline-flex';
+
+    /* ✅ 첨부파일: 기존 것 불러와서 렌더 */
+    const atts = Array.isArray(d.attachments) ? d.attachments.map(a => (
+      a && a.url ? a : { url:a, name:(a&&a.name)||'파일', type:(a&&a.type)||'', bytes:(a&&a.bytes)||0 }
+    )) : [];
+    if (fileInput){
+      fileInput.dataset.attachments = JSON.stringify(atts);
+      renderAttachmentList(fileInput);
+    }
+
+  }else{
+    var f = byId('form'); if(f) f.reset();
+    if(btnDelete) btnDelete.style.display='none';
+
+    /* ✅ 새 글: 첨부 초기화 */
+    if (fileInput){
+      fileInput.dataset.attachments = '[]';
+      renderAttachmentList(fileInput);
+    }
+  }
+  if(modal){ modal.classList.add('open'); if(titleEl) titleEl.focus(); }
+}
+
+    function closeModal(){ if(modal) modal.classList.remove('open'); }
+
+    on(btnUpload,'click', async function(){
+      const files = Array.from(fileInput?.files||[]);
+      if(!files.length){ toast('업로드할 파일을 선택하세요'); return; }
+      btnUpload.disabled = true;
+      beginBatch();
+      try{
+        const results = await uploadManyAny(files, 'attachments/notices');
+        if(fileUrlEl) fileUrlEl.value = results[0].secure_url;
+        appendUploadResults(fileInput, results);
+        toast(results.length+'개 업로드 완료');
+      }catch(e){ alert(e.message||'업로드 실패'); }
+      finally{ btnUpload.disabled = false; endBatch(); }
+    });
+
+    on(btnSave,'click', async function(){
+      if(!titleEl || !titleEl.value.trim()){ if(titleEl) titleEl.focus(); return; }
+      var base = {
+        title: titleEl.value.trim(),
+        content: (contentEl && contentEl.value)||'',
+        isPinned: !!(pinnedEl && pinnedEl.checked),
+        fileUrl: (fileUrlEl && fileUrlEl.value.trim()) || null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        visible: true
+      };
+      const nAtt = fileInput?.dataset?.attachments ? JSON.parse(fileInput.dataset.attachments) : null;
+      if(nAtt) base.attachments = nAtt;
+
+
+      btnSave.disabled = true;
+      try{
+        if(editingId){
+          await db.collection('notices').doc(editingId).update(base);
+          const i = nAll.findIndex(x=>x.id===editingId);
+          if(i>-1){ nAll[i] = { id: editingId, data: Object.assign({}, nAll[i].data, base, { updatedAt:new Date() }) }; }
+          filterNotices(); renderNotices(false);
+          toast('수정 완료'); closeModal(); await resetNotices();
+        }else{
+          const createdAtMs = Date.now();
+          const docRef = await db.collection('notices').add(Object.assign({}, base, {
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAtMs
+          }));
+          nAll = [{ id: docRef.id, data: Object.assign({}, base, { createdAtMs, createdAt:new Date() }) }, ...nAll];
+          filterNotices(); renderNotices(false);
+          toast('등록 완료'); closeModal(); await resetNotices();
+        }
+      }catch(e){ alert('저장 실패: '+e.message); }
+      finally{ btnSave.disabled = false; }
+    });
+    on(btnDelete,'click', async function(){
+      if(!editingId) return;
+      if(!confirm('이 공지를 삭제할까요?')) return;
+      btnDelete.disabled = true;
+      try{ await db.collection('notices').doc(editingId).delete(); toast('삭제 완료'); closeModal(); await resetNotices(); }
+      catch(e){ alert('삭제 실패: '+e.message); }
+      finally{ btnDelete.disabled = false; }
+    });
+    on(btnCancel,'click', closeModal);
+    on(btnClose,'click', closeModal);
+
+    on(byId('btnNew'), 'click', function(){ openModal({}); });
+    on(byId('btnNew2'),'click', function(){ openModal({}); });
+    on(byId('btnSearch'),'click', function(){ nKeyword = (byId('q')&&byId('q').value.trim())||''; filterNotices(); renderNotices(false); });
+    on(byId('q'),'keydown', function(e){ if(e.key==='Enter') byId('btnSearch').click(); });
+    on(byId('filterPinned'),'change', function(){ nPinned = byId('filterPinned').value; filterNotices(); renderNotices(false); });
+    on(byId('btnReload'),'click', resetNotices);
+    on(byId('btnMore'),'click', function(){ renderNotices(true); });
+
+    document.addEventListener('click', async function(e){
+      var editBtn = e.target.closest && e.target.closest('.btn-edit');
+      var delBtn  = e.target.closest && e.target.closest('.btn-del');
+      if(editBtn){
+        var id = editBtn.getAttribute('data-id');
+        var doc = await db.collection('notices').doc(id).get();
+        if(doc.exists) openModal({docId:id, data:doc.data()});
+      }
+      if(delBtn){
+        var id2 = delBtn.getAttribute('data-id');
+        if(!confirm('삭제할까요?')) return;
+        await db.collection('notices').doc(id2).delete();
+        toast('삭제 완료'); await resetNotices();
+      }
+    });
+
+    /* ---------- 정기법회 ---------- */
+    var rPageSize=10, rKeyword='', rPinned='', rCat='', rEditingId=null;
+    function rCol(){ return db.collection('regular_posts'); }
+    function catLabel(c){ var m={weekend:'주말법회',prayer:'기도안내',memorial:'49제 및 제사',sunday:'일요법회'}; return m[c]||String(c||''); }
+
+    var rAll=[], rFiltered=[], rNext=0;
+    function drawRegularRowFromObj(o, parentTbody){
+      try{
+        var d = o.data||{};
+        var tr = document.createElement('tr'); tr.className='tr';
+        tr.innerHTML =
+          '<td>'+escapeHtml(catLabel(d.category))+(d.isPinned?' · <span class="badge">고정</span>':'')+'</td>'+
+          '<td>'+escapeHtml(d.title||'')+'</td>'+
+          '<td>'+fmt(d.createdAt||d.updatedAt||(d.createdAtMs?new Date(d.createdAtMs):null))+'</td>'+
+          '<td class="cell-right">'+
+            '<button class="btn btn-primary r-edit" type="button" data-id="'+o.id+'">수정</button> '+
+            '<button class="btn btn-danger r-del" type="button" data-id="'+o.id+'">삭제</button>'+
+          '</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }catch(err){
+        var tr=document.createElement('tr');
+        tr.innerHTML = '<td colspan="4" style="color:#c00">[표시불가] '+escapeHtml(o.id)+' – '+escapeHtml(err.message||err)+'</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }
+    }
+    async function fetchAllRegulars(){
+      const snap = await rCol().get();
+      rAll = snap.docs.map(doc=>({ id:doc.id, data: doc.data() || {} }));
+      rAll = rAll.filter(x=> x.data && x.data.seed!==true && x.data.visible!==false);
+      rAll.sort((a,b)=>{
+        const am = tsToMs(a.data.createdAtMs) || tsToMs(a.data.createdAt) || tsToMs(a.data.updatedAt);
+        const bm = tsToMs(b.data.createdAtMs) || tsToMs(b.data.createdAt) || tsToMs(b.data.updatedAt);
+        return bm - am;
+      });
+    }
+    function filterRegulars(){
+      const kw=lower(rKeyword||'');
+      rFiltered = rAll.filter(({data})=>{
+        if(rCat && data.category!==rCat) return false;
+        if(rPinned!==''){
+          if( (!!data.isPinned) !== (rPinned==='1') ) return false;
+        }
+        if(kw){
+          const t= lower(data.title||'');
+          if(!t.includes(kw)) return false;
+        }
+        return true;
+      });
+      rNext=0;
+    }
+    function renderRegulars(append){
+      const tb=els.regularTbody;
+      if(!tb){ console.warn('[regular] tbody not found'); return; }
+      if(!append) tb.innerHTML='';
+      const slice = rFiltered.slice(rNext, rNext+rPageSize);
+      slice.forEach(o=>drawRegularRowFromObj(o, tb));
+      rNext += slice.length;
+      var more=byId('rMore');
+      if(more) more.style.display = (rNext < rFiltered.length) ? 'inline-flex' : 'none';
+    }
+    async function resetRegulars(){
+      await fetchAllRegulars(); filterRegulars(); renderRegulars(false);
+    }
+
+    var rModal=byId('rModal');
+    var rCatEl=byId('rCat'), rTitleEl=byId('rTitleInput'), rPinnedEl=byId('rPinned'),
+        rContentEl=byId('rContent'), rFileUrlEl=byId('rFileUrl'), rFileEl=byId('rFile');
+    var rUploadBtn=byId('rUpload'), rSaveBtn=byId('rSave'), rDeleteBtn=byId('rDelete'),
+        rCancelBtn=byId('rCancel'), rCloseBtn=byId('rClose');
+
+    function openRModal(opts){
+      opts=opts||{}; rEditingId=opts.docId||null;
+      var t=byId('rTitle'); if(t) t.textContent = rEditingId?'정기법회 안내 수정':'정기법회 안내 작성';
+      if(opts.data){
+        var d=opts.data;
+        if(rCatEl) rCatEl.value = (d.category||'weekend');
+        if(rTitleEl) rTitleEl.value = String(d.title||'');
+        if(rPinnedEl) rPinnedEl.checked = !!d.isPinned;
+        if(rContentEl) rContentEl.value = String(d.content||'');
+        if(rFileUrlEl) rFileUrlEl.value = String(d.fileUrl||'');
+        if(rDeleteBtn) rDeleteBtn.style.display='inline-flex';
+      }else{
+        var f=byId('rForm'); if(f) f.reset();
+        if(rCatEl) rCatEl.value = rCat||'weekend';
+        if(rDeleteBtn) rDeleteBtn.style.display='none';
+      }
+      if(rModal){ rModal.classList.add('open'); if(rTitleEl) rTitleEl.focus(); }
+    }
+    function closeRModal(){ if(rModal) rModal.classList.remove('open'); }
+
+    on(rUploadBtn,'click', async function(){
+      const files = Array.from(rFileEl?.files||[]);
+      if(!files.length){ toast('업로드할 파일을 선택하세요'); return; }
+      rUploadBtn.disabled=true;
+      beginBatch();
+      try{
+        const results = await uploadManyAny(files, 'attachments/regular');
+        if(rFileUrlEl) rFileUrlEl.value = results[0].secure_url;
+        appendUploadResults(rFileEl, results);
+        toast(results.length+'개 업로드 완료');
+      }catch(e){ alert(e.message||'업로드 실패'); }
+      finally{ rUploadBtn.disabled=false; endBatch(); }
+    });
+
+    on(rSaveBtn,'click', async function(){
+      if(!rTitleEl || !rTitleEl.value.trim()){ if(rTitleEl) rTitleEl.focus(); return; }
+      var base={
+        category: (rCatEl&&rCatEl.value)||'weekend',
+        title: rTitleEl.value.trim(),
+        content: (rContentEl&&rContentEl.value)||'',
+        isPinned: !!(rPinnedEl&&rPinnedEl.checked),
+        fileUrl: (rFileUrlEl&&rFileUrlEl.value.trim())||null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        visible:true
+      };
+      const rAtt = rFileEl?.dataset?.attachments ? JSON.parse(rFileEl.dataset.attachments) : null;
+      if(rAtt) base.attachments = rAtt;
+
+      rSaveBtn.disabled=true;
+      try{
+        if(rEditingId){
+          await rCol().doc(rEditingId).update(base);
+          const i = rAll.findIndex(x=>x.id===rEditingId);
+          if(i>-1){ rAll[i] = { id:rEditingId, data: Object.assign({}, rAll[i].data, base, { updatedAt:new Date() }) }; }
+          filterRegulars(); renderRegulars(false);
+          toast('수정 완료'); closeRModal(); await resetRegulars();
+        }else{
+          const createdAtMs = Date.now();
+          const dr=await rCol().add(Object.assign({},base,{ createdAt:firebase.firestore.FieldValue.serverTimestamp(), createdAtMs }));
+          rAll = [{ id: dr.id, data: Object.assign({}, base, { createdAtMs, createdAt:new Date() }) }, ...rAll];
+          filterRegulars(); renderRegulars(false);
+          toast('등록 완료'); closeRModal(); await resetRegulars();
+        }
+      }catch(e){ alert('저장 실패: '+e.message); }
+      finally{ rSaveBtn.disabled=false; }
+    });
+    on(rDeleteBtn,'click', async function(){
+      if(!rEditingId) return;
+      if(!confirm('해당 항목을 삭제할까요?')) return;
+      rDeleteBtn.disabled=true;
+      try{ await rCol().doc(rEditingId).delete(); toast('삭제 완료'); closeRModal(); await resetRegulars(); }
+      catch(e){ alert('삭제 실패: '+e.message); }
+      finally{ rDeleteBtn.disabled=false; }
+    });
+    on(rCancelBtn,'click', closeRModal);
+    on(rCloseBtn,'click', closeRModal);
+
+    document.addEventListener('click', async function(e){
+      var edit = e.target.closest && e.target.closest('.r-edit');
+      var del  = e.target.closest && e.target.closest('.r-del');
+      if(edit){
+        var id=edit.getAttribute('data-id'); var doc=await rCol().doc(id).get();
+        if(doc.exists) openRModal({docId:id, data:doc.data()});
+      }
+      if(del){
+        var id2=del.getAttribute('data-id'); if(!confirm('삭제할까요?')) return;
+        await rCol().doc(id2).delete(); toast('삭제 완료'); await resetRegulars();
+      }
+    });
+
+    on(byId('rNew'), 'click', function(){ openRModal({}); });
+    on(byId('rNew2'),'click', function(){ openRModal({}); });
+    on(byId('rSearch'),'click', function(){ rKeyword=(byId('rq')&&byId('rq').value.trim())||''; filterRegulars(); renderRegulars(false); });
+    on(byId('rq'),'keydown', function(e){ if(e.key==='Enter') byId('rSearch').click(); });
+    on(byId('rFilterCat'),'change', function(){ rCat=byId('rFilterCat').value; filterRegulars(); renderRegulars(false); });
+    on(byId('rFilterPinned'),'change', function(){ rPinned=byId('rFilterPinned').value; filterRegulars(); renderRegulars(false); });
+    on(byId('rReload'),'click', resetRegulars);
+    on(byId('rMore'),'click', function(){ renderRegulars(true); });
+
+    /* ---------- 행사 ---------- */
+    var ePageSize=10, eQ='', eFrom='', eTo='', eEditingId=null;
+    function eCol(){ return db.collection('events'); }
+    var eAll=[], eFiltered=[], eNext=0;
+
+    function _toDate(val){ return val && typeof val.toDate==='function' ? val.toDate() : (val ? new Date(val) : null); }
+
+    function drawEventRowFromObj(o, parentTbody){
+      try{
+        var d=o.data||{};
+        var tr=document.createElement('tr'); tr.className='tr';
+        tr.innerHTML =
+          '<td>'+escapeHtml(d.title||'')+'</td>'+
+          '<td>'+fmt(d.date)+'</td>'+
+          '<td>'+escapeHtml(d.time||'')+'</td>'+
+          '<td>'+escapeHtml(d.place||'')+'</td>'+
+          '<td class="cell-right">'+
+            '<button class="btn btn-primary e-edit" type="button" data-id="'+o.id+'">수정</button> '+
+            '<button class="btn btn-danger e-del" type="button" data-id="'+o.id+'">삭제</button>'+
+          '</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }catch(err){
+        var tr=document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" style="color:#c00">[표시불가] '+escapeHtml(o.id)+' – '+escapeHtml(err.message||err)+'</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }
+    }
+    async function fetchAllEvents(){
+      const snap = await eCol().get();
+      eAll = snap.docs.map(doc=>({ id:doc.id, data: doc.data() || {} }));
+      eAll = eAll.filter(x=> x.data && x.data.seed!==true && x.data.visible!==false);
+      eAll.sort((a,b)=> tsToMs(_toDate(b.data.date)) - tsToMs(_toDate(a.data.date)));
+    }
+    function filterEvents(){
+      const kw=lower(eQ||'');
+      const from = eFrom ? new Date(eFrom+'T00:00:00') : null;
+      const to   = eTo   ? new Date(eTo+'T23:59:59')   : null;
+      eFiltered = eAll.filter(({data})=>{
+        const d=_toDate(data.date);
+        if(from && (!d || d<from)) return false;
+        if(to   && (!d || d>to  )) return false;
+        if(kw){
+          const t= lower(data.title||'');
+          if(!t.includes(kw)) return false;
+        }
+        return true;
+      });
+      eNext=0;
+    }
+    function renderEvents(append){
+      const tb=els.eventTbody;
+      if(!tb){ console.warn('[events] tbody not found'); return; }
+      if(!append) tb.innerHTML='';
+      const slice = eFiltered.slice(eNext, eNext+ePageSize);
+      slice.forEach(o=>drawEventRowFromObj(o, tb));
+      eNext += slice.length;
+      var more=byId('eMore');
+      if(more) more.style.display = (eNext < eFiltered.length) ? 'inline-flex' : 'none';
+    }
+    async function resetEvents(){
+      await fetchAllEvents(); filterEvents(); renderEvents(false);
+    }
+
+    var eModal=byId('eModal'), eTitle=byId('eTitle'),
+        eName=byId('eName'), eDate=byId('eDate'), eTime=byId('eTime'),
+        ePlace=byId('ePlace'), eDesc=byId('eDesc'), eFileUrl=byId('eFileUrl'),
+        eFile=byId('eFile'), eUpload=byId('eUpload'), eSave=byId('eSave'),
+        eDelete=byId('eDelete'), eCancel=byId('eCancel'), eClose=byId('eClose');
+
+    function openEModal(opts){
+      opts=opts||{}; eEditingId=opts.docId||null;
+      if(eTitle) eTitle.textContent = eEditingId?'행사일정 수정':'행사일정 작성';
+      if(opts.data){
+        var d=opts.data;
+        if(eName) eName.value= String(d.title||'');
+        if(eDate) eDate.value = d.date && typeof d.date.toDate==="function" ? toInputDate(d.date.toDate())
+                         : (d.date ? toInputDate(new Date(d.date)) : '');
+        if(eTime) eTime.value= String(d.time||'');
+        if(ePlace) ePlace.value= String(d.place||'');
+        if(eDesc) eDesc.value= String(d.description||'');
+        if(eFileUrl) eFileUrl.value= String(d.fileUrl||'');
+        if(eDelete) eDelete.style.display='inline-flex';
+      }else{
+        var f=byId('eForm'); if(f) f.reset();
+        if(eDelete) eDelete.style.display='none';
+      }
+      if(eModal){ eModal.classList.add('open'); if(eName) eName.focus(); }
+    }
+    function closeEModal(){ if(eModal) eModal.classList.remove('open'); }
+
+    on(eUpload,'click', async function(){
+      const files = Array.from(eFile?.files||[]);
+      if(!files.length){ toast('업로드할 파일을 선택하세요'); return; }
+      eUpload.disabled=true;
+      beginBatch();
+      try{
+        const results = await uploadManyAny(files, 'attachments/events');
+        if(eFileUrl) eFileUrl.value = results[0].secure_url;
+        appendUploadResults(eFile, results);
+        toast(results.length+'개 업로드 완료');
+      }catch(e){ alert(e.message||'업로드 실패'); }
+      finally{ eUpload.disabled=false; endBatch(); }
+    });
+
+    on(eSave,'click', async function(){
+      if(!eName || !eName.value.trim()){ if(eName) eName.focus(); return; }
+      if(!eDate || !eDate.value){ if(eDate) eDate.focus(); return; }
+      var dateVal=new Date(eDate.value);
+      var base={
+        title:eName.value.trim(),
+        date: firebase.firestore.Timestamp.fromDate(dateVal),
+        time: (eTime&&eTime.value.trim())||null,
+        place: (ePlace&&ePlace.value.trim())||null,
+        description: (eDesc&&eDesc.value.trim())||null,
+        fileUrl: (eFileUrl&&eFileUrl.value.trim())||null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        visible:true
+      };
+      const eAtt = eFile?.dataset?.attachments ? JSON.parse(eFile.dataset.attachments) : null;
+      if(eAtt) base.attachments = eAtt;
+
+      eSave.disabled=true;
+      try{
+        if(eEditingId){
+          await eCol().doc(eEditingId).update(base);
+          const i = eAll.findIndex(x=>x.id===eEditingId);
+          if(i>-1){ eAll[i] = { id:eEditingId, data: Object.assign({}, eAll[i].data, base, { date: dateVal, updatedAt:new Date() }) }; }
+          filterEvents(); renderEvents(false);
+          toast('수정 완료'); closeEModal(); await resetEvents();
+        }else{
+          const createdAtMs = Date.now();
+          const dr=await eCol().add(Object.assign({},base,{ createdAt:firebase.firestore.FieldValue.serverTimestamp(), createdAtMs }));
+          eAll = [{ id: dr.id, data: Object.assign({}, base, { date: dateVal, createdAtMs, createdAt:new Date() }) }, ...eAll];
+          filterEvents(); renderEvents(false);
+          toast('등록 완료'); closeEModal(); await resetEvents();
+        }
+      }catch(err){ alert('저장 실패: '+err.message); }
+      finally{ eSave.disabled=false; }
+    });
+    on(eDelete,'click', async function(){
+      if(!eEditingId) return;
+      if(!confirm('해당 일정을 삭제할까요?')) return;
+      eDelete.disabled=true;
+      try{ await eCol().doc(eEditingId).delete(); toast('삭제 완료'); closeEModal(); await resetEvents(); }
+      catch(err){ alert('삭제 실패: '+err.message); }
+      finally{ eDelete.disabled=false; }
+    });
+    on(eCancel,'click', closeEModal);
+    on(eClose,'click', closeEModal);
+
+    document.addEventListener('click', async function(e){
+      var edit=e.target.closest && e.target.closest('.e-edit');
+      var del =e.target.closest && e.target.closest('.e-del');
+      if(edit){
+        var id=edit.getAttribute('data-id'); var doc=await eCol().doc(id).get();
+        if(doc.exists) openEModal({docId:id, data:doc.data()});
+      }
+      if(del){
+        var id2=del.getAttribute('data-id'); if(!confirm('삭제할까요?')) return;
+        await eCol().doc(id2).delete();
+        toast('삭제 완료'); await resetEvents();
+      }
+    });
+    on(byId('eNew'),'click', function(){ openEModal({}); });
+    on(byId('eNew2'),'click', function(){ openEModal({}); });
+    on(byId('eSearch'),'click', function(){
+      eQ = (byId('eq')&&byId('eq').value.trim())||'';
+      eFrom = (byId('eFrom')&&byId('eFrom').value)||'';
+      eTo   = (byId('eTo')&&byId('eTo').value)||'';
+      filterEvents(); renderEvents(false);
+    });
+    on(byId('eq'),'keydown', function(ev){ if(ev.key==='Enter') byId('eSearch').click(); });
+    on(byId('eReload'),'click', resetEvents);
+    on(byId('eMore'),'click', function(){ renderEvents(true); });
+
+    /* ---------- 미디어 (행사 사진/갤러리) ---------- */
+    var mediaPage=12, mediaQ='', mediaCurType='events', mediaEditingId=null;
+    var mediaMap = {
+      events: { col:'photos_events',  path:'images/events'  },
+      gallery:{ col:'photos_gallery', path:'images/gallery' }
+    };
+    function mediaRef(){ return db.collection(mediaMap[mediaCurType].col); }
+
+    var mAll=[], mFiltered=[], mNext=0;
+    function drawMediaRowFromObj(o, parentTbody){
+      try{
+        var d=o.data||{};
+        var when=d.date||d.createdAt||(d.createdAtMs?new Date(d.createdAtMs):null);
+        var thumb=d.imageUrl ? '<img src="'+escapeHtml(d.imageUrl)+'" alt="" style="width:72px;height:48px;object-fit:cover;border-radius:6px">' : '';
+        var tr=document.createElement('tr'); tr.className='tr';
+        tr.innerHTML =
+          '<td>'+thumb+'</td>'+
+          '<td>'+escapeHtml(d.title||'')+'</td>'+
+          '<td>'+fmt(when)+'</td>'+
+          '<td class="cell-right">'+
+            '<button class="btn btn-primary m-edit" type="button" data-id="'+o.id+'">수정</button> '+
+            '<button class="btn btn-danger m-del" type="button" data-id="'+o.id+'">삭제</button>'+
+          '</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }catch(err){
+        var tr=document.createElement('tr');
+        tr.innerHTML = '<td colspan="4" style="color:#c00">[표시불가] '+escapeHtml(o.id)+' – '+escapeHtml(err.message||err)+'</td>';
+        parentTbody && parentTbody.appendChild(tr);
+      }
+    }
+    async function fetchAllMedia(){
+      const snap = await mediaRef().get();
+      mAll = snap.docs.map(doc=>({ id:doc.id, data: doc.data() || {} }));
+      mAll = mAll.filter(x=> x.data && x.data.seed!==true && x.data.visible!==false);
+      mAll.sort((a,b)=>{
+        const am = tsToMs(a.data.date||a.data.createdAt||a.data.createdAtMs);
+        const bm = tsToMs(b.data.date||b.data.createdAt||b.data.createdAtMs);
+        return bm - am;
+      });
+    }
+    function filterMedia(){
+      const kw=lower(mediaQ||'');
+      mFiltered = mAll.filter(({data})=>{
+        if(kw){
+          const t= lower(data.title||'');
+          if(!t.includes(kw)) return false;
+        }
+        return true;
+      });
+      mNext=0;
+    }
+    function renderMedia(append){
+      const tb=els.mediaTbody;
+      if(!tb){ console.warn('[media] tbody not found'); return; }
+      if(!append) tb.innerHTML='';
+      const slice = mFiltered.slice(mNext, mNext+mediaPage);
+      slice.forEach(o=>drawMediaRowFromObj(o, tb));
+      mNext += slice.length;
+      var more=byId('mMore');
+      if(more) more.style.display = (mNext < mFiltered.length) ? 'inline-flex' : 'none';
+    }
+    async function resetMedia(){
+      await fetchAllMedia(); filterMedia(); renderMedia(false);
+    }
+
+    // === 미디어 작성/수정/삭제 모달 ===
+    var mModal    = byId('modalMedia');
+    var mTypeEl   = byId('mtype');
+    var mTitleEl  = byId('mtitle');
+    var mDateEl   = byId('mdate');
+    var mDescEl   = byId('mdesc');
+    var mImgEl    = byId('mimg');
+    var mFileEl   = byId('mfile');
+    var mUploadBt = byId('mUpload');
+    var mSaveBt   = byId('mSave');
+    var mDeleteBt = byId('mDelete');
+    var mCancelBt = byId('mCancel');
+    var mCloseBt  = byId('closeMedia');
+    var mEditingId = null;
+
+    function openMModal(opts){
+  opts = opts || {};
+  mEditingId = opts.docId || null;
+
+  if (mTypeEl) mTypeEl.value = mediaCurType || 'events';
+
+  if (opts.data){
+    const d = opts.data;
+    if (mTitleEl) mTitleEl.value = d.title || '';
+    if (mDateEl)  mDateEl.value  = d.date && typeof d.date.toDate==='function'
+                      ? toInputDate(d.date.toDate())
+                      : (d.date ? toInputDate(new Date(d.date)) : '');
+    if (mDescEl)  mDescEl.value  = d.description || '';
+    if (mImgEl)   mImgEl.value   = d.imageUrl || '';
+    if (mDeleteBt) mDeleteBt.style.display = 'inline-flex';
+
+    // ✅ 기존 첨부 로드해서 삭제 UI에 표시
+    const preset =
+      Array.isArray(d.attachments) && d.attachments.length
+        ? d.attachments.filter(a => a && a.url)
+        : (d.imageUrl ? [{ url: d.imageUrl, name: (d.title||'image') + '.jpg', type: 'image' }] : []);
+    mFileEl.dataset.attachments = JSON.stringify(preset);
+    renderAttachmentList(mFileEl);
+    syncFirstAttachmentToField(mFileEl, mImgEl);
+
+  } else {
+    const f = byId('mform'); if (f) f.reset();
+    if (mDeleteBt) mDeleteBt.style.display = 'none';
+    // ✅ 신규도 빈 리스트 렌더
+    mFileEl.dataset.attachments = '[]';
+    renderAttachmentList(mFileEl);
+    syncFirstAttachmentToField(mFileEl, mImgEl);
+  }
+
+  if (mModal){ mModal.classList.add('open'); if (mTitleEl) mTitleEl.focus(); }
+}
+
+
+    function closeMModal(){ if (mModal) mModal.classList.remove('open'); }
+
+    on(mUploadBt,'click', async function(){
+      const files = Array.from(mFileEl?.files || []);
+      if (!files.length){ toast('업로드할 이미지를 선택하세요'); return; }
+      mUploadBt.disabled = true;
+      beginBatch();
+      try{
+        const kind   = (mTypeEl?.value || 'events');
+        const folder = mediaMap[kind].path;
+        // 이미지/영상 위주이나 문서도 허용 → uploadManyAny로 자동 분기
+        const results = await uploadManyAny(files, folder);
+        if (mImgEl) mImgEl.value = results[0].secure_url;
+        appendUploadResults(mFileEl, results);
+        toast(results.length+'개 업로드 완료');
+      }catch(e){ alert(e.message || '업로드 실패'); }
+      finally{ mUploadBt.disabled = false; endBatch(); }
+    });
+
+    on(mSaveBt,'click', async function(){
+      if (!mTitleEl || !mTitleEl.value.trim()){ mTitleEl.focus(); return; }
+      const type = (mTypeEl?.value || 'events');
+      mediaCurType = type;
+
+      const base = {
+        title: mTitleEl.value.trim(),
+        description: (mDescEl && mDescEl.value.trim()) || null,
+        imageUrl: (mImgEl && mImgEl.value.trim()) || null,
+        date: mDateEl && mDateEl.value
+                ? firebase.firestore.Timestamp.fromDate(new Date(mDateEl.value))
+                : null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        visible: true
+      };
+      const mAtt = mFileEl?.dataset?.attachments ? JSON.parse(mFileEl.dataset.attachments) : null;
+      if (mAtt) base.attachments = mAtt;
+
+      mSaveBt.disabled = true;
+      try{
+        if (mEditingId){
+          await mediaRef().doc(mEditingId).update(base);
+          const i = mAll.findIndex(x=>x.id===mEditingId);
+          if(i>-1){ mAll[i] = { id:mEditingId, data: Object.assign({}, mAll[i].data, base, { updatedAt:new Date() }) }; }
+          filterMedia(); renderMedia(false);
+          toast('수정 완료'); closeMModal(); await resetMedia();
+        }else{
+          const createdAtMs = Date.now();
+          const dr = await mediaRef().add(Object.assign({}, base, {
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAtMs
+          }));
+          mAll = [{ id: dr.id, data: Object.assign({}, base, { createdAtMs, createdAt:new Date() }) }, ...mAll];
+          filterMedia(); renderMedia(false);
+          toast('등록 완료'); closeMModal(); await resetMedia();
+        }
+      }catch(e){
+        alert('저장 실패: '+e.message);
+      }finally{
+        mSaveBt.disabled = false;
+      }
+    });
+
+    on(mDeleteBt,'click', async function(){
+      if (!mEditingId) return;
+      if (!confirm('해당 항목을 삭제할까요?')) return;
+      mDeleteBt.disabled = true;
+      try{
+        await mediaRef().doc(mEditingId).delete();
+        toast('삭제 완료'); closeMModal(); await resetMedia();
+      }catch(e){ alert('삭제 실패: '+e.message); }
+      finally{ mDeleteBt.disabled = false; }
+    });
+
+    on(mCancelBt,'click', closeMModal);
+    on(mCloseBt,'click', closeMModal);
+
+    document.addEventListener('click', async function(e){
+      const edit = e.target.closest && e.target.closest('.m-edit');
+      const del  = e.target.closest && e.target.closest('.m-del');
+      if (edit){
+        const id = edit.getAttribute('data-id');
+        const doc = await mediaRef().doc(id).get();
+        if (doc.exists) openMModal({docId:id, data: doc.data()});
+      }
+      if (del){
+        const id = del.getAttribute('data-id');
+        if (!confirm('삭제할까요?')) return;
+        await mediaRef().doc(id).delete();
+        toast('삭제 완료'); await resetMedia();
+      }
+    });
+
+    on(byId('mediaType'),'change', function(e){ mediaCurType = e.target.value; resetMedia(); });
+    on(byId('mSearch'),'click', function(){ mediaQ = (byId('mq')?.value.trim()) || ''; filterMedia(); renderMedia(false); });
+    on(byId('mq'),'keydown', function(ev){ if(ev.key==='Enter') byId('mSearch').click(); });
+    on(byId('mReload'),'click', resetMedia);
+    on(byId('mMore'),'click', function(){ renderMedia(true); });
+    on(byId('mNewTop'),'click', function(){ openMModal({}); });
+    on(byId('mNew'),'click', function(){ openMModal({}); });
+
+    /* ========== Office Sync helpers (옵션) ========== */
+    var OFFICE_COLLECTION='office_board';
+    async function syncOffice(kind, id, src){
+      try{
+        var destId=kind+"_"+id;
+        var data={
+          kind:kind, refId:id,
+          title: src.title||'',
+          content: (src.content!=null?src.content:(src.description!=null?src.description:null)),
+          category: src.category||null,
+          date: src.date||null,
+          time: src.time||null,
+          place: src.place||null,
+          fileUrl: src.fileUrl||null,
+          attachments: src.attachments||null,
+          isPinned: !!src.isPinned,
+          visible: src.visible!==false,
+          createdAt: src.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          source: 'admin-dashboard'
+        };
+        await db.collection(OFFICE_COLLECTION).doc(destId).set(data,{merge:true});
+      }catch(e){ console.warn('[office sync]',e); }
+    }
+    async function removeFromOffice(kind,id){
+      try{
+        await db.collection(OFFICE_COLLECTION).doc(kind+"_"+id).set({
+          deleted:true, visible:false, updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        },{merge:true});
+      }catch(e){ console.warn('[office remove]',e); }
+    }
+
+    
+    // ===== 부팅 =====
+async function boot(){
+  // 2) 통계 구독
+  subscribeStats();
+
+  // 3) 목록 초기 로드
+  await resetNotices();
+  await resetRegulars();
+  await resetEvents();
+  await resetMedia();
+
+  // 4) 특정 공지 편집 바로 열기 (옵션)
+  const params = new URLSearchParams(location.search);
+  const editId = params.get('edit');
+  if (editId) {
+    try {
+      const doc = await db.collection('notices').doc(editId).get();
+      if (doc.exists) openModal({ docId: editId, data: doc.data() });
+    } catch (_) {}
+  }
+  console.debug('[boot] done');
+}
+
+
+  }); // DOMContentLoaded
+})();
+</script>
+</body>
+</html>

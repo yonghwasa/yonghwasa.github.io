@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>용화사 사찰 웹사이트</title>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <style>
+    /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-width: 1280px; overflow-x: auto; }
+    body { font-family:'Noto Sans KR',sans-serif; background:#fafafa; color:#333; line-height:1.6; }
+    img, video { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+    #wrapper { width: clamp(1280px, 100%, 1920px); min-width: 1280px; max-width: 1440px;
+               height: clamp(860px, 100%, 1080px ); min-height: 740px; max-height: 1080px; 
+               margin: 0 auto;}
+
+    /* Header */
+    .header-top { background:#fff; padding:0.75rem 2rem;
+              display:flex; align-items:center; justify-content:center;
+              gap:0.5rem; font-size: 1rem; color: #333;
+              border-bottom: 1px solid #eaeaea;
+            }
+    .header-top img{ justify-content: center; width: 250px; height: 105px;}
+    .header-top .divider {color: #ccc; margin: 0 0.75rem;}
+    .header-top .temple-name {font-weight: 700;}
+    :root { --menu-width: 1200px; --menu-gap: 10rem; }
+    nav.main-nav {
+      background:#fff; position: relative;
+      padding:0.5rem 2rem; overflow: visible;
+    }
+    nav.main-nav > ul { display:flex; justify-content: center; flex-wrap: nowrap;
+                        list-style:none; gap: 10rem; white-space: nowrap;
+                        font-weight: 500; max-width: 1200px; margin: 0 auto;
+                        position: relative;}
+    nav.main-nav ul li { position:relative; padding: 0; }
+    nav.main-nav > ul > li:not(:last-child)::after{
+      content: "|"; font-size: larger;
+      position: absolute;
+      right: -5rem;
+      color: #333;
+    }
+    nav.main-nav ul li > a{
+      color: #333; white-space: nowrap;
+      padding: 1rem;
+      transition: color 0.2s;
+      font-size: larger;
+    }
+    nav.main-nav ul li > a:hover{
+      color: #B9A26A;
+    }
+    nav.main-nav > ul.menu{
+  max-width: var(--menu-width);
+  margin: 0 auto;
+  gap: var(--menu-gap);                  
+}
+nav.main-nav > ul.menu > li + li::after{
+  right: calc(-0.5 * var(--menu-gap));   
+}
+nav.main-nav .mega-submenu{
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--menu-width);
+  max-width: var(--menu-width);          
+}
+
+
+    nav.main-nav .mega-submenu { display: grid; grid-template-columns: repeat(5, max-content);  column-gap: 8rem;                             
+                                 position: absolute; top: 100%; left: 0; justify-content: center;
+                                 width: 100%; max-width: 1920px; padding: 2rem;
+                                 background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box;
+                                 opacity: 0; pointer-events: none; transform: translateY(-10px);
+                                 transition: opacity 0.3s ease, transform 0.3s ease-out; z-index: 50;}
+
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    nav.main-nav .mega-submenu .group { text-align: left; padding: 0 0.25rem; box-sizing: border-box; }
+    nav.main-nav .mega-submenu .group ul { list-style: none; padding: 0; margin: 0; }
+    nav.main-nav .mega-submenu .group ul li + li { margin-top: 0.35rem;  padding-left: 0; }
+    nav.main-nav .mega-submenu .group a { color: #333; text-decoration: none; transition: color 0.2s; }
+    nav.main-nav .mega-submenu .group a:hover { color: #B9A26A; }
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    @media (max-width: 1360px){
+  nav.main-nav .mega-submenu{ grid-template-columns: repeat(5, 1fr); gap: 3.5rem; }
+}
+   
+    /* Hero Slider */
+    .hero { width:100%; height:75vh; position:relative; 
+            flex-shrink: 0;}
+    .hero .swiper-slide { 
+      width:100%; height:100%; 
+      background-size:cover;
+      background-position:center;
+      background-repeat: no-repeat;
+      flex: 0 0 100%; 
+    }
+    .swiper-pagination-bullet-active { background:#B9A26A; }
+    .swiper-container{
+      width: 100%;
+      height: 60vh;
+      overflow: hidden;
+    }
+    .swiper-wrapper{
+      display: flex;
+    }
+    .hero .swiper-container,
+    .hero .swiper-wrapper,
+    .hero .swiper-slide { height: 100%;}
+
+    /* Mcontainer Section */
+    #Mcontainer { max-width:1200px; max-height: 200px; margin:2rem auto; 
+                  padding:0 1rem; margin-top: -9rem; position: relative; 
+                  z-index: 10; } 
+    .iconArea ul { 
+      display:flex; 
+      justify-content:center; 
+      gap:5rem; 
+      list-style:none; 
+      margin-bottom:0.5rem; 
+      margin-left: -3.5rem;}
+    .iconArea ul li { 
+      text-align:center; 
+    }
+    .iconArea ul li a{
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+    }
+    .iconArea ul li img { 
+      display: block;
+      width:60px; 
+      height:60px; 
+    }
+    .iconArea ul li span { 
+      display:block; 
+      margin-top:0.5rem; 
+      font-weight:500; 
+      color:#2c3e50; 
+    }
+    .swiper-container-fade { position:relative; }
+
+    
+    /* Section Titles */
+    h2.section-title { font-size:1.75rem; color:#2c3e50;
+                         border-left:4px solid #B9A26A; padding-left:0.5rem;
+                         margin-bottom:1rem; }
+
+    /* Calendar */
+    .events-section { background: #B9A26A; color: #fff; position: relative;
+                      padding: 0 1rem; max-width: 400px; margin: 2rem auto ; 
+                      height: 280px; overflow-x: auto; overflow-y: hidden;
+                      margin-right: 130px; z-index: 30; }
+    .events-section .events-header { display: flex; align-items: center; justify-content: space-between; 
+                                     margin-bottom: 1.5rem; }
+    .events-section .label { font-size: 1rem; opacity: 0.8; }
+    .events-section .events-header .section-title { font-size: 1.5rem; margin: 0; font-weight: 700;
+                                                    color: #fffffe; }
+    .events-section .events-header, .events-section .more-btn { position: relative; z-index: 31; }
+    .events-section .more-btn { display: inline-flex; align-items: center; background: #fff;
+                                color: #333; padding: 0.3rem 1rem; margin-top: 0.4rem;
+                                text-decoration: none; font-weight: 500; gap: 0.25rem;
+                                border-radius: 8px; }
+    .events-section .more-btn .plus { font-family: 1.2rem; line-height: 1; }
+    .events-section .card { flex: 0 0 200px !important; background: #fff; color: #333; 
+                            border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 0.5rem;
+                            display: flex; flex-direction: column; justify-content: space-between; 
+                            height: 60px; }
+    .events-section .card strong { font-size: 1rem; color: #2c3e50; margin-bottom: 0.5rem; }
+    .events-section .card .date { font-size: 0.85rem; color: #999; text-align: right;
+                                  margin-top: auto; }
+    .events-side-image { width: clamp(420px, 50vw, 720px); height: auto; object-fit: cover; 
+                         display: block; position: relative; z-index: 10;
+                         pointer-events: none; }
+    .events-side-image { margin-top: -330px; margin-left: 130px; float: left;
+                         max-width: 715px; min-width: 600px; max-height: 300px;min-height: 220px;  }
+    
+    
+    /* Notice */
+    .notice-section { max-width: 1200px; margin: 1rem auto; padding: 0 1rem; }
+    .notice-section .section-title { font-size: 1.75rem; color: #2c3e50; border-left: 4px solid #B9A26A; 
+                                     padding-left: 0.5rem; margin-bottom: 1rem; }
+    .notice-section .horizontal-scroll { display: flex; flex-wrap: nowrap; gap: 1rem;
+                                         overflow-x: auto; padding-bottom: 1rem; scroll-behavior: smooth; }
+    .notice-section .horizontal-scroll::-webkit-scrollbar { height: 6px; }
+    .notice-section .horizontal-scroll::-webkit-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.2); border-radius: 3px; }
+    .notice-section .card { flex: 0 0 280px; background: #fff; border-radius: 8px; 
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 1rem; display: flex;
+                            flex-direction: column; justify-content: space-between; height: 150px;
+                            width: 280px; box-sizing: border-box; overflow: hidden; }
+    .notice-section .card a { font-size: 1.3rem; color: #2c3e50; margin-bottom: 0.5rem; 
+                              display: block; white-space: nowrap; overflow: hidden; 
+                              line-height: 1.2; text-overflow: ellipsis;}
+    .notice-section .card .date { font-size: 0.75rem; color: #999; text-align: right; }
+
+    
+    /* Gallery */
+    .gallery { max-width:1200px; margin:2rem auto; padding:0 1rem; 
+                }
+    .gallery .grid { display:grid;
+             grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:1rem; }
+    .gallery-item { background:#fff; border-radius:8px;
+                                overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .gallery-item img { width:100%; height:140px; object-fit:cover; }
+    .gallery-item p { padding:0.75rem; font-size:0.95rem; }
+
+    /* Photo News */
+    .photo-news { max-width:1200px; margin:2rem auto; padding:0 1rem;
+                  }
+    .photo-news .grid { display:grid;
+             grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:1rem; }
+    .news-item { background:#fff; border-radius:8px;
+                                overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .news-item img { width:100%; height:140px; object-fit:cover; }
+    .news-item p { padding:0.75rem; font-size:0.95rem; }
+
+    /* Footer Links Bar*/
+    .footer-links{
+      background: #B9A26A;
+      padding: 0.75rem 1rem;
+    }
+    .footer-links ul{
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.65rem;
+      padding-left: 0.75rem;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    .footer-links ul li{
+      position: relative;
+    }
+    .footer-links ul li:not(:last-child)::after{
+      content: "/";
+      margin: 0 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-links ul li a{
+      color: #fff;
+      transition:color 0.2s;
+    }
+    .footer-links ul li a:hover{
+      color: #333;
+    }
+
+    /*Footer Info */
+    .footer-info{
+      background: #333;
+      color: #fff;
+      text-align: start;
+      padding: 1.5rem 1.5rem;
+      line-height: 1.4;
+    }
+    .footer-info .account{
+      color: #efc964;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .footer-info .address{
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .footer-info .name{
+      text-align: right;
+      padding-right: 4rem;
+      font-size: larger;
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /*Footer Bottom */
+    .footer-bottom{
+      background: #222;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+
+    /* Back to Top */
+    #toTop { position:fixed; bottom:20px; right:20px;
+             background:#fff; color:#222; padding:0;
+             border-radius:50%; cursor:pointer; display:none;
+             box-shadow:0 2px 6px rgba(0,0,0,0.2); width: 32px; height: 32px;
+             display: flex; align-items: center; justify-content: center; }
+
+    /* Photo background */
+    .lower-bg { background: #efefef; padding: 2rem 0; }
+
+    .lower-bg .gallery,
+    .lower-bg .photo-news { background: #fff; max-width: 1200px; margin: 0 auto 2rem;
+                            padding: 1rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .gallery-item, .news-item { flex-shrink: 0; min-width: 200px; flex-wrap: nowrap;}
+    /* Photo date */
+    .gallery-item .date ,
+    .news-item .date { display: block; margin-top: 0.5rem; font-size: 0.85rem;
+                       color:#999; text-align: right; }
+    
+    
+    /* Event Notice */
+    .events-section .card ,
+    .notice-section .card { flex-shrink: 0; min-width: 280px; }
+    .events-section .card ,
+    .notice-section .card { flex:0 0 280px; }
+
+    /* More btn */
+    .section-header { display: flex; align-items: center; justify-content: space-between;
+                      margin-bottom: 1rem; }
+.section-more { display: inline-flex; align-items: center; gap: 0.5rem;
+                font-size: 0.95rem; color: #333; text-decoration: none;
+                padding: 0.25rem 0.5rem; transition: background 0.2s, color 0.2s; }
+.section-more .plus { display: inline-flex; justify-content: center; align-items: center;
+                      width: 24px; height: 24px; border: 1px solid #ccc;
+                      border-radius: 50%; font-weight: bold; color: #E86C00; }
+
+/* === 갤러리/행사사진: 카드가 늘어나지 않도록 고정 폭 + 유동 배치 === */
+.gallery .grid,
+.photo-news .grid{
+  display: flex;             /* grid → flex로 변경 */
+  flex-wrap: wrap;           /* 줄바꿈 허용 */
+  gap: 16px;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.gallery-item,
+.news-item{
+  flex: 0 0 280px;           /* 카드 고정폭(280px) - 필요시 240~320로 조절 */
+  max-width: 280px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.gallery-item img,
+.news-item img{
+  width: 100%;
+  height: 160px;             /* 이미지 고정 높이 */
+  object-fit: cover;
+}
+
+/* 상자(섹션)는 그대로 100% 폭이지만, 카드가 남는 공간을 채우지 않음 */
+.lower-bg .gallery,
+.lower-bg .photo-news{
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+/* 반응형으로 아주 좁아졌을 때 카드 폭만 살짝 줄이려면(선택) */
+@media (max-width: 640px){
+  .gallery-item, .news-item{ flex-basis: 220px; max-width: 220px; }
+  .gallery-item img, .news-item img{ height: 140px; }
+}
+
+
+/* admin-inline.css */
+.admin-only{display:none!important}
+body.admin-logged-in .admin-only{display:initial!important}
+
+/* 오른쪽 하단 툴바 */
+.admin-rail{
+  position:fixed; right:16px; bottom:16px; z-index:9999;
+  display:flex; gap:8px; align-items:center;
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08); padding:8px 10px;
+}
+.admin-rail .btn{height:36px; padding:0 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer}
+.admin-rail .btn-primary{background:#B9A26A; color:#fff; border:0}
+
+/* 편집 모드 시 시각화 */
+body.is-editing [contenteditable="true"]{
+  outline:2px dashed #B9A26A; outline-offset:2px; border-radius:6px;
+}
+.edit-actions{
+  position:absolute; right:6px; top:6px; z-index:5;
+  display:flex; gap:6px;
+}
+.edit-actions .btn-mini{
+  height:28px; padding:0 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:.9rem
+}
+
+/* dialog 기본 */
+.dialog{border:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);width:min(560px,90vw);padding:18px}
+.dialog::backdrop{background:rgba(0,0,0,.45)}
+.form-row{display:flex;flex-direction:column;gap:.35rem;margin:.5rem 0}
+.form-row input,.form-row textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px}
+.row{display:flex;gap:8px;align-items:center}
+
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+         <a href="try.html"> 
+          <img src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-001.png" alt="천태산 용화사 마크">  
+          <span class="divider"></span>
+          <span class="temple-name"></span>
+         </a>
+      </div>
+      <nav class="main-nav">
+        <ul class="menu">
+          <li><a href="yonghasa.html#greeting">천태산 용화사</a></li>
+          <li><a href="jM.html#notice">종무행정</a></li>
+          <li><a href="sI.html#events-photo">사찰소식</a></li>
+          <li><a href="bMG.html#weekend">법회 및 기도</a></li>
+          <li><a href="tMC.html#g-intro">불교 교실</a></li>
+        </ul>
+        <div class="mega-submenu">
+          <div class="group">
+            <ul>
+              <li><a href="yonghasa.html#greeting">주자스님 인사말</a></li>
+              <li><a href="yonghasa.html#heritage">성보 문화재</a></li>
+              <li><a href="yonghasa.html#visit">찾아오시는 길</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="jM.html#notice">공지사항</a></li>
+              <li><a href="jM.html#events">행사일정</a></li>
+              <li><a href="jM.html#regular">정기법회 안내</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="sI.html#events-photo">행사 사진</a></li>
+              <li><a href="sI.html#gallery">포토 갤러리</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="bMG.html#weekend">주말법회</a></li>
+              <li><a href="bMG.html#prayer">기도안내</a></li>
+              <li><a href="bMG.html#memorial">49제 및 제사</a></li>
+              <li><a href="bMG.html#sunday">일요법회</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="tMC.html#g-intro">불교 교실 소개</a></li>
+              <li><a href="tMC.html#g-schedule">강의 시간 안내</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+  <!-- Hero Slider -->
+    <section class="hero" id="home">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" style="background-image:url('/Users/junjun/Downloads/Project/제목을_입력해주세요_/001.png');"></div>
+          <div class="swiper-slide" style="background-image:url('/Users/junjun/Downloads/Project/제목을_입력해주세요_/002.png');"></div>
+          <div class="swiper-slide" style="background-image:url('/Users/junjun/Downloads/Project/제목을_입력해주세요_/003.png');"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </section>
+
+  <!-- Mcontainer -->
+    <div id="Mcontainer">
+      <div class="swiper-container swiper-container-fade">
+        <div class="iconArea">
+          <ul>
+            <li><a href="yonghasa.html#greeting"><img src="/Users/junjun/Downloads/Project/아이콘/제목을 입력해주세요_-001.png" alt="주지스님 인사말"><span>주지스님 인사말</span></a></li>
+            <li><a href="yonghasa.html#heritage"><img src="/Users/junjun/Downloads/Project/아이콘/006.png" alt="문화재"><span>성보 문화재</span></a></li>
+            <li><a href="jM.html#events"><img src="/Users/junjun/Downloads/Project/아이콘/007.png" alt="행사일정"><span>행사일정</span></a></li>
+            <li><a href="sI.html#events-photo"><img src="/Users/junjun/Downloads/Project/아이콘/008.png" alt="소식"><span>소식</span></a></li>
+            <li><a href="yonghasa.html#visit"><img src="/Users/junjun/Downloads/Project/아이콘/009.png" alt="오시는 길"><span>오시는 길</span></a></li>
+          </ul>
+        </div>
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" style="background:url('/assets/user/images/main/main_visual01.png') center/cover;"></div>
+          <div class="swiper-slide" style="background:url('/assets/user/images/main/main_visual02.png') center/cover;"></div>
+          <div class="swiper-slide" style="background:url('/assets/user/images/main/main_visual03.png') center/cover;"></div>
+          <div class="swiper-slide" style="background:url('/assets/user/images/main/main_visual04.png') center/cover;"></div>
+        </div>
+      </div>
+    </div>
+
+  
+
+  <!-- Calendar -->
+    <section class="events-section">
+      <div class="events-header">
+        <span class="label"></span>
+        <h2 class="section-title">행사일정(08월)</h2>
+        <a href="jM.html#events" class="more-btn">
+          <span>more</span><span class="plus">+</span>
+        </a>
+      </div>
+    </section>
+    
+    <img class="events-side-image" src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-002.png" alt="꾸미기 용 사진">
+
+  <!-- Notice -->
+    <section class="notice-section">
+     <div class="section-header" >
+      <h2 class="section-title">공지사항</h2>
+      <a href="jM.html#notice" class="more-btn">
+        <span>공지사항 더보기</span><span class="plus">+</span>
+      </a>
+     </div>
+     <div class="horizontal-scroll" id="home-notices">
+        
+      </div>
+    </section>
+
+  <!-- Photo Gallery -->
+  <div class="lower-bg">
+    <section class="gallery" id="gallery">
+      <div class="section-header">
+        <h2 class="section-title">포토 갤러리</h2>
+        <a href="sI.html#gallery" class="more-btn">
+          <span>더보기</span><span class="plus">+</span>
+        </a>
+      </div>
+      <div class="grid">
+        
+      </div>
+    </section>
+
+  <!-- Photo News -->
+    <section class="photo-news" id="photo-news">
+      <div class="section-header">
+        <h2 class="section-title">행사 사진</h2>
+        <a href="file:///Users/junjun/Downloads/Project/sI.html#events-photo" class="more-btn">
+          <span>더보기</span><span class="plus">+</span>
+        </a>
+      </div>
+      <div class="grid">
+        
+      </div>
+    </section>
+  </div>
+
+  <!-- Back to Top Button -->
+    <div id="toTop">
+      <img src="/Users/junjun/Downloads/Project/아이콘/제목을 입력해주세요_-010.png" alt="TOP" style="width: 27px; height: 27px;">
+    
+    </div>
+
+  <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <ul>
+        <li><a href="try.html">홈</a></li>
+        <li><a href="yonghasa.html#greeting">사찰소개</a></li>
+        <li><a href="admin.html">관리자 로그인</a></li>
+        <li><a href="sI.html#events-photo">소식</a></li>
+        <li><a href="jM.html#notice">공지사항</a></li>
+        <li><a href="yonghasa.html#visit">오시는길</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <p class="account">계좌번호: 기업 000000000 (예금주 : 용화사)</p>
+        <p class="name">천태산 용화사</p>
+        <p class="address">
+          (우:12531) 경기 양평군 청운면 하고론길 38<br>
+          종무소: 031-773-1148
+        </p>
+
+      </div>
+     <div class="footer-bottom">
+       <p class="copyright">© 2025 Yonghwasa. All rights reserved.</p>
+      
+      </div>
+    </footer>
+
+  <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+    // Initialize Sliders
+      new Swiper('.hero .swiper-container', {
+        loop:true, effect:'fade', autoplay:{ delay:5000 },
+        pagination:{ el:'.hero .swiper-pagination', clickable:true },
+        navigation:{ nextEl:'.hero .swiper-button-next', prevEl:'.hero .swiper-button-prev' }
+    });
+      new Swiper('#Mcontainer .swiper-container-fade', {
+        loop:true, effect:'fade', autoplay:{ delay:4000 },
+        pagination:{ el:'#Mcontainer .swiper-pagination', clickable:true }
+    });
+
+    // Back to Top Logic
+      const toTopBtn = document.getElementById('toTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) toTopBtn.style.display = 'block';
+        else toTopBtn.style.display = 'none';
+    });
+      toTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    </script>
+    <!-- Firebase SDK (compat) -->
+<script>
+  // 날짜 포맷 유틸
+  function fmtDate(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+    </script>
+   
+    <script>
+(function(){
+  var sub = document.getElementById('subnav'); if(!sub) return;
+
+  function activate(id){
+    sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
+    var cur = sub.querySelector('a[data-panel="'+id+'"]'); if(cur) cur.classList.add('active');
+
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+    var panel = document.getElementById(id); if(panel) panel.classList.add('is-active');
+
+    var bc=document.getElementById('bc-current'); if(bc&&cur) bc.textContent=cur.textContent;
+  }
+
+  function activateFromHash(){
+    var id = location.hash.slice(1) || 'events';
+    if(!document.getElementById(id)) id = 'events';
+    activate(id);
+  }
+
+  window.addEventListener('hashchange', activateFromHash);     // 해시 바뀔 때마다
+  document.addEventListener('DOMContentLoaded', activateFromHash); // 첫 로드
+})();
+</script>
+<script>
+  // ===== 공통 Firebase 초기화 =====
+  const DEMO_MODE = false; // 데모 모드면 true (백엔드 없이 버튼 테스트 가능)
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const ts   = firebase.firestore.FieldValue.serverTimestamp;
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  // 대시보드와 같은 설정
+  const firebaseConfig = {
+    apiKey:"AIzaSyBFh2Z7DKG9a8Q0GJk065FrN3NXnOrVFr4",
+    authDomain:"yonghwasa-web.firebaseapp.com",
+    projectId:"yonghwasa-web",
+    storageBucket:"yonghwasa-web.appspot.com",
+    appId:"1:853312665810:web:ad06badcb0f23ad42d950b",
+    measurementId:"G-JFHHD2E2F2"
+  };
+  if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // 공용 포매터
+  function fmt(ts){
+    try{
+      const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+      if(!d) return '-';
+      const y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
+      return `${y}.${m}.${da}`;
+    }catch(_){ return '-'; }
+  }
+</script>
+<script>
+(function(){
+  // ===== 공통 유틸 =====
+  const $  = s => document.querySelector(s);
+  const esc = s => String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const toDate = v => v?.toDate ? v.toDate() : (v ? new Date(v) : null);
+  const pad2 = n => String(n).padStart(2,'0');
+  const ymd = d => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  // Cloudinary 썸네일(빠르고 가볍게)
+  const thumb = (url, w=400, h=280) => url ? url.replace('/upload/','/upload/f_auto,q_auto,c_fill,w_'+w+',h_'+h+'/') : '';
+
+  // Firestore에서 최신 N개 가져오기(가벼운 필터 포함)
+  async function fetchLatest(col, {limit=5, visibility=true} = {}){
+    const snap = await db.collection(col)
+      .orderBy('createdAt','desc')
+      .limit(limit*3)                  // 안전 여유분
+      .get();
+    const list = snap.docs
+      .map(d=>({ id:d.id, ...d.data() }))
+      .filter(x => x.seed!==true && (visibility? x.visible!==false : true));
+    // date(촬영일/행사일) 우선 정렬 → 없으면 createdAt/createdAtMs
+    list.sort((a,b)=>{
+      const da = toDate(a.date) || toDate(a.createdAt) || new Date(a.createdAtMs||0);
+      const dbb= toDate(b.date) || toDate(b.createdAt) || new Date(b.createdAtMs||0);
+      return dbb - da;
+    });
+    return list.slice(0, limit);
+  }
+
+  // ====== 1) 공지: 최신 5개 ======
+(function(){
+  const wrap = document.getElementById('home-notices');
+  if(!wrap) return;
+
+  // 임시(인덱스 필요 없음): visible 필터 제거
+  db.collection('notices')
+    .orderBy('createdAt','desc')
+    .limit(5)
+    .onSnapshot((snap)=>{
+      const cards = [];
+      snap.forEach(doc=>{
+        const d = doc.data()||{};
+        const when = d.date?.toDate?.() || d.createdAt?.toDate?.() || new Date();
+        const link = `view.html?col=notices&id=${doc.id}`;
+        cards.push(
+          `<div class="card" data-col="notices" data-id="${doc.id}">
+             <a class="item-link" href="${link}">
+               ${d.type==='공지' ? '공지: ' : ''}${d.title || '(제목없음)'}
+             </a>
+             <span class="date">${when.getFullYear()}-${String(when.getMonth()+1).padStart(2,'0')}-${String(when.getDate()).padStart(2,'0')}</span>
+           </div>`
+        );
+      });
+      wrap.innerHTML = cards.join('') || '<div class="card"><a class="item-link" href="#">등록된 공지가 없습니다.</a><span class="date">-</span></div>';
+    }, (err)=>{
+      console.error('notices onSnapshot error:', err.code, err.message);
+      wrap.innerHTML = '<div class="card"><a class="item-link" href="#">공지 로드 실패</a><span class="date">-</span></div>';
+    });
+})();
+
+  // ====== 2) 포토 갤러리 최신 4 ======
+  (async function renderGallery(){
+    const grid = document.querySelector('.gallery .grid'); if(!grid) return;
+    const list = await fetchLatest('photos_gallery', {limit:4});
+    grid.innerHTML = list.map(d=>{
+      const raw = d.imageUrl || (Array.isArray(d.attachments)&&d.attachments[0]?.url) || '';
+      const tmb = thumb(raw, 420, 280);
+      const title = esc(d.title||'(제목없음)');
+      const when  = d.date ? toDate(d.date) : (toDate(d.createdAt) || new Date());
+      const link = `view.html?col=photos_gallery&id=${d.id}`;
+      return `<div class="gallery-item" data-col="photos_gallery" data-id="${d.id}">
+                <a class="item-link" href="${link}">
+                  <img src="${tmb}" alt="${title}">
+                </a>
+                <p>${title}</p>
+                <span class="date">${ymd(when)}</span>
+              </div>`;
+    }).join('') || '<div class="gallery-item"><p>등록된 사진이 없습니다.</p></div>';
+  })();
+
+  // ====== 3) 행사 사진 최신 4 ======
+  (async function renderPhotoNews(){
+    const grid = document.querySelector('.photo-news .grid'); if(!grid) return;
+    const list = await fetchLatest('photos_events', {limit:4});
+    grid.innerHTML = list.map(d=>{
+      const raw = d.imageUrl || (Array.isArray(d.attachments)&&d.attachments[0]?.url) || '';
+      const tmb = thumb(raw, 420, 280);
+      const title = esc(d.title||'(제목없음)');
+      const when  = d.date ? toDate(d.date) : (toDate(d.createdAt) || new Date());
+      const link = `view.html?col=photos_events&id=${d.id}`;
+      return `<div class="news-item" data-col="photos_events" data-id="${d.id}">
+                <a class="item-link" href="${link}">
+                  <img src="${tmb}" alt="${title}">
+                </a>
+                <p>${title}</p>
+                <span class="date">${ymd(when)}</span>
+              </div>`;
+    }).join('') || '<div class="news-item"><p>등록된 행사 사진이 없습니다.</p></div>';
+  })();
+
+  // ====== 4) 행사일정: 달 이동 + 그 달 일정 표시 ======
+  (function renderMonthlyEvents(){
+    const sec = document.querySelector('.events-section'); if(!sec) return;
+    // 기존 더미 카드 지우고 컨테이너 구성
+    sec.querySelectorAll('.card').forEach(n=>n.remove());
+    const header = sec.querySelector('.events-header');
+    const titleEl = header?.querySelector('.section-title');
+
+    // 타이틀 옆에 이전/다음 버튼 삽입
+    const navWrap = document.createElement('div');
+    navWrap.className = 'row';
+    navWrap.style.display = 'flex';
+    navWrap.style.gap = '6px';
+    const prevBtn = document.createElement('button');
+    const nextBtn = document.createElement('button');
+    [prevBtn,nextBtn].forEach(b=>{ b.className='btn input-xs'; b.style.height='28px'; });
+    prevBtn.textContent = '〈';
+    nextBtn.textContent = '〉';
+    titleEl?.insertAdjacentElement('afterend', navWrap);
+    navWrap.appendChild(prevBtn);
+    navWrap.appendChild(nextBtn);
+
+    // 목록 영역 만들기
+    const listWrap = document.createElement('div');
+    listWrap.id = 'home-event-list';
+    listWrap.style.display = 'grid';
+    listWrap.style.gridTemplateColumns = '1fr';
+    listWrap.style.gap = '8px';
+    listWrap.style.marginBottom = '10px';
+    sec.appendChild(listWrap);
+
+    // 월 상태
+    let offset = 0; // 0=이번달, -1=지난달, +1=다음달 …
+
+    function monthRange(offsetMonths){
+      const base = new Date();
+      base.setDate(1);
+      base.setHours(0,0,0,0);
+      const from = new Date(base.getFullYear(), base.getMonth()+offsetMonths, 1);
+      const to   = new Date(base.getFullYear(), base.getMonth()+offsetMonths+1, 1);
+      return {from, to};
+    }
+    function setHeaderText(){
+      const base = new Date();
+      const cur  = new Date(base.getFullYear(), base.getMonth()+offset, 1);
+      const mm   = pad2(cur.getMonth()+1);
+      if(titleEl) titleEl.textContent = `행사일정(${mm}월)`;
+    }
+
+    async function loadMonth(){
+      setHeaderText();
+      const {from, to} = monthRange(offset);
+      const q = db.collection('events')
+        .where('date','>=', firebase.firestore.Timestamp.fromDate(from))
+        .where('date','<',  firebase.firestore.Timestamp.fromDate(to))
+        .orderBy('date','asc');
+
+      const snap = await q.get();
+      const arr = snap.docs
+        .map(d=>({ id:d.id, ...d.data() }))
+        .filter(x=> x.seed!==true && x.visible!==false);
+
+      listWrap.innerHTML = arr.length
+        ? arr.map(ev=>{
+            const dt = toDate(ev.date);
+            const title = esc(ev.title||'(제목없음)');
+            const line = [
+              `<strong style="color:#2c3e50">${title}</strong>`,
+              `<span class="date" style="color:#666">${ymd(dt)}${ev.time? ' · '+esc(ev.time):''}${ev.place? ' · '+esc(ev.place):''}</span>`
+            ].join('<br>');
+            return `<div class="card" style="background:#fff;color:#333;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);padding:8px 10px;height:auto">${line}</div>`;
+          }).join('')
+        : `<div class="card" style="background:#fff;color:#333;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);padding:8px 10px;height:auto">
+             이번 달 등록된 일정이 없습니다.
+           </div>`;
+    }
+
+    prevBtn.addEventListener('click', ()=>{ offset -= 1; loadMonth(); });
+    nextBtn.addEventListener('click', ()=>{ offset += 1; loadMonth(); });
+
+    // 첫 로드
+    loadMonth();
+  })();
+})();
+</script>
+
+<script>
+(function () {
+  function buildUrl(el){
+    const col = el.getAttribute('data-col');
+    const id  = el.getAttribute('data-id');
+    return (col && id) ? `view.html?col=${encodeURIComponent(col)}&id=${encodeURIComponent(id)}` : null;
+  }
+  document.addEventListener('click', function(e){
+    const holder = e.target.closest('[data-col][data-id]');
+    if(!holder) return;
+    const a = e.target.closest('a');
+    if (a && a.getAttribute('href')) return; // 이미 링크 있으면 그대로
+    const url = buildUrl(holder);
+    if(!url) return;
+    e.preventDefault();
+    location.href = url;
+  });
+})();
+</script>
+
+<script>
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('.item-link');
+  if (!a) return;
+
+  const card = a.closest('[data-col][data-id]');
+  if (card) {
+    e.preventDefault(); // 다른 href 무시
+    const col = card.getAttribute('data-col');
+    const id  = card.getAttribute('data-id');
+    location.href = `view.html?col=${encodeURIComponent(col)}&id=${encodeURIComponent(id)}`;
+  }
+});
+</script>
+
+<script>
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('.item-link');
+  if (!a) return;
+  const card = a.closest('[data-col][data-id]');
+  if (!card) return;
+
+  // 모든 상황에서 상세로 보냄
+  e.preventDefault();
+  const col = card.getAttribute('data-col');
+  const id  = card.getAttribute('data-id');
+  location.href = `view.html?col=${encodeURIComponent(col)}&id=${encodeURIComponent(id)}`;
+});
+</script>
+
+
+<script src="admin-inline.js"></script>
+<link rel="stylesheet" href="admin-inline.css">
+
+  </div>
+</body>
+</html>

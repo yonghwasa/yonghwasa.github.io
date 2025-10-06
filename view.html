@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>상세보기</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+  :root{--brand:#B9A26A;--ink:#2c3e50;}
+  *{box-sizing:border-box}
+  body{font-family:'Noto Sans KR',system-ui,-apple-system,Segoe UI,Roboto,Arial; background:#f6f6f6; color:#333; margin:0}
+  .wrap{max-width:1100px; margin:32px auto; padding:0 16px}
+  .card{background:#fff; border-radius:12px; box-shadow:0 8px 22px rgba(0,0,0,.06); overflow:hidden}
+  .head{padding:18px 22px; background:#f7f5ef; border-left:6px solid var(--brand); font-weight:700; font-size:22px}
+  .meta{padding:12px 22px; color:#666; border-bottom:1px solid #eee; display:flex; gap:12px; flex-wrap:wrap}
+  .meta span{white-space:nowrap}
+  .body{padding:24px 22px; line-height:1.9}
+  .body img{
+  display:block;
+  width:min(980px, 100%);   /* 화면이 넓으면 최대 980px, 좁으면 100% */
+  height:auto;
+  margin:14px auto;         /* 중앙 정렬 + 여백 */
+  border-radius:10px;
+  } 
+  .attach{padding:16px 22px; background:#fafafa; border-top:1px dashed #e5e5e5}
+  .attach h4{margin:0 0 8px 0; color:#444; font-size:15px}
+  .attach a{display:inline-flex; align-items:center; gap:8px; padding:10px 12px; background:#fff; border:1px solid #e8e8e8; border-radius:8px; text-decoration:none; color:#333}
+  .photo-hero{width:100%; max-height:680px; object-fit:cover}
+  .nav{display:flex; justify-content:space-between; padding:18px 0}
+  .btn{display:inline-block; padding:10px 16px; border-radius:10px; border:1px solid #ddd; background:#fff; color:#333; text-decoration:none}
+  .btn.primary{background:var(--brand); color:#fff; border-color:var(--brand)}
+  .grid-photos{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-top:12px}
+  .grid-photos img{width:100%; height:200px; object-fit:cover; border-radius:8px}
+
+  .page-hero{position:relative;min-height:260px;background:#eee}
+.ph-inner{max-width:1200px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:center;padding:1.5rem}
+.ph-title{font-size:2rem;font-weight:800;margin:0 0 .5rem}
+.breadcrumbs{display:flex;gap:.5rem;color:#666}
+.breadcrumbs .sep{opacity:.6}
+.subnav{display:flex;gap:1rem;list-style:none;margin-top:.75rem;padding:0}
+.subnav a{padding:.35rem .6rem;border-radius:999px}
+.subnav a.active{background:rgba(0,0,0,.08)}
+
+  /* 링크가 보라색으로 보이지 않도록 */
+  a,a:visited{color:inherit;text-decoration:none}
+
+  /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-width: 1280px; overflow-x: auto; }
+    body { font-family:'Noto Sans KR',sans-serif; background:#fafafa; color:#333; line-height:1.6; }
+    img, video { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+    #wrapper { width: clamp(1280px, 100%, 1920px); min-width: 1280px; max-width: 1440px;
+               height: clamp(860px, 100%, 1080px ); min-height: 740px; max-height: 1080px; 
+               margin: 0 auto;}
+
+    /* Header */
+    .header-top { background:#fff; padding:0.75rem 2rem;
+              display:flex; align-items:center; justify-content:center;
+              gap:0.5rem; font-size: 1rem; color: #333;
+              border-bottom: 1px solid #eaeaea;
+            }
+    .header-top img{ justify-content: center; width: 250px; height: 105px;}
+    .header-top .divider {color: #ccc; margin: 0 0.75rem;}
+    .header-top .temple-name {font-weight: 700;}
+    :root { --menu-width: 1200px; --menu-gap: 10rem; }
+    nav.main-nav {
+      background:#fff; position: relative;
+      padding:0.5rem 2rem; overflow: visible;
+    }
+    nav.main-nav > ul { display:flex; justify-content: center; flex-wrap: nowrap;
+                        list-style:none; gap: 10rem; white-space: nowrap;
+                        font-weight: 500; max-width: 1200px; margin: 0 auto;
+                        position: relative;}
+    nav.main-nav ul li { position:relative; padding: 0; }
+    nav.main-nav > ul > li:not(:last-child)::after{
+      content: "|"; font-size: larger;
+      position: absolute;
+      right: -5rem;
+      color: #333;
+    }
+    nav.main-nav ul li > a{
+      color: #333; white-space: nowrap;
+      padding: 1rem;
+      transition: color 0.2s;
+      font-size: larger;
+    }
+    nav.main-nav ul li > a:hover{
+      color: #B9A26A;
+    }
+    nav.main-nav > ul.menu{
+  max-width: var(--menu-width);
+  margin: 0 auto;
+  gap: var(--menu-gap);                  
+}
+nav.main-nav > ul.menu > li + li::after{
+  right: calc(-0.5 * var(--menu-gap));   
+}
+nav.main-nav .mega-submenu{
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--menu-width);
+  max-width: var(--menu-width);          
+}
+
+
+    nav.main-nav .mega-submenu { display: grid; grid-template-columns: repeat(5, max-content);  column-gap: 8rem;                             
+                                 position: absolute; top: 100%; left: 0; justify-content: center;
+                                 width: 100%; max-width: 1920px; padding: 2rem;
+                                 background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box;
+                                 opacity: 0; pointer-events: none; transform: translateY(-10px);
+                                 transition: opacity 0.3s ease, transform 0.3s ease-out; z-index: 50;}
+
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    nav.main-nav .mega-submenu .group { text-align: left; padding: 0 0.25rem; box-sizing: border-box; }
+    nav.main-nav .mega-submenu .group ul { list-style: none; padding: 0; margin: 0; }
+    nav.main-nav .mega-submenu .group ul li + li { margin-top: 0.35rem;  padding-left: 0; }
+    nav.main-nav .mega-submenu .group a { color: #333; text-decoration: none; transition: color 0.2s; }
+    nav.main-nav .mega-submenu .group a:hover { color: #B9A26A; }
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    @media (max-width: 1360px){
+  nav.main-nav .mega-submenu{ grid-template-columns: repeat(5, 1fr); gap: 3.5rem; }
+    }
+
+  /* ===== Hero (종무행정과 동일) ===== */
+:root{
+  --menu-width: 1200px; /* 히어로 내부 컨테이너 폭 */
+}
+
+/* 배경 이미지 섹션 */
+.page-hero{
+  position: relative;
+  min-height: 360px;
+  background-image: var(--hero, url('/Users/junjun/Downloads/Project/subheropic/5-5 .JPG'));
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.page-hero::before{
+  content:"";
+  position:absolute; inset:0;
+  /* 상단은 옅게, 하단은 진하게 (원본과 동일한 감도) */
+  background: linear-gradient(180deg, rgba(0,0,0,.08) 35%, rgba(0,0,0,.5) 100%);
+}
+
+/* 히어로 내부 정렬 */
+.ph-inner{
+  position:absolute; inset:0;
+  left:50%; transform:translateX(-50%);
+  max-width: var(--menu-width);
+  padding: 2rem 1rem;
+  color:#fff; text-align:center;
+
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+}
+
+/* 타이틀 */
+.ph-title{
+  font-size: clamp(1.8rem, 2.4vw + 1rem, 3rem);
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-shadow: 0 3px 12px rgba(0,0,0,.35);
+  margin-bottom: .8rem;
+}
+
+/* 빵크럼 */
+.breadcrumbs{
+  display:flex; align-items:center; gap:.5rem;
+  font-size:.95rem; opacity:.95; margin-bottom:.9rem;
+}
+.breadcrumbs a{ color:#fff; }
+.breadcrumbs .sep{ opacity:.6; }
+
+/* 서브 탭 */
+.subnav{
+  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+  gap:1rem 2rem; max-width: var(--menu-width);
+  padding:.25rem .75rem;
+}
+.subnav li{ list-style:none; position:relative; }
+.subnav li+li::before{
+  content:"•"; position:absolute; left:-1.2rem; top:50%;
+  transform:translateY(-50%); color: rgba(255,255,255,.65);
+}
+.subnav a{
+  color:#fff; padding:.35rem .6rem; border-radius:999px;
+  transition:.2s ease; white-space:nowrap;
+}
+.subnav a:hover{ background: rgba(255,255,255,.12); }
+.subnav a.active{
+  background: rgba(0,0,0,.28);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+}
+
+/* 반응형(원본과 동일 기준) */
+@media (max-width: 1024px){
+  .page-hero{ min-height:300px; }
+  .subnav{ gap:.8rem 1.2rem; }
+  .subnav li+li::before{ left:-1rem; }
+}
+
+.page-hero{
+  position:relative; min-height:360px;
+  background-image: var(--hero);   /* ← 이 변수에 JS가 분류별 이미지를 넣어요 */
+  background-size:cover; background-position:center;
+}
+.page-hero::before{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.08) 35%, rgba(0,0,0,.5) 100%);
+}
+
+
+
+  /* Footer Links Bar*/
+    .footer-links{
+      background: #B9A26A;
+      padding: 0.75rem 1rem;
+    }
+    .footer-links ul{
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.65rem;
+      padding-left: 0.75rem;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    .footer-links ul li{
+      position: relative;
+    }
+    .footer-links ul li:not(:last-child)::after{
+      content: "/";
+      margin: 0 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-links ul li a{
+      color: #fff;
+      transition:color 0.2s;
+    }
+    .footer-links ul li a:hover{
+      color: #333;
+    }
+
+    /*Footer Info */
+    .footer-info{
+      background: #333;
+      color: #fff;
+      text-align: start;
+      padding: 1.5rem 1.5rem;
+      line-height: 1.4;
+    }
+    .footer-info .account{
+      color: #efc964;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .footer-info .address{
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .footer-info .name{
+      text-align: right;
+      padding-right: 4rem;
+      font-size: larger;
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /*Footer Bottom */
+    .footer-bottom{
+      background: #222;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+
+    /* Back to Top */
+    #toTop { position:fixed; bottom:20px; right:20px;
+             background:#fff; color:#222; padding:0;
+             border-radius:50%; cursor:pointer; display:none;
+             box-shadow:0 2px 6px rgba(0,0,0,0.2); width: 32px; height: 32px;
+             display: flex; align-items: center; justify-content: center; }
+
+   /* ------- 상세페이지 이미지 공통(안 잘리면서 같은 크기) ------- */
+:root{
+  /* 원하는 박스 폭과 비율만 바꾸면 한 번에 조정됩니다 */
+  --detail-w: 720px;     /* 사진 표시 폭(데스크톱 기준 최대폭) */
+  --detail-ratio: 4/3;   /* 16/9, 3/2, 1/1 등으로 취향 변경 가능 */
+}
+
+/* 1) 첫 번째 큰 이미지(.photo-hero)도 그리드 이미지와 동일 박스 크기 */
+.body img.photo-hero{
+  width: min(var(--detail-w), 100%);
+  aspect-ratio: var(--detail-ratio);
+  height: auto;                 /* aspect-ratio가 높이를 만들어 줌 */
+  object-fit: contain !important;/* 절대 자르지 않음 */
+  background: #fff;             /* 레터박스 영역(남는 여백) */
+  border-radius: 12px;
+  margin: 14px auto;
+  /* 기존의 큰 높이 제한/자르기 옵션을 덮어쓰기 */
+  max-height: none !important;
+}
+
+/* 2) 나머지 이미지들도 동일 박스 크기로 맞춤 */
+.body .grid-photos img{
+  width: min(var(--detail-w), 100%);
+  aspect-ratio: var(--detail-ratio);
+  height: auto;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 10px;
+  margin: 14px auto;            /* 가운데 정렬 */
+}
+
+/* 3) 그리드가 좁아서 카드가 찌그러지지 않게(선택) */
+.body .grid-photos{
+  display: grid;
+  grid-template-columns: 1fr;    /* 한 줄에 하나씩(원하면 주석 처리) */
+  gap: 12px;
+}
+
+
+
+</style>
+</head>
+<body>
+<!-- Header -->
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+         <a href="try.html"> 
+          <img src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-001.png" alt="천태산 용화사 마크">  
+          <span class="divider"></span>
+          <span class="temple-name"></span>
+         </a>
+      </div>
+      <nav class="main-nav">
+        <ul class="menu">
+          <li><a href="yonghasa.html#greeting">천태산 용화사</a></li>
+          <li><a href="jM.html#notice">종무행정</a></li>
+          <li><a href="sI.html#events-photo">사찰소식</a></li>
+          <li><a href="bMG.html#weekend">법회 및 기도</a></li>
+          <li><a href="tMC.html#g-intro">불교 교실</a></li>
+        </ul>
+        <div class="mega-submenu">
+          <div class="group">
+            <ul>
+              <li><a href="yonghasa.html#greeting">주자스님 인사말</a></li>
+              <li><a href="yonghasa.html#heritage">성보 문화재</a></li>
+              <li><a href="yonghasa.html#visit">찾아오시는 길</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="jM.html#notice">공지사항</a></li>
+              <li><a href="jM.html#events">행사일정</a></li>
+              <li><a href="jM.html#regular">정기법회 안내</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="sI.html#events-photo">행사 사진</a></li>
+              <li><a href="sI.html#gallery">포토 갤러리</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="bMG.html#weekend">주말법회</a></li>
+              <li><a href="bMG.html#prayer">기도안내</a></li>
+              <li><a href="bMG.html#memorial">49제 및 제사</a></li>
+              <li><a href="bMG.html#sunday">일요법회</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="tMC.html#g-intro">불교 교실 소개</a></li>
+              <li><a href="tMC.html#g-schedule">강의 시간 안내</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+  <!-- 히어로 -->
+<section id="hero" class="page-hero">
+  <div class="ph-inner">
+    <h1 id="heroTitle" class="ph-title">상세</h1>
+    <nav id="breadcrumbs" class="breadcrumbs"></nav>
+    <ul id="subnav" class="subnav"></ul>
+  </div>
+</section>
+
+
+
+
+
+
+<div class="wrap">
+  <div class="card">
+    <div id="title" class="head">불러오는 중…</div>
+    <div id="meta" class="meta"></div>
+    <div id="content" class="body"></div>
+    <div id="attach" class="attach" style="display:none"></div>
+  </div>
+  <div class="nav">
+    <a id="prevLink" class="btn" href="#" style="visibility:hidden">◀ 이전글</a>
+    <a id="back" class="btn" href="javascript:history.back()">목록보기</a>
+    <a id="nextLink" class="btn" href="#" style="visibility:hidden">다음글 ▶</a>
+  </div>
+</div>
+
+  <!-- Back to Top Button -->
+    <div id="toTop">
+      <img src="/Users/junjun/Downloads/Project/아이콘/제목을 입력해주세요_-010.png" alt="TOP" style="width: 27px; height: 27px;">
+    
+    </div>
+
+  <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <ul>
+        <li><a href="try.html">홈</a></li>
+        <li><a href="yonghasa.html#greeting">사찰소개</a></li>
+        <li><a href="admin.html">관리자 로그인</a></li>
+        <li><a href="sI.html#events-photo">소식</a></li>
+        <li><a href="jM.html#notice">공지사항</a></li>
+        <li><a href="yonghasa.html#visit">오시는길</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <p class="account">계좌번호: 기업 000000000 (예금주 : 용화사)</p>
+        <p class="name">천태산 용화사</p>
+        <p class="address">
+          (우:12531) 경기 양평군 청운면 하고론길 38<br>
+          종무소: 031-773-1148
+        </p>
+
+      </div>
+     <div class="footer-bottom">
+       <p class="copyright">© 2025 Yonghwasa. All rights reserved.</p>
+      
+      </div>
+    </footer>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* ===== Firebase config ===== */
+const firebaseConfig = {
+  apiKey:"AIzaSyBFh2Z7DKG9a8Q0GJk065FrN3NXnOrVFr4",
+  authDomain:"yonghwasa-web.firebaseapp.com",
+  projectId:"yonghwasa-web",
+  storageBucket:"yonghwasa-web.appspot.com",
+  appId:"1:853312665810:web:ad06badcb0f23ad42d950b",
+  measurementId:"G-JFHHD2E2F2"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* ===== 유틸 ===== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s??'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+const toDate = v => v?.toDate ? v.toDate() : (v ? new Date(v) : null);
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const qs = new URLSearchParams(location.search);
+
+/* ===== 쿼리 ===== */
+const RAW_COL = qs.get('col') || '';
+const ID      = qs.get('id')  || '';
+
+/* 별칭 → 실제 컬렉션 */
+const ALIAS = {
+  notices: 'notices',
+  notice_posts: 'notices',
+  events: 'events',
+  event_posts: 'events',
+  regulars: 'regular_posts',      // ★ 정기법회 표준화
+  regular_posts: 'regular_posts',
+  photos_events: 'photos_events',
+  photos_gallery: 'photos_gallery'
+};
+const COL = ALIAS[RAW_COL] || RAW_COL;
+
+/* 라벨/타이틀 */
+const COLLECTION_TITLE = {
+  notices: '공지사항',
+  events: '행사일정',
+  regular_posts: '정기 법회 안내',
+  photos_gallery: '포토 갤러리',
+  photos_events: '행사 사진'
+};
+const LABEL = {
+  notices: '공지사항',
+  events: '행사일정',
+  regular_posts: '정기법회 안내',
+  photos_events: '행사 사진',
+  photos_gallery: '포토 갤러리'
+};
+const IS_JM = ['notices','events','regular_posts'].includes(COL);
+
+/* 히어로 렌더 */
+function renderHero(){
+  const hero = $('#hero'), t=$('#heroTitle'), bc=$('#breadcrumbs'), sn=$('#subnav');
+  if(!hero||!t||!bc||!sn) return;
+  const BG = {
+    jm:   "url('/Users/junjun/Downloads/Project/subheropic/5-5 .JPG')",
+    news: "url('/Users/junjun/Downloads/Project/subheropic/x-16 .JPG')"
+  };
+  hero.style.setProperty('--hero', IS_JM ? BG.jm : BG.news);
+
+  if (IS_JM){
+    t.textContent = '종무행정';
+    bc.innerHTML =
+      `<a href="try.html">HOME</a><span class="sep">›</span>
+       <a href="jM.html">종무행정</a><span class="sep">›</span>
+       <span class="current">${LABEL[COL]}</span>`;
+    sn.innerHTML =
+      `<li><a href="jM.html#notice"  class="${COL==='notices'?'active':''}">공지사항</a></li>
+       <li><a href="jM.html#events"  class="${COL==='events'?'active':''}">행사일정</a></li>
+       <li><a href="jM.html#regular" class="${COL==='regular_posts'?'active':''}">정기법회 안내</a></li>`;
+  } else {
+    t.textContent = '사찰 소식';
+    bc.innerHTML =
+      `<a href="try.html">HOME</a><span class="sep">›</span>
+       <a href="sI.html">사찰 소식</a><span class="sep">›</span>
+       <span class="current">${LABEL[COL]}</span>`;
+    sn.innerHTML =
+      `<li><a href="sI.html#events-photo" class="${COL==='photos_events'?'active':''}">행사 사진</a></li>
+       <li><a href="sI.html#gallery"      class="${COL==='photos_gallery'?'active':''}">포토 갤러리</a></li>`;
+  }
+}
+
+/* ===== 상세 로딩 ===== */
+async function load(){
+  try{
+    if(!COL || !ID){ $('#title').textContent='잘못된 접근입니다.'; return; }
+
+    const docRef = db.collection(COL).doc(ID);
+    const snap   = await docRef.get();
+    if(!snap.exists){ $('#title').textContent='삭제되었거나 없는 글입니다.'; return; }
+
+    const d = snap.data() || {};
+    const title   = d.title || '(제목없음)';
+    const author  = d.author || d.writer || '관리자';
+    const created = toDate(d.createdAt) || toDate(d.date) || new Date();
+    const views   = d.views|0;
+
+    // 제목/메타
+    $('#title').textContent = title;
+    $('#meta').innerHTML =
+      `<span>분류 : ${COLLECTION_TITLE[COL]||COL}</span>`+
+      `<span>작성자 : ${esc(author)}</span>`+
+      `<span>등록일 : ${ymd(created)}</span>`+
+      `<span>조회수 : ${views}</span>`;
+
+    // 본문
+    const contentEl = $('#content');
+
+    // 텍스트형(공지/일정/정기법회)  ★ regular_posts 로 체크
+    if (COL==='notices' || COL==='events' || COL==='regular_posts') {
+      const rawHtml = d.contentHtml || d.bodyHtml || '';
+      const rawText = d.content || d.body || d.memo || d.description || '';
+      const info = (COL==='events')
+        ? `<div style="padding:12px 14px;border:1px solid #eee;border-radius:8px;background:#fcfcfc;margin-bottom:14px">
+             <strong style="color:var(--ink)">${esc(d.title||'')}</strong><br/>
+             <span style="color:#666">${d.date? ymd(toDate(d.date)) : ''}${d.time? ' · '+esc(d.time):''}${d.place? ' · '+esc(d.place):''}</span>
+           </div>` : '';
+      if (rawHtml) contentEl.innerHTML = info + rawHtml;
+      else if (rawText) contentEl.innerHTML = info + String(rawText).replace(/\n/g,'<br>');
+      else contentEl.innerHTML = info + '<p>-</p>';
+    }
+
+    // 사진형(갤러리/행사사진)
+    if (COL==='photos_gallery' || COL==='photos_events') {
+      const images =
+        (Array.isArray(d.attachments) && d.attachments.length>0
+          ? d.attachments.map(a=>a.url||a).filter(Boolean)
+          : [d.imageUrl].filter(Boolean));
+      const rawHtml = d.contentHtml || d.bodyHtml || '';
+      const rawText = d.content || d.body || d.memo || d.description || '';
+      let desc = '';
+      if (rawHtml) desc = rawHtml;
+      else if (rawText) desc = `<div style="margin-top:12px">${String(rawText).replace(/\n/g,'<br>')}</div>`;
+
+      if (images.length) {
+        contentEl.innerHTML =
+          `<img class="photo-hero" src="${images[0]}" alt="${esc(title)}">` + desc;
+        if (images.length > 1) {
+          contentEl.insertAdjacentHTML(
+            'beforeend',
+            `<div class="grid-photos">${images.slice(1).map(u=>`<img src="${u}" alt="">`).join('')}</div>`
+          );
+        }
+      } else {
+        contentEl.innerHTML = desc || '<p>-</p>';
+      }
+    }
+
+    // 첨부파일
+    const attach = $('#attach');
+
+// ★ 사진 계열은 첨부 박스를 아예 숨김
+if (COL === 'photos_gallery' || COL === 'photos_events') {
+  attach.style.display = 'none';
+} else {
+  const files = (d.files || d.attachments || [])
+    .map(x => (x.url ? x : { url: x, name: x.name || '첨부파일' }))
+    .filter(f => !!f.url);
+
+  if (files.length) {
+    attach.style.display = 'block';
+    attach.innerHTML =
+      `<h4>첨부파일</h4>` +
+      files.map(f =>
+        `<a href="${f.url}" target="_blank" rel="noopener">📎 ${esc(f.name || '파일')}</a>`
+      ).join(' ');
+  } else {
+    attach.style.display = 'none';
+  }
+}
+
+    // 조회수 +1 (권한 없으면 무시)
+    try{ await docRef.update({ views: firebase.firestore.FieldValue.increment(1) }); }catch(e){}
+
+    // 이전/다음
+    try{
+      const sortField = d.createdAt ? 'createdAt' : (d.date ? 'date' : null);
+      const baseTs    = d[sortField];
+      if (sortField && baseTs) {
+        const newer = await db.collection(COL).orderBy(sortField,'desc').startAfter(baseTs).limit(1).get();
+        if (!newer.empty) {
+          const nd = newer.docs[0];
+          $('#nextLink').style.visibility = 'visible';
+          $('#nextLink').href = `view.html?col=${COL}&id=${nd.id}`;
+        }
+        const older = await db.collection(COL).orderBy(sortField,'desc').endBefore(baseTs).limitToLast(1).get();
+        if (!older.empty) {
+          const od = older.docs[0];
+          $('#prevLink').style.visibility = 'visible';
+          $('#prevLink').href = `view.html?col=${COL}&id=${od.id}`;
+        }
+      }
+    }catch(_) {}
+  }catch(err){
+    console.error(err);
+    $('#title').textContent = '불러오기 실패';
+    $('#content').innerHTML = `<p style="color:#b00">오류: ${esc(err.message||err)}</p>`;
+  }
+}
+
+/* 히어로 먼저, 그 다음 데이터 */
+renderHero();
+load();
+
+/* Back to Top */
+const toTopBtn = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  toTopBtn.style.display = (window.scrollY > 300) ? 'block' : 'none';
+});
+toTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>

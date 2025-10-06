@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>불교 교실 | 용화사</title>
+
+  <style>
+    /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-width: 1280px; overflow-x: auto; }
+    body { font-family:'Noto Sans KR',sans-serif; background:#fafafa; color:#333; line-height:1.6; }
+    img, video { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+    #wrapper { width: clamp(1280px, 100%, 1920px); min-width: 1280px; max-width: 1440px;
+               height: clamp(860px, 100%, 1080px ); min-height: 740px; max-height: 1080px; 
+               margin: 0 auto;}
+    /* Header */
+    .header-top { background:#fff; padding:0.75rem 2rem;
+              display:flex; align-items:center; justify-content:center;
+              gap:0.5rem; font-size: 1rem; color: #333;
+              border-bottom: 1px solid #eaeaea;
+            }
+    .header-top img{ justify-content: center; width: 250px; height: 105px;}
+    .header-top .divider {color: #ccc; margin: 0 0.75rem;}
+    .header-top .temple-name {font-weight: 700;}
+    :root { --menu-width: 1200px; --menu-gap: 10rem; }
+    nav.main-nav {
+      background:#fff; position: relative;
+      padding:0.5rem 2rem; overflow: visible;
+    }
+    nav.main-nav > ul { display:flex; justify-content: center; flex-wrap: nowrap;
+                        list-style:none; gap: 10rem; white-space: nowrap;
+                        font-weight: 500; max-width: 1200px; margin: 0 auto;
+                        position: relative;}
+    nav.main-nav ul li { position:relative; padding: 0; }
+    nav.main-nav > ul > li:not(:last-child)::after{
+      content: "|"; font-size: larger;
+      position: absolute;
+      right: -5rem;
+      color: #333;
+    }
+    nav.main-nav ul li > a{
+      color: #333; white-space: nowrap;
+      padding: 1rem;
+      transition: color 0.2s;
+      font-size: larger;
+    }
+    nav.main-nav ul li > a:hover{
+      color: #B9A26A;
+    }
+    nav.main-nav > ul.menu{
+  max-width: var(--menu-width);
+  margin: 0 auto;
+  gap: var(--menu-gap);                  
+}
+nav.main-nav > ul.menu > li + li::after{
+  right: calc(-0.5 * var(--menu-gap));   
+}
+nav.main-nav .mega-submenu{
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--menu-width);
+  max-width: var(--menu-width);          
+}
+
+
+    nav.main-nav .mega-submenu { display: grid; grid-template-columns: repeat(5, max-content);  column-gap: 8rem;                             
+                                 position: absolute; top: 100%; left: 0; justify-content: center;
+                                 width: 100%; max-width: 1920px; padding: 2rem;
+                                 background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box;
+                                 opacity: 0; pointer-events: none; transform: translateY(-10px);
+                                 transition: opacity 0.3s ease, transform 0.3s ease-out; z-index: 50;}
+
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    nav.main-nav .mega-submenu .group { text-align: left; padding: 0 0.25rem; box-sizing: border-box; }
+    nav.main-nav .mega-submenu .group ul { list-style: none; padding: 0; margin: 0; }
+    nav.main-nav .mega-submenu .group ul li + li { margin-top: 0.35rem;  padding-left: 0; }
+    nav.main-nav .mega-submenu .group a { color: #333; text-decoration: none; transition: color 0.2s; }
+    nav.main-nav .mega-submenu .group a:hover { color: #B9A26A; }
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    @media (max-width: 1360px){
+  nav.main-nav .mega-submenu{ grid-template-columns: repeat(5, 1fr); gap: 3.5rem; }
+}
+   
+
+    /* 히어로 + 빵크럼 + 서브탭 */
+    .page-hero{
+      position:relative;min-height:360px;
+      background-image:var(--hero, url('/Users/junjun/Downloads/Project/2/002.png'));
+      background-size:cover;background-position:center
+    }
+    .page-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08) 35%,rgba(0,0,0,.5) 100%)}
+    .ph-inner{position:absolute;inset:0;left:50%;transform:translateX(-50%);max-width:var(--menu-width);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;color:#fff;text-align:center}
+    .ph-title{font-size:clamp(1.8rem,2.4vw + 1rem,3rem);font-weight:800;text-shadow:0 3px 12px rgba(0,0,0,.35);margin-bottom:.8rem}
+    .breadcrumbs{display:flex;gap:.5rem;align-items:center;font-size:.95rem;opacity:.95;margin-bottom:.9rem}
+    .breadcrumbs a{color:#fff}.breadcrumbs .sep{opacity:.6}
+    .subnav{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:2rem;max-width:var(--menu-width);padding:.25rem .75rem}
+    .subnav li{list-style:none;position:relative}
+    .subnav li+li::before{content:"•";position:absolute;left:-1.2rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.65)}
+    .subnav a{color:#fff;padding:.35rem .8rem;border-radius:999px;transition:.2s;white-space:nowrap}
+    .subnav a:hover{background:rgba(255,255,255,.12)}
+    .subnav a.active{background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+
+    /* 콘텐츠 */
+    .sheet{max-width:var(--menu-width);margin:2rem auto;padding:2rem;background:#fff;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.08);position:relative}
+    .tab-panel{display:none}.tab-panel.is-active{display:block}
+    .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:20px}
+    table.table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
+    .table th,.table td{padding:14px 16px;border-bottom:1px solid #eee;text-align:center}
+    .table thead th{background:#f6f6f6}
+
+    /* Footer Links Bar*/
+    .footer-links{
+      background: #B9A26A;
+      padding: 0.75rem 1rem;
+    }
+    .footer-links ul{
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.65rem;
+      padding-left: 0.75rem;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    .footer-links ul li{
+      position: relative;
+    }
+    .footer-links ul li:not(:last-child)::after{
+      content: "/";
+      margin: 0 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-links ul li a{
+      color: #fff;
+      transition:color 0.2s;
+    }
+    .footer-links ul li a:hover{
+      color: #333;
+    }
+
+    /*Footer Info */
+    .footer-info{
+      background: #333;
+      color: #fff;
+      text-align: start;
+      padding: 1.5rem 1.5rem;
+      line-height: 1.4;
+    }
+    .footer-info .account{
+      color: #efc964;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .footer-info .address{
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .footer-info .name{
+      text-align: right;
+      padding-right: 4rem;
+      font-size: larger;
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /*Footer Bottom */
+    .footer-bottom{
+      background: #222;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+
+    /* Back to Top */
+    #toTop { position:fixed; bottom:20px; right:20px;
+             background:#fff; color:#222; padding:0;
+             border-radius:50%; cursor:pointer; display:none;
+             box-shadow:0 2px 6px rgba(0,0,0,0.2); width: 32px; height: 32px;
+             display: flex; align-items: center; justify-content: center; }
+
+    /* admin-inline.css */
+.admin-only{display:none!important}
+body.admin-logged-in .admin-only{display:initial!important}
+
+/* 오른쪽 하단 툴바 */
+.admin-rail{
+  position:fixed; right:16px; bottom:16px; z-index:9999;
+  display:flex; gap:8px; align-items:center;
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08); padding:8px 10px;
+}
+.admin-rail .btn{height:36px; padding:0 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer}
+.admin-rail .btn-primary{background:#B9A26A; color:#fff; border:0}
+
+/* 편집 모드 시 시각화 */
+body.is-editing [contenteditable="true"]{
+  outline:2px dashed #B9A26A; outline-offset:2px; border-radius:6px;
+}
+.edit-actions{
+  position:absolute; right:6px; top:6px; z-index:5;
+  display:flex; gap:6px;
+}
+.edit-actions .btn-mini{
+  height:28px; padding:0 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:.9rem
+}
+
+/* dialog 기본 */
+.dialog{border:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);width:min(560px,90vw);padding:18px}
+.dialog::backdrop{background:rgba(0,0,0,.45)}
+.form-row{display:flex;flex-direction:column;gap:.35rem;margin:.5rem 0}
+.form-row input,.form-row textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px}
+.row{display:flex;gap:8px;align-items:center}
+
+  </style>
+</head>
+<body>
+<!-- Header -->
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+         <a href="try.html"> 
+          <img src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-001.png" alt="천태산 용화사 마크">  
+          <span class="divider"></span>
+          <span class="temple-name"></span>
+         </a>
+      </div>
+      <nav class="main-nav">
+        <ul class="menu">
+          <li><a href="yonghasa.html#greeting">천태산 용화사</a></li>
+          <li><a href="jM.html#notice">종무행정</a></li>
+          <li><a href="sI.html#events-photo">사찰소식</a></li>
+          <li><a href="bMG.html#weekend">법회 및 기도</a></li>
+          <li><a href="tMC.html#g-intro">불교 교실</a></li>
+        </ul>
+        <div class="mega-submenu">
+          <div class="group">
+            <ul>
+              <li><a href="yonghasa.html#greeting">주자스님 인사말</a></li>
+              <li><a href="yonghasa.html#heritage">성보 문화재</a></li>
+              <li><a href="yonghasa.html#visit">찾아오시는 길</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="jM.html#notice">공지사항</a></li>
+              <li><a href="jM.html#events">행사일정</a></li>
+              <li><a href="jM.html#regular">정기법회 안내</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="sI.html#events-photo">행사 사진</a></li>
+              <li><a href="sI.html#gallery">포토 갤러리</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="bMG.html#weekend">주말법회</a></li>
+              <li><a href="bMG.html#prayer">기도안내</a></li>
+              <li><a href="bMG.html#memorial">49제 및 제사</a></li>
+              <li><a href="bMG.html#sunday">일요법회</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="tMC.html#g-intro">불교 교실 소개</a></li>
+              <li><a href="tMC.html#g-schedule">강의 시간 안내</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+  <!-- 히어로 -->
+  <section class="page-hero" style="--hero:url('/Users/junjun/Downloads/Project/subheropic/x-19 .JPG')">
+    <div class="ph-inner">
+      <h1 class="ph-title">불교 교실</h1>
+
+      <nav class="breadcrumbs" aria-label="breadcrumb">
+        <a href="try.html">HOME</a>
+        <span class="sep">›</span>
+        불교 교실
+        <span class="sep">›</span>
+        <span id="bc-current">불교 교실 안내</span>
+      </nav>
+
+      <ul class="subnav" id="subnav">
+        <li><a class="active" href="#g-intro"    data-panel="g-intro">불교 교실 안내</a></li>
+        <li><a href="#g-schedule" data-panel="g-schedule">강의 시간 안내</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 본문 -->
+  <main>
+    <!-- 불교 교실 안내 -->
+    <section id="g-intro" class="sheet tab-panel is-active">
+      <h2 class="section-title">불교 교실 안내</h2>
+      <div class="grid-2">
+        <div class="card">
+          <p style="font-size:1.05rem;color:#444;margin-bottom:1rem">
+            불교의 기본 교리부터 일상 수행까지 단계적으로 배우는 프로그램입니다.
+            초심자도 부담 없이 참여할 수 있으며, 강의와 실습이 병행됩니다.
+          </p>
+          <ul style="margin-left:1rem;list-style:disc;color:#555">
+            <li>대상: 불교에 관심 있는 누구나</li>
+            <li>진행: 주 1회, 회당 90분</li>
+            <li>장소: 교육관 2층 강의실</li>
+            <li>준비물: 필기도구</li>
+          </ul>
+          <p style="margin-top:.75rem;color:#666">문의: 종무소 031-773-1148</p>
+        </div>
+        <div class="card">
+          <img src="/Users/junjun/Downloads/Project/logo-001.png" alt="불교 교실 이미지">
+        </div>
+      </div>
+    </section>
+
+    <!-- 강의 시간 안내 -->
+    <section id="g-schedule" class="sheet tab-panel">
+      <h2 class="section-title">강의 시간 안내</h2>
+      <table class="table">
+        <thead><tr><th>요일</th><th>시간</th><th>과목</th><th>강사</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>화</td><td>19:30 ~ 21:00</td><td>불교 입문</td><td>지도법사</td><td>초심자 추천</td></tr>
+          <tr><td>목</td><td>19:30 ~ 21:00</td><td>금강경 강좌</td><td>주지스님</td><td>-</td></tr>
+          <tr><td>토</td><td>14:00 ~ 15:30</td><td>명상 실습</td><td>선 수행 지도</td><td>편한 복장</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.75rem;color:#666">※ 일정은 사정에 따라 변동될 수 있습니다.</p>
+    </section>
+  </main>
+
+  <!-- 관리자 툴바: 로그인 시에만 보임 -->
+<div class="admin-rail admin-only" id="adminRail">
+  <span id="adminEmail" style="color:#666;font-size:.95rem"></span>
+  <button class="btn" id="btnToggleEdit">편집 모드</button>
+  <button class="btn" id="btnAddNotice">+ 공지</button>
+  <button class="btn" id="btnAddEvent">+ 일정</button>
+  <button class="btn" id="btnLogout">로그아웃</button>
+</div>
+
+<!-- 공지 등록 다이얼로그 -->
+<dialog class="dialog" id="dlgNotice">
+  <form method="dialog" id="frmNotice">
+    <h3>새 공지</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>링크(선택) <input name="fileUrl" placeholder="https://..." /></label></div>
+    <div class="form-row"><label>게시일(선택) <input type="date" name="date" /></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 일정 등록 다이얼로그 (간단 버전) -->
+<dialog class="dialog" id="dlgEvent">
+  <form method="dialog" id="frmEvent">
+    <h3>새 일정</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>날짜<input type="date" name="date" required /></label></div>
+    <div class="form-row"><label>비고<textarea name="memo" rows="3" placeholder="선택"></textarea></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+    <!-- Back to Top Button -->
+    <div id="toTop">
+      <img src="/Users/junjun/Downloads/Project/아이콘/제목을 입력해주세요_-010.png" alt="TOP" style="width: 27px; height: 27px;">
+    </div>
+
+  <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <ul>
+        <li><a href="try.html">홈</a></li>
+        <li><a href="yonghasa.html#greeting">사찰소개</a></li>
+        <li><a href="admin.html">관리자 로그인</a></li>
+        <li><a href="sI.html#events-photo">소식</a></li>
+        <li><a href="jM.html#notice">공지사항</a></li>
+        <li><a href="yonghasa.html#visit">오시는길</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <p class="account">계좌번호: 기업 000000000 (예금주 : 용화사)</p>
+        <p class="name">천태산 용화사</p>
+        <p class="address">
+          (우:12531) 경기 양평군 청운면 하고론길 38<br>
+          종무소: 031-773-1148
+        </p>
+
+      </div>
+     <div class="footer-bottom">
+       <p class="copyright">© 2025 Yonghwasa. All rights reserved.</p>
+      
+      </div>
+    </footer>
+
+<!-- 스크립트: Top 버튼 + 탭 라우팅(단일) -->
+<script>
+  // Back to Top Logic
+      const toTopBtn = document.getElementById('toTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) toTopBtn.style.display = 'block';
+        else toTopBtn.style.display = 'none';
+    });
+      toTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+  // 탭 라우팅 (해시 지원, 빵크럼 동기화)
+  (function(){
+    const sub=document.getElementById('subnav'); if(!sub) return;
+    const panels=[...document.querySelectorAll('.tab-panel')];
+    const defaultId='g-intro';
+
+    function activate(id, smooth){
+      // 링크 active
+      sub.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.dataset.panel===id));
+      // 패널 표시
+      panels.forEach(p=>p.classList.toggle('is-active', p.id===id));
+      // 빵크럼 텍스트
+      const cur=sub.querySelector(`a[data-panel="${id}"]`);
+      const bc=document.getElementById('bc-current'); if(bc&&cur) bc.textContent=cur.textContent;
+      // 해시 반영
+      history.replaceState(null,'','#'+id);
+      // 스크롤 보정(선택)
+      if(smooth){
+        const nav=document.querySelector('nav.main-nav');
+        const offset=(nav?.offsetHeight||0)+16;
+        const el=document.getElementById(id);
+        if(el){
+          const top=el.getBoundingClientRect().top+window.scrollY-offset;
+          window.scrollTo({top,behavior:'smooth'});
+        }
+      }
+    }
+
+    function fromHash(smooth){
+      let id=location.hash.slice(1) || defaultId;
+      if(!document.getElementById(id)) id=defaultId;
+      activate(id, smooth);
+    }
+
+    // 클릭
+    document.addEventListener('click',e=>{
+      const a=e.target.closest('#subnav a'); if(!a) return;
+      e.preventDefault();
+      activate(a.dataset.panel || a.getAttribute('href').slice(1), true);
+    });
+
+    // 초기/해시 변경
+    document.addEventListener('DOMContentLoaded',()=>fromHash(false));
+    window.addEventListener('hashchange',()=>fromHash(true));
+  })();
+</script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  // ===== 공통 Firebase 초기화 =====
+  const DEMO_MODE = false; // 데모 모드면 true (백엔드 없이 버튼 테스트 가능)
+  
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  
+  const ts   = firebase.firestore.FieldValue.serverTimestamp;
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  // 대시보드와 같은 설정
+  const firebaseConfig = {
+    apiKey:"AIzaSyBFh2Z7DKG9a8Q0GJk065FrN3NXnOrVFr4",
+    authDomain:"yonghwasa-web.firebaseapp.com",
+    projectId:"yonghwasa-web",
+    storageBucket:"yonghwasa-web.appspot.com",
+    appId:"1:853312665810:web:ad06badcb0f23ad42d950b",
+    measurementId:"G-JFHHD2E2F2"
+  };
+  if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // 공용 포매터
+  function fmt(ts){
+    try{
+      const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+      if(!d) return '-';
+      const y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
+      return `${y}.${m}.${da}`;
+    }catch(_){ return '-'; }
+  }
+</script>
+
+
+<script src="admin-inline.js"></script>
+<link rel="stylesheet" href="admin-inline.css">
+
+</body>
+</html>

@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>용화사 사찰 웹사이트 | 종무행정</title>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+  <style>
+   /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-width: 1280px; overflow-x: auto; }
+    body { font-family:'Noto Sans KR',sans-serif; background:#fafafa; color:#333; line-height:1.6; }
+    img, video { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+    #wrapper { width: clamp(1280px, 100%, 1920px); min-width: 1280px; max-width: 1440px;
+               height: clamp(860px, 100%, 1080px ); min-height: 740px; max-height: 1080px; 
+               margin: 0 auto;}
+
+    /* Header */
+    .header-top { background:#fff; padding:0.75rem 2rem;
+              display:flex; align-items:center; justify-content:center;
+              gap:0.5rem; font-size: 1rem; color: #333;
+              border-bottom: 1px solid #eaeaea;
+            }
+    .header-top img{ justify-content: center; width: 250px; height: 105px;}
+    .header-top .divider {color: #ccc; margin: 0 0.75rem;}
+    .header-top .temple-name {font-weight: 700;}
+    :root { --menu-width: 1200px; --menu-gap: 10rem; }
+    nav.main-nav {
+      background:#fff; position: relative;
+      padding:0.5rem 2rem; overflow: visible;
+    }
+    nav.main-nav > ul { display:flex; justify-content: center; flex-wrap: nowrap;
+                        list-style:none; gap: 10rem; white-space: nowrap;
+                        font-weight: 500; max-width: 1200px; margin: 0 auto;
+                        position: relative;}
+    nav.main-nav ul li { position:relative; padding: 0; }
+    nav.main-nav > ul > li:not(:last-child)::after{
+      content: "|"; font-size: larger;
+      position: absolute;
+      right: -5rem;
+      color: #333;
+    }
+    nav.main-nav ul li > a{
+      color: #333; white-space: nowrap;
+      padding: 1rem;
+      transition: color 0.2s;
+      font-size: larger;
+    }
+    nav.main-nav ul li > a:hover{
+      color: #B9A26A;
+    }
+    nav.main-nav > ul.menu{
+  max-width: var(--menu-width);
+  margin: 0 auto;
+  gap: var(--menu-gap);                  
+}
+nav.main-nav > ul.menu > li + li::after{
+  right: calc(-0.5 * var(--menu-gap));   
+}
+nav.main-nav .mega-submenu{
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--menu-width);
+  max-width: var(--menu-width);          
+}
+
+
+    nav.main-nav .mega-submenu { display: grid; grid-template-columns: repeat(5, max-content);  column-gap: 8rem;                             
+                                 position: absolute; top: 100%; left: 0; justify-content: center;
+                                 width: 100%; max-width: 1920px; padding: 2rem;
+                                 background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box;
+                                 opacity: 0; pointer-events: none; transform: translateY(-10px);
+                                 transition: opacity 0.3s ease, transform 0.3s ease-out; z-index: 50;}
+
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    nav.main-nav .mega-submenu .group { text-align: left; padding: 0 0.25rem; box-sizing: border-box; }
+    nav.main-nav .mega-submenu .group ul { list-style: none; padding: 0; margin: 0; }
+    nav.main-nav .mega-submenu .group ul li + li { margin-top: 0.35rem;  padding-left: 0; }
+    nav.main-nav .mega-submenu .group a { color: #333; text-decoration: none; transition: color 0.2s; }
+    nav.main-nav .mega-submenu .group a:hover { color: #B9A26A; }
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    @media (max-width: 1360px){
+  nav.main-nav .mega-submenu{ grid-template-columns: repeat(5, 1fr); gap: 3.5rem; }
+}
+
+    
+    .page-hero{
+      position:relative;min-height:360px;
+      background-image:var(--hero, url('/Users/junjun/Downloads/Project/2/003.png'));
+      background-size:cover;background-position:center;
+    }
+    .page-hero::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.08) 35%,rgba(0,0,0,.5) 100%);
+    }
+    .ph-inner{
+      position:absolute;inset:0;left:50%;transform:translateX(-50%);
+      max-width:var(--menu-width);display:flex;flex-direction:column;justify-content:center;align-items:center;
+      padding:2rem 1rem;color:#fff;text-align:center
+    }
+    .ph-title{
+      font-size:clamp(1.8rem,2.4vw + 1rem,3rem);font-weight:800;letter-spacing:.03em;
+      text-shadow:0 3px 12px rgba(0,0,0,.35);margin-bottom:.8rem
+    }
+    .breadcrumbs{display:flex;align-items:center;gap:.5rem;font-size:.95rem;opacity:.95;margin-bottom:.9rem}
+    .breadcrumbs a{color:#fff}.breadcrumbs .sep{opacity:.6}
+
+    
+    .subnav{
+      position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+      display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+      gap:1rem 2rem;max-width:var(--menu-width);padding:.25rem .75rem
+    }
+    .subnav li{list-style:none;position:relative}
+    .subnav li+li::before{content:"•";position:absolute;left:-1.2rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.65)}
+    .subnav a{color:#fff;padding:.35rem .6rem;border-radius:999px;transition:.2s ease;white-space:nowrap}
+    .subnav a:hover{background:rgba(255,255,255,.12)}
+    .subnav a.active{background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+
+    /* Tap Panel */
+    .sheet{max-width:var(--menu-width);margin:2rem auto;padding:2rem;background:#fff;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.08);position:relative}
+    .sheet::after{content:"";position:absolute;left:2rem;right:2rem;bottom:-10px;height:8px;border-radius:999px}
+    .tab-panel{display:none}
+    .tab-panel.is-active{display:block}
+
+    /* Boadrd Tool */
+    .board-toolbar{display:flex;gap:.5rem;justify-content:flex-end;margin-bottom:.75rem}
+    .select,.input{padding:.5rem .6rem;border:1px solid #ddd;border-radius:8px;background:#fff}
+    .btn{display:inline-flex;align-items:center;padding:.5rem .9rem;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer}
+    .btn:hover{border-color:#999}
+    .board{width:100%;border-collapse:collapse;background:#fff;overflow:hidden;border-radius:8px}
+    .board thead th{background:#faf7ef;border-bottom:2px solid #e9dcc2;padding:.75rem .75rem;text-align:left;white-space:nowrap}
+    .board tbody td{border-bottom:1px solid #eee;padding:.75rem .75rem}
+    .board .tag{display:inline-block;background:#e9dcc2;color:#7a5b1a;border-radius:999px;font-size:.78rem;padding:.2rem .55rem;margin-right:.5rem}
+    .board .file{opacity:.55}
+    .pager{display:flex;gap:.35rem;justify-content:center;margin:1rem 0}
+    .pager .btn{padding:.4rem .7rem}.pager .btn.current{border-color:#B9A26A}
+
+    
+    @media(max-width:1360px){nav.main-nav .mega-submenu{column-gap:3.5rem}}
+    @media(max-width:1024px){
+      .page-hero{min-height:300px}
+      .subnav{gap:.8rem 1.2rem}
+      .subnav li+li::before{left:-1rem}
+    }
+    /* Calendar */
+:root{
+  --cal-head:#a99986;      /* 요일 헤더 배경 */
+  --cal-head-text:#fff;
+  --cal-border:#e8e1d5;
+  --cal-muted:#999;
+  --cal-sun:#E86C00;
+}
+
+.cal-wrap{ max-width: var(--menu-width); margin: 0 auto; }
+.cal-header{
+  display:flex; justify-content:center; align-items:center; gap:1rem;
+  margin: .75rem 0 1rem;
+}
+.cal-title{ font-size:1.75rem; font-weight:700; }
+.cal-nav{
+  width:36px; height:36px; border-radius:50%; border:1px solid #ddd; background:#fff;
+  cursor:pointer; line-height:34px; font-size:1.2rem;
+}
+.cal-nav:hover{ border-color:#bbb; }
+
+.cal-grid{
+  display:grid; grid-template-columns: repeat(7, 1fr);
+  border:1px solid var(--cal-border); background:#fff; overflow:hidden;
+  border-radius:8px;
+}
+.cal-cell{ border-right:1px solid var(--cal-border); border-bottom:1px solid var(--cal-border); }
+.cal-cell.head{
+  background: var(--cal-head); color: var(--cal-head-text); text-align:center;
+  font-weight:600; padding:.75rem 0;
+}
+.cal-day{
+  min-height:140px; padding:8px 10px; position:relative; background:#fff;
+}
+.cal-day.is-out{ background:#fafafa; }
+.cal-day .date{ font-weight:600; }
+.cal-day.sun .date{ color: var(--cal-sun); }
+.cal-day.sat .date{ color:#666; }
+.cal-day.is-today{ outline:2px solid rgba(185,162,106,.45); outline-offset:-2px; }
+
+.cal-events{ margin-top:6px; font-size:.92rem; color:#666; list-style:none; }
+.cal-events li{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cal-events li::before{ content:"· "; color:#bbb; }
+
+.cal-note{ color: var(--cal-muted); margin-top:.6rem; font-size:.9rem; }
+
+    /* Footer Links Bar*/
+    .footer-links{
+      background: #B9A26A;
+      padding: 0.75rem 1rem;
+    }
+    .footer-links ul{
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.65rem;
+      padding-left: 0.75rem;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    .footer-links ul li{
+      position: relative;
+    }
+    .footer-links ul li:not(:last-child)::after{
+      content: "/";
+      margin: 0 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-links ul li a{
+      color: #fff;
+      transition:color 0.2s;
+    }
+    .footer-links ul li a:hover{
+      color: #333;
+    }
+
+    /*Footer Info */
+    .footer-info{
+      background: #333;
+      color: #fff;
+      text-align: start;
+      padding: 1.5rem 1.5rem;
+      line-height: 1.4;
+    }
+    .footer-info .account{
+      color: #efc964;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .footer-info .address{
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .footer-info .name{
+      text-align: right;
+      padding-right: 4rem;
+      font-size: larger;
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /*Footer Bottom */
+    .footer-bottom{
+      background: #222;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+
+    /* Back to Top */
+    #toTop { position:fixed; bottom:20px; right:20px;
+             background:#fff; color:#222; padding:0;
+             border-radius:50%; cursor:pointer; display:none;
+             box-shadow:0 2px 6px rgba(0,0,0,0.2); width: 32px; height: 32px;
+             display: flex; align-items: center; justify-content: center; }
+
+    /* admin-inline.css */
+.admin-only{display:none!important}
+body.admin-logged-in .admin-only{display:initial!important}
+
+/* 오른쪽 하단 툴바 */
+.admin-rail{
+  position:fixed; right:16px; bottom:16px; z-index:9999;
+  display:flex; gap:8px; align-items:center;
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08); padding:8px 10px;
+}
+.admin-rail .btn{height:36px; padding:0 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer}
+.admin-rail .btn-primary{background:#B9A26A; color:#fff; border:0}
+
+/* 편집 모드 시 시각화 */
+body.is-editing [contenteditable="true"]{
+  outline:2px dashed #B9A26A; outline-offset:2px; border-radius:6px;
+}
+.edit-actions{
+  position:absolute; right:6px; top:6px; z-index:5;
+  display:flex; gap:6px;
+}
+.edit-actions .btn-mini{
+  height:28px; padding:0 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:.9rem
+}
+
+/* dialog 기본 */
+.dialog{border:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);width:min(560px,90vw);padding:18px}
+.dialog::backdrop{background:rgba(0,0,0,.45)}
+.form-row{display:flex;flex-direction:column;gap:.35rem;margin:.5rem 0}
+.form-row input,.form-row textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px}
+.row{display:flex;gap:8px;align-items:center}
+
+  </style>
+</head>
+<body>
+<!-- Header -->
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+         <a href="try.html"> 
+          <img src="/Users/junjun/Downloads/Project/제목을-입력해주세요_-001.png" alt="천태산 용화사 마크">  
+          <span class="divider"></span>
+          <span class="temple-name"></span>
+         </a>
+      </div>
+      <nav class="main-nav">
+        <ul class="menu">
+          <li><a href="yonghasa.html#greeting">천태산 용화사</a></li>
+          <li><a href="jM.html#notice">종무행정</a></li>
+          <li><a href="sI.html#events-photo">사찰소식</a></li>
+          <li><a href="bMG.html#weekend">법회 및 기도</a></li>
+          <li><a href="tMC.html#g-intro">불교 교실</a></li>
+        </ul>
+        <div class="mega-submenu">
+          <div class="group">
+            <ul>
+              <li><a href="yonghasa.html#greeting">주자스님 인사말</a></li>
+              <li><a href="yonghasa.html#heritage">성보 문화재</a></li>
+              <li><a href="yonghasa.html#visit">찾아오시는 길</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="jM.html#notice">공지사항</a></li>
+              <li><a href="jM.html#events">행사일정</a></li>
+              <li><a href="jM.html#regular">정기법회 안내</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="sI.html#events-photo">행사 사진</a></li>
+              <li><a href="sI.html#gallery">포토 갤러리</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="bMG.html#weekend">주말법회</a></li>
+              <li><a href="bMG.html#prayer">기도안내</a></li>
+              <li><a href="bMG.html#memorial">49제 및 제사</a></li>
+              <li><a href="bMG.html#sunday">일요법회</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="tMC.html#g-intro">불교 교실 소개</a></li>
+              <li><a href="tMC.html#g-schedule">강의 시간 안내</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+  <!-- 히어로 + 서브탭 -->
+  <section class="page-hero" style="--hero:url('/Users/junjun/Downloads/Project/subheropic/5-5 .JPG')">
+    <div class="ph-inner">
+      <h1 class="ph-title">종무행정</h1>
+
+      <nav class="breadcrumbs" aria-label="breadcrumb">
+        <a href="/Users/junjun/Downloads/Project/try.html" class="home" aria-label="홈">HOME</a>
+        <span class="sep">›</span>
+        <a href="/Users/junjun/Downloads/Project/jM.html">종무행정</a>
+        <span class="sep">›</span>
+        <span class="current" id="bc-current">공지사항</span>
+      </nav>
+
+      <ul class="subnav" role="tablist" id="subnav">
+        <li><a class="active" href="#notice" data-panel="notice">공지사항</a></li>
+        <li><a href="#events" data-panel="events">행사일정</a></li>
+        <li><a href="#regular" data-panel="regular">정기법회 안내</a></li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- 탭 패널들 (공지/행사/정기법회 동일한 표 틀) -->
+  <main>
+    <!-- 공지사항 -->
+    <section id="notice" class="sheet tab-panel is-active" aria-labelledby="tab-notice">
+      <div class="board-toolbar">
+        <select class="select" id="sel-notice">
+          <option value="all">전체</option><option value="공지">공지</option><option value="일반">일반</option>
+        </select>
+        <input class="input" id="q-notice" placeholder="제목 검색" />
+        <button class="btn" id="btn-notice">검색</button>
+      </div>
+
+      <table class="board" id="board-notice">
+  <thead>
+    <tr>
+      <th style="width:80px">번호</th>
+      <th>제목</th>
+      <th style="width:80px">파일</th>
+      <th style="width:120px">작성자</th>
+      <th style="width:140px">작성일</th>
+      <th style="width:90px"></th>
+    </tr>
+  </thead>
+  <tbody id="noticeBody"></tbody>
+</table>
+
+<!-- 페이지 버튼 들어갈 자리 -->
+<div class="pager" id="noticePager"></div>
+
+    </section>
+
+    <!-- 행사일정 (공지와 동일한 틀) -->
+    <section id="events" class="sheet tab-panel" aria-labelledby="tab-schedule">
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <button class="cal-nav prev" aria-label="이전 달">‹</button>
+      <h2 class="cal-title"><span class="cal-year"></span>년 <span class="cal-month"></span>월</h2>
+      <button class="cal-nav next" aria-label="다음 달">›</button>
+    </div>
+
+    <div class="cal-grid" id="calendar">
+      <!-- JS가 요일 헤더 + 날짜 셀을 렌더링합니다 -->
+    </div>
+
+    <p class="cal-note">· 일정은 예시 데이터입니다</p>
+  </div>
+</section>
+
+
+    <!-- 정기법회 안내 (공지와 동일한 틀) -->
+    <section id="regular" class="sheet tab-panel" aria-labelledby="tab-regular">
+      <div class="board-toolbar">
+  <select class="select" id="sel-regular">
+    <option value="">전체</option>
+    <option value="weekend">주말법회</option>
+    <option value="prayer">기도안내</option>
+    <option value="memorial">49제 및 제사</option>
+    <option value="sunday">일요법회</option>
+  </select>
+  <input class="input" id="q-regular" placeholder="제목 검색" />
+  <button class="btn" id="btn-regular">검색</button>
+</div>
+
+<table class="board" id="board-regular">
+  <thead>
+    <tr>
+      <th style="width:130px">분류</th>
+      <th>제목</th>
+      <th style="width:80px">파일</th>
+      <th style="width:120px">작성자</th>
+      <th style="width:140px">작성일</th>
+    </tr>
+  </thead>
+  <tbody id="regularTbody"></tbody>
+</table>
+
+      <div class="pager"><button class="btn current">1</button><button class="btn">2</button></div>
+    </section>
+
+    <!-- 관리자 툴바: 로그인 시에만 보임 -->
+<div class="admin-rail admin-only" id="adminRail">
+  <span id="adminEmail" style="color:#666;font-size:.95rem"></span>
+  <button class="btn" id="btnToggleEdit">편집 모드</button>
+  <button class="btn" id="btnAddNotice">+ 공지</button>
+  <button class="btn" id="btnAddEvent">+ 일정</button>
+  <button class="btn" id="btnLogout">로그아웃</button>
+</div>
+
+<!-- 공지 등록 다이얼로그 -->
+<dialog class="dialog" id="dlgNotice">
+  <form method="dialog" id="frmNotice">
+    <h3>새 공지</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>링크(선택) <input name="fileUrl" placeholder="https://..." /></label></div>
+    <div class="form-row"><label>게시일(선택) <input type="date" name="date" /></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 일정 등록 다이얼로그 (간단 버전) -->
+<dialog class="dialog" id="dlgEvent">
+  <form method="dialog" id="frmEvent">
+    <h3>새 일정</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>날짜<input type="date" name="date" required /></label></div>
+    <div class="form-row"><label>비고<textarea name="memo" rows="3" placeholder="선택"></textarea></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+  <!-- Back to Top -->
+  <div id="toTop">
+    <img src="/Users/junjun/Downloads/Project/아이콘/제목을 입력해주세요_-010.png" alt="TOP" style="width:27px;height:27px">
+  </div>
+
+  
+  <footer>
+      <div class="footer-links">
+        <ul>
+        <li><a href="try.html">홈</a></li>
+        <li><a href="yonghasa.html#greeting">사찰소개</a></li>
+        <li><a href="admin.html">관리자 로그인</a></li>
+        <li><a href="sI.html#events-photo">소식</a></li>
+        <li><a href="jM.html#notice">공지사항</a></li>
+        <li><a href="yonghasa.html#visit">오시는길</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <p class="account">계좌번호: 기업 000000000 (예금주 : 용화사)</p>
+        <p class="name">천태산 용화사</p>
+        <p class="address">
+          (우:12531) 경기 양평군 청운면 하고론길 38<br>
+          종무소: 031-773-1148
+        </p>
+
+      </div>
+     <div class="footer-bottom">
+       <p class="copyright">© 2025 Yonghwasa. All rights reserved.</p>
+      
+      </div>
+    </footer>
+
+
+<!-- ===== 스크립트: BackToTop + 탭 전환 + 각 탭 검색 ===== -->
+<script>
+// Back to Top Logic
+      const toTopBtn = document.getElementById('toTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) toTopBtn.style.display = 'block';
+        else toTopBtn.style.display = 'none';
+    });
+      toTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+/* 탭 전환: subnav 클릭 시 패널 스위칭 (스크롤 이동 X) */
+(function(){
+  var sub=document.getElementById('subnav');
+  if(!sub) return;
+
+  function activatePanel(id){
+    // 링크 active
+    var links=sub.querySelectorAll('a');
+    for(var i=0;i<links.length;i++) links[i].classList.remove('active');
+    var current=sub.querySelector('a[data-panel="'+id+'"]');
+    if(current) current.classList.add('active');
+
+    // 패널 표시
+    var panels=document.querySelectorAll('.tab-panel');
+    for(var j=0;j<panels.length;j++) panels[j].classList.remove('is-active');
+    var p=document.getElementById(id);
+    if(p) p.classList.add('is-active');
+
+    // 빵크럼 현재 항목 변경
+    var bc=document.getElementById('bc-current');
+    if(bc && current) bc.textContent=current.textContent;
+  }
+
+  // 클릭 핸들러
+  document.addEventListener('click',function(e){
+    var t=e.target; while(t&&t.nodeType===3)t=t.parentNode;
+    if(!t||!t.closest) return;
+    var a=t.closest('a'); if(!a||!a.closest('#subnav')) return;
+    var id=a.getAttribute('data-panel'); if(!id) return;
+    e.preventDefault();
+    activatePanel(id);
+  });
+
+  // 해시로 직접 진입 시 (#regular 등)
+  var init=location.hash?location.hash.replace('#',''):'notice';
+  if(document.getElementById(init)) activatePanel(init);
+})();
+
+/* 간단 검색/필터: 공지/행사/정기 공통 함수 */
+(function(){
+  function bindBoard(ns){
+    var q=document.getElementById('q-'+ns);
+    var sel=document.getElementById('sel-'+ns);
+    var btn=document.getElementById('btn-'+ns);
+    var rows=[].slice.call(document.querySelectorAll('#board-'+ns+' tbody tr'));
+    function apply(){
+      var term=(q&&q.value||'').trim().toLowerCase();
+      var tag=sel&&sel.value||'all';
+      rows.forEach(function(tr){
+        var title=tr.cells[1].innerText.toLowerCase();
+        var okTag=(tag==='all')||(tr.getAttribute('data-tag')===tag);
+        var okQ=!term||title.indexOf(term)>-1;
+        tr.style.display=(okTag&&okQ)?'':'none';
+      });
+    }
+    if(q) q.addEventListener('input',apply);
+    if(sel) sel.addEventListener('change',apply);
+    if(btn) btn.addEventListener('click',apply);
+  }
+  ['notice','schedule','regular'].forEach(bindBoard);
+})();
+
+
+/* ===== 행사일정 달력: Firestore events 연동 ===== */
+(function(){
+  const grid       = document.getElementById('calendar');
+  const titleYear  = document.querySelector('.cal-title .cal-year');
+  const titleMonth = document.querySelector('.cal-title .cal-month');
+  const btnPrev    = document.querySelector('.cal-nav.prev');
+  const btnNext    = document.querySelector('.cal-nav.next');
+  if(!grid) return;
+
+  let allEvents = [];
+  let cur = new Date(); cur.setDate(1);
+
+  const ymd = (d)=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const toDate = v => v?.toDate ? v.toDate() : (v ? new Date(v) : null);
+
+  function buildMonthMap(y,m){
+    const map = {};
+    for(const ev of allEvents){
+      const d = toDate(ev.date); if(!d) continue;
+      if(d.getFullYear()!==y || d.getMonth()!==m) continue;
+      const k = ymd(d);
+      (map[k] ||= []).push(ev);
+    }
+    for(const k in map){
+      map[k].sort((a,b)=>{
+        const ta=(a.time||''), tb=(b.time||'');
+        if(ta&&tb&&ta!==tb) return ta.localeCompare(tb,'ko');
+        return (a.title||'').localeCompare(b.title||'','ko');
+      });
+    }
+    return map;
+  }
+
+  function render(y,m){
+    titleYear.textContent=y; titleMonth.textContent=(m+1);
+    const weekdays=['일','월','화','수','목','금','토'];
+    let html = weekdays.map(w=>`<div class="cal-cell head">${w}</div>`).join('');
+    const first = new Date(y,m,1);
+    const startDow = first.getDay();
+    const days = new Date(y,m+1,0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+    const map = buildMonthMap(y,m);
+
+    for(let i=0;i<42;i++){
+      const col=i%7, day=i-startDow+1, inMonth=day>=1&&day<=days;
+      const cls=['cal-cell','cal-day']; if(!inMonth) cls.push('is-out');
+      if(col===0) cls.push('sun'); if(col===6) cls.push('sat');
+      if(inMonth){
+        const curDate=new Date(y,m,day);
+        if(ymd(curDate)===ymd(today)) cls.push('is-today');
+      }
+      html+=`<div class="${cls.join(' ')}">`;
+      html+=`<div class="date">${inMonth?day:'&nbsp;'}</div>`;
+      if(inMonth){
+        const key = ymd(new Date(y,m,day));
+        const list = map[key]||[];
+        if(list.length){
+          html+=`<ul class="cal-events">`;
+          list.slice(0,3).forEach(ev=>{
+            const t = ev.time ? (ev.time+' ') : '';
+            html+=`<li>${t}${ev.title||''}</li>`;
+          });
+          if(list.length>3) html+=`<li> … 외 ${list.length-3}건</li>`;
+          html+=`</ul>`;
+        }
+      }
+      html+=`</div>`;
+    }
+    grid.innerHTML=html;
+  }
+
+  function move(diff){
+    cur = new Date(cur.getFullYear(), cur.getMonth()+diff, 1);
+    render(cur.getFullYear(), cur.getMonth());
+  }
+  btnPrev?.addEventListener('click', ()=>move(-1));
+  btnNext?.addEventListener('click', ()=>move(1));
+
+  // Firestore 구독
+  db.collection('events').onSnapshot(snap=>{
+    const arr=[];
+    snap.forEach(doc=>{
+      const d=doc.data()||{};
+      if(d.seed===true||d.visible===false) return;
+      if(!d.date) return;
+      arr.push({id:doc.id, ...d});
+    });
+    allEvents = arr;
+    render(cur.getFullYear(), cur.getMonth());
+  }, err=>{
+    console.error('[events]', err);
+    render(cur.getFullYear(), cur.getMonth());
+  });
+
+  render(cur.getFullYear(), cur.getMonth());
+})();
+  var grid = document.getElementById('calendar');
+
+
+  var titleYear = document.querySelector('.cal-title .cal-year');
+  var titleMonth = document.querySelector('.cal-title .cal-month');
+  var btnPrev = document.querySelector('.cal-nav.prev');
+  var btnNext = document.querySelector('.cal-nav.next');
+
+  var today = new Date();
+  var curY = today.getFullYear();
+  var curM = today.getMonth(); // 0-11
+
+  function ymd(y,m,d){
+    return y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  }
+
+  function render(y, m){
+    // 타이틀
+    if(titleYear) titleYear.textContent = y;
+    if(titleMonth) titleMonth.textContent = (m+1);
+
+    // 요일 헤더
+    var weekdays = ['일','월','화','수','목','금','토'];
+    var html = '';
+    for(var i=0;i<7;i++){
+      html += '<div class="cal-cell head">'+weekdays[i]+'</div>';
+    }
+
+    // 날짜 계산
+    var first = new Date(y, m, 1);
+    var startDow = first.getDay();              // 0(일)~6(토)
+    var daysInMonth = new Date(y, m+1, 0).getDate();
+
+    // 총 6주(42칸) 렌더
+    for(var i=0;i<42;i++){
+      var col = i % 7;
+      var dayNum = i - startDow + 1;
+      var inMonth = (dayNum >= 1 && dayNum <= daysInMonth);
+
+      var cls = ['cal-cell','cal-day'];
+      if(!inMonth) cls.push('is-out');
+      if(col===0) cls.push('sun');
+      if(col===6) cls.push('sat');
+      if(inMonth && y===today.getFullYear() && m===today.getMonth() && dayNum===today.getDate()){
+        cls.push('is-today');
+      }
+
+      html += '<div class="'+cls.join(' ')+'">';
+      html += inMonth ? '<div class="date">'+dayNum+'</div>' : '<div class="date">&nbsp;</div>';
+
+      if(inMonth){
+        var key = ymd(y,m,dayNum);
+        var evts = EVENTS[key] || [];
+        if(evts.length){
+          html += '<ul class="cal-events">';
+          for(var k=0;k<evts.length;k++){
+            html += '<li>'+evts[k]+'</li>';
+          }
+          html += '</ul>';
+        }
+      }
+      html += '</div>';
+    }
+
+    grid.innerHTML = html;
+  }
+
+  // 초기 렌더
+  render(curY, curM);
+
+  // 네비게이션
+  function move(diff){
+    var d = new Date(curY, curM + diff, 1);
+    curY = d.getFullYear(); curM = d.getMonth();
+    render(curY, curM);
+  }
+  if(btnPrev) btnPrev.addEventListener('click', function(){ move(-1); });
+  if(btnNext) btnNext.addEventListener('click', function(){ move(1); });
+
+  // 행사일정 탭으로 직접 진입(#schedule)이면 활성화되도록(이미 탭 스크립트가 처리 중이긴 함)
+  if(location.hash.replace('#','')==='schedule'){
+    // 필요 시 추가 동작 가능
+  }
+
+</script>
+<script>
+
+  // 날짜 포맷 유틸
+  function fmtDate(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+</script>
+<script>
+
+
+(function(){
+  var sub=document.getElementById('subnav'); if(!sub) return;
+  function activate(id){
+    sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
+    var cur=sub.querySelector('a[data-panel="'+id+'"]'); if(cur) cur.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+    var panel=document.getElementById(id); if(panel) panel.classList.add('is-active');
+    var bc=document.getElementById('bc-current'); if(bc&&cur) bc.textContent=cur.textContent;
+    // (선택) 해시 동기화
+    history.replaceState(null, "", "#" + id);
+  }
+  // ⬇️ 이 한 줄에서 해시를 읽어 초기 탭을 정함
+  var init = location.hash ? location.hash.slice(1) : 'notice';
+  if(document.getElementById(init)) activate(init);
+})();
+  </script>
+  <script>
+(function(){
+  var sub = document.getElementById('subnav'); if(!sub) return;
+
+  function activate(id){
+    sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
+    var cur = sub.querySelector('a[data-panel="'+id+'"]'); if(cur) cur.classList.add('active');
+
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('is-active'));
+    var panel = document.getElementById(id); if(panel) panel.classList.add('is-active');
+
+    var bc=document.getElementById('bc-current'); if(bc&&cur) bc.textContent=cur.textContent;
+  }
+
+  function activateFromHash(){
+    var id = location.hash.slice(1) || 'events';
+    if(!document.getElementById(id)) id = 'events';
+    activate(id);
+  }
+
+  window.addEventListener('hashchange', activateFromHash);     // 해시 바뀔 때마다
+  document.addEventListener('DOMContentLoaded', activateFromHash); // 첫 로드
+})();
+</script>
+
+<script>
+  // ===== 공통 Firebase 초기화 =====
+  const DEMO_MODE = false; // 데모 모드면 true (백엔드 없이 버튼 테스트 가능)  
+  const ts   = firebase.firestore.FieldValue.serverTimestamp;
+</script>
+
+
+<script>
+  // 대시보드와 같은 설정
+  
+  if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  
+
+  // 공용 포매터
+  function fmt(ts){
+    try{
+      const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+      if(!d) return '-';
+      const y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
+      return `${y}.${m}.${da}`;
+    }catch(_){ return '-'; }
+  }
+</script>
+<!-- (1) SDK: 단 한 번만 -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey:"AIzaSyBFh2Z7DKG9a8Q0GJk065FrN3NXnOrVFr4",
+    authDomain:"yonghwasa-web.firebaseapp.com",
+    projectId:"yonghwasa-web",
+    storageBucket:"yonghwasa-web.appspot.com",
+    appId:"1:853312665810:web:ad06badcb0f23ad42d950b",
+    measurementId:"G-JFHHD2E2F2"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db   = firebase.firestore();
+  const auth = firebase.auth();
+
+(function(){
+  // 목록 어디든지: .item-link 를 클릭하면 view.html?col=...&id=...으로 이동
+  document.addEventListener('click', (e)=>{
+    const link = e.target.closest('.item-link');
+    if(!link) return;
+    const row = link.closest('[data-col][data-id]');
+    if(!row) return;
+    const col = row.getAttribute('data-col');
+    const id  = row.getAttribute('data-id');
+    // 상세페이지로 이동
+    location.href = `view.html?col=${encodeURIComponent(col)}&id=${encodeURIComponent(id)}`;
+  });
+})();
+
+  // 공지
+db.collection('notices').orderBy('createdAt','desc').get().then(snap=>{
+  const html = snap.docs.map(d=>{
+    const x = d.data();
+    return `
+      <div class="notice-item" data-col="notices" data-id="${d.id}">
+        <a class="item-link">${x.title || '(제목없음)'}</a>
+        <span class="date">${(x.createdAt?.toDate?.() ? x.createdAt.toDate().toISOString().slice(0,10) : '')}</span>
+      </div>`;
+  }).join('');
+  document.querySelector('#notice-list').innerHTML = html;
+});
+
+// 행사일정
+db.collection('events').orderBy('date','desc').get().then(snap=>{
+  document.querySelector('#events-list').innerHTML =
+    snap.docs.map(d=>{
+      const x=d.data(), dt=x.date?.toDate?.();
+      return `<div class="event-item" data-col="events" data-id="${d.id}">
+                <a class="item-link">${x.title||''}</a>
+                <span class="date">${dt? dt.toISOString().slice(0,10): ''}</span>
+              </div>`;
+    }).join('');
+});
+
+// 정기 법회
+db.collection('regulars').orderBy('createdAt','desc').get().then(snap=>{
+  document.querySelector('#regular-list').innerHTML =
+    snap.docs.map(d=>{
+      const x=d.data();
+      return `<div class="regular-item" data-col="regulars" data-id="${d.id}">
+                <a class="item-link">${x.title||''}</a>
+              </div>`;
+    }).join('');
+});
+
+</script>
+<script>
+(function(){
+  // ===== 유틸 =====
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const escapeHtml = s => String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const toDate = v => v?.toDate ? v.toDate() : (v ? new Date(v) : null);
+  const ymd = d => {
+    const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), da=String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${da}`;
+  };
+  const ymdDot = d => {
+    const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), da=String(d.getDate()).padStart(2,'0');
+    return `${y}.${m}.${da}`;
+  };
+
+  // =========================================================
+  // 1) 공지사항 (collection: notices)
+  //    - isPinned(공지) 먼저, 최신순
+  //    - sel-notice: 전체/공지/일반
+  // =========================================================
+  const noticeTB = $('#noticeTbody');
+  let noticeAll = [];
+
+  async function loadNotices(){
+    const snap = await db.collection('notices').get();
+    noticeAll = snap.docs.map(d=>({ id:d.id, ...d.data() }))
+      .filter(x=> x.seed!==true && x.visible!==false);
+    // 정렬: 공지 우선 -> createdAt desc
+    noticeAll.sort((a,b)=>{
+      const ap=a.isPinned?1:0, bp=b.isPinned?1:0;
+      if(ap!==bp) return bp-ap;
+      const at = toDate(a.createdAt) || toDate(a.updatedAt) || new Date(0);
+      const bt = toDate(b.createdAt) || toDate(b.updatedAt) || new Date(0);
+      return bt-at;
+    });
+    renderNotices();
+  }
+
+  function renderNotices(){
+    if(!noticeTB) return;
+    const filter = ($('#sel-notice')?.value||'all');
+    const kw = ($('#q-notice')?.value||'').trim().toLowerCase();
+
+    const list = noticeAll.filter(n=>{
+      if(filter==='공지' && !n.isPinned) return false;
+      if(filter==='일반' && !!n.isPinned) return false;
+      if(kw && !(n.title||'').toLowerCase().includes(kw)) return false;
+      return true;
+    });
+
+    let seq = list.filter(n=>!n.isPinned).length; // 일반글 역순 번호
+    noticeTB.innerHTML = list.map(n=>{
+      const created = toDate(n.createdAt) || new Date();
+      const day = toDate(n.date) || created;
+      const no = n.isPinned ? '공지' : seq--;
+      const badge = n.isPinned ? '<span class="tag">공지</span> ' : '';
+      const file = (n.fileUrl || (Array.isArray(n.attachments)&&n.attachments.length)) ? '📎' : '';
+      return `
+        <tr data-tag="${n.isPinned?'공지':'일반'}">
+          <td>${no}</td>
+         <td>${badge}<a href="view.html?col=notices&id=${n.id}">${escapeHtml(n.title||'')}</a></td>
+          <td class="file">${file}</td>
+          <td>${escapeHtml(n.author||'종무소')}</td>
+          <td>${ymdDot(day)}</td>
+          <td></td>
+        </tr>`;
+    }).join('');
+  }
+
+  $('#btn-notice')?.addEventListener('click', renderNotices);
+  $('#q-notice')?.addEventListener('keydown', e=>{ if(e.key==='Enter') renderNotices(); });
+  $('#sel-notice')?.addEventListener('change', renderNotices);
+
+  // =========================================================
+  // 2) 행사일정 달력 (collection: events)
+  //    - 현재 보이는 달 범위만 쿼리해서 이벤트를 칠함
+  // =========================================================
+  const calGrid = $('#calendar');
+  const titleYear = document.querySelector('.cal-title .cal-year');
+  const titleMonth = document.querySelector('.cal-title .cal-month');
+  const btnPrev = document.querySelector('.cal-nav.prev');
+  const btnNext = document.querySelector('.cal-nav.next');
+
+  let cur = new Date(); cur.setDate(1);
+  let eventsMap = {}; // {'YYYY-MM-DD': ['제목', ...]}
+
+  async function loadMonthEvents(dFirst){
+    const y = dFirst.getFullYear(), m = dFirst.getMonth();
+    const start = new Date(y, m, 1, 0,0,0);
+    const end   = new Date(y, m+1, 0, 23,59,59);
+
+    const snap = await db.collection('events')
+      .where('date','>=', firebase.firestore.Timestamp.fromDate(start))
+      .where('date','<=', firebase.firestore.Timestamp.fromDate(end))
+      .get();
+
+    eventsMap = {};
+    snap.forEach(doc=>{
+      const x = doc.data()||{};
+      if(x.visible===false || x.seed===true) return;
+      const d = toDate(x.date); if(!d) return;
+      const key = ymd(d);
+      (eventsMap[key] ||= []).push({
+      id: doc.id,
+      title: (x.title||'(제목없음)').trim(),
+      time:  (x.time||''),
+      place: (x.place||'')
+     });
+    });
+    renderCalendar(dFirst);
+  }
+
+  function renderCalendar(dFirst){
+    if(!calGrid) return;
+    const y = dFirst.getFullYear(), m = dFirst.getMonth();
+    titleYear && (titleYear.textContent = y);
+    titleMonth && (titleMonth.textContent = m+1);
+
+    const weekdays=['일','월','화','수','목','금','토'];
+    let html = weekdays.map(w=>`<div class="cal-cell head">${w}</div>`).join('');
+
+    const today = new Date(); today.setHours(0,0,0,0);
+    const startDow = new Date(y,m,1).getDay();
+    const daysInMonth = new Date(y,m+1,0).getDate();
+
+    for(let i=0;i<42;i++){
+      const col = i%7;
+      const dayNum = i - startDow + 1;
+      const inMonth = dayNum>=1 && dayNum<=daysInMonth;
+      const classes = ['cal-cell','cal-day'];
+      if(!inMonth) classes.push('is-out');
+      if(col===0) classes.push('sun');
+      if(col===6) classes.push('sat');
+      if(inMonth){
+        const k = ymd(new Date(y,m,dayNum));
+        if(ymd(new Date(y,m,dayNum))===ymd(today)) classes.push('is-today');
+      }
+      html += `<div class="${classes.join(' ')}">`;
+      html += `<div class="date">${inMonth?dayNum:'&nbsp;'}</div>`;
+      if(inMonth){
+        const key = ymd(new Date(y,m,dayNum));
+        const evs = eventsMap[key] || [];
+        if(evs.length){
+          html += '<ul class="cal-events">';
+          evs.forEach(ev => {
+            const tt = ev.time ? ev.time + ' ' : '';
+            html += `<li>
+              <a href="view.html?col=events&id=${ev.id}">
+               ${escapeHtml(tt + ev.title)}
+            </a>
+         </li>`;
+       });
+          html += '</ul>';
+        }
+      }
+      html += `</div>`;
+    }
+    calGrid.innerHTML = html;
+  }
+
+  btnPrev?.addEventListener('click', ()=>{ cur = new Date(cur.getFullYear(), cur.getMonth()-1, 1); loadMonthEvents(cur); });
+  btnNext?.addEventListener('click', ()=>{ cur = new Date(cur.getFullYear(), cur.getMonth()+1, 1); loadMonthEvents(cur); });
+
+  // =========================================================
+  // 3) 정기법회 안내 (collection: regular_posts)
+  //    - category: weekend/prayer/memorial/sunday
+  // =========================================================
+  const regularTB = $('#regularTbody');
+  let regularAll = [];
+
+  async function loadRegular(){
+    const snap = await db.collection('regular_posts').get();
+    regularAll = snap.docs.map(d=>({ id:d.id, ...d.data() }))
+      .filter(x=> x.seed!==true && x.visible!==false)
+      .sort((a,b)=>{
+        const at = toDate(a.createdAt) || toDate(a.updatedAt) || new Date(0);
+        const bt = toDate(b.createdAt) || toDate(b.updatedAt) || new Date(0);
+        return bt - at;
+      });
+    renderRegular();
+  }
+
+  function catLabel(c){
+    return ({weekend:'주말법회',prayer:'기도안내',memorial:'49제 및 제사',sunday:'일요법회'})[c] || (c||'');
+  }
+
+  function renderRegular(){
+    if(!regularTB) return;
+    const cat = $('#sel-regular')?.value || '';
+    const kw = ($('#q-regular')?.value||'').trim().toLowerCase();
+
+    const list = regularAll.filter(r=>{
+      if(cat && r.category!==cat) return false;
+      if(kw && !(r.title||'').toLowerCase().includes(kw)) return false;
+      return true;
+    });
+
+    regularTB.innerHTML = list.map(r=>{
+      const when = toDate(r.createdAt) || toDate(r.updatedAt) || new Date();
+      const file = (r.fileUrl || (Array.isArray(r.attachments)&&r.attachments.length)) ? '📎' : '';
+      const pin  = r.isPinned ? ' <span class="tag">고정</span>' : '';
+      return `
+        <tr data-tag="${escapeHtml(r.category||'')}">
+          <td>${escapeHtml(catLabel(r.category))}${pin}</td>
+          <td><a href="view.html?col=regular_posts&id=${r.id}">${escapeHtml(r.title||'')}</a></td>
+          <td class="file">${file}</td>
+          <td>${escapeHtml(r.author||'종무소')}</td>
+          <td>${ymdDot(when)}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  $('#btn-regular')?.addEventListener('click', renderRegular);
+  $('#q-regular')?.addEventListener('keydown', e=>{ if(e.key==='Enter') renderRegular(); });
+  $('#sel-regular')?.addEventListener('change', renderRegular);
+
+  // ===== 최초 로드 =====
+  Promise.all([loadNotices(), loadMonthEvents(cur), loadRegular()]);
+})();
+</script>
+<script>
+// ===== 공지사항: 실시간 로드 + 검색 + 페이징 =====
+(function(){
+  const PAGE_SIZE = 16;
+
+  const tbody   = document.getElementById('noticeBody');
+  const pagerEl = document.getElementById('noticePager');
+  const selEl   = document.getElementById('sel-notice'); // 전체/공지/일반
+  const qEl     = document.getElementById('q-notice');
+  const btnEl   = document.getElementById('btn-notice');
+
+  let all = [];        // Firestore에서 받아온 전체
+  let filtered = [];   // 검색/필터 적용된 결과
+  let page = 1;        // 현재 페이지(1-base)
+
+  // 날짜 포맷 (YYYY.MM.DD)
+  function fmtDate(d){
+    try{
+      if (d?.toDate) d = d.toDate();
+      if (!(d instanceof Date)) d = new Date(d);
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const da= String(d.getDate()).padStart(2,'0');
+      return `${y}.${m}.${da}`;
+    }catch(_){ return '-'; }
+  }
+
+  // 행 렌더
+  function renderRows(slice){
+    const rows = slice.map((d, idx)=>{
+      const hasFile = !!(d.fileUrl || (Array.isArray(d.attachments) && d.attachments.length));
+      const tag = d.type || '일반';
+      // 번호: 페이지 내 1~ / 필요하면 전체 넘버로 바꾸려면 ( (page-1)*PAGE_SIZE + idx + 1 )
+      const num = (idx + 1) + (page-1)*PAGE_SIZE;
+
+      const dateForDisplay = d.date?.toDate ? d.date.toDate()
+                           : (d.createdAt?.toDate ? d.createdAt.toDate() : new Date());
+
+      return `
+        <tr data-tag="${tag}">
+          <td>${num}</td>
+          <td>${tag==='공지'?'<span class="tag">공지</span>':''}
+          <a href="view.html?col=notices&id=${d.id}">
+            ${d.title||''}
+          </a>
+        </td>
+          <td class="file">${hasFile ? '📎' : ''}</td>
+          <td>종무소</td>
+          <td>${fmtDate(dateForDisplay)}</td>
+          <td></td>
+        </tr>`;
+    }).join('');
+
+    tbody.innerHTML = rows || `<tr><td colspan="6" style="text-align:center;color:#777">게시물이 없습니다.</td></tr>`;
+  }
+
+  // 페이저 렌더
+  function renderPager(){
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    if (totalPages <= 1){ pagerEl.innerHTML = ''; return; }
+
+    let html = '';
+    html += `<button class="btn" data-page="prev" ${page<=1?'disabled':''}>이전</button>`;
+
+    // 페이지 번호 (많아질 수 있으니 앞·뒤 2개 + 현재 주변만 표시)
+    const windowSize = 2;
+    const start = Math.max(1, page - windowSize);
+    const end   = Math.min(totalPages, page + windowSize);
+
+    if (start > 1){
+      html += `<button class="btn" data-page="1">1</button>`;
+      if (start > 2) html += `<span style="padding:.4rem .5rem;color:#999">…</span>`;
+    }
+
+    for (let p=start; p<=end; p++){
+      html += `<button class="btn ${p===page?'current':''}" data-page="${p}">${p}</button>`;
+    }
+
+    if (end < totalPages){
+      if (end < totalPages-1) html += `<span style="padding:.4rem .5rem;color:#999">…</span>`;
+      html += `<button class="btn" data-page="${totalPages}">${totalPages}</button>`;
+    }
+
+    html += `<button class="btn" data-page="next" ${page>=totalPages?'disabled':''}>다음</button>`;
+    pagerEl.innerHTML = html;
+  }
+
+  // 현재 page 표시
+  function renderPage(){
+    const start = (page-1) * PAGE_SIZE;
+    const slice = filtered.slice(start, start + PAGE_SIZE);
+    renderRows(slice);
+    renderPager();
+  }
+
+  // 검색/필터 적용
+  function applyFilter(){
+    const term = (qEl?.value || '').trim().toLowerCase();
+    const tag  = selEl?.value || 'all';
+    filtered = all.filter(d=>{
+      if (tag !== 'all' && (d.type||'일반') !== tag) return false;
+      if (term && !(d.title||'').toLowerCase().includes(term)) return false;
+      return true;
+    });
+    page = 1; // 검색/필터 바꾸면 1페이지로
+    renderPage();
+  }
+
+  // 페이저 클릭
+  pagerEl.addEventListener('click', (e)=>{
+    const b = e.target.closest('button[data-page]');
+    if(!b) return;
+    const val = b.getAttribute('data-page');
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    if (val === 'prev') page = Math.max(1, page-1);
+    else if (val === 'next') page = Math.min(totalPages, page+1);
+    else page = parseInt(val,10) || 1;
+    renderPage();
+  });
+
+  // 검색 바인딩
+  btnEl?.addEventListener('click', applyFilter);
+  qEl?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') applyFilter(); });
+  selEl?.addEventListener('change', applyFilter);
+
+  // Firestore 구독 (최신순)
+  db.collection('notices').orderBy('createdAt','desc').onSnapshot((snap)=>{
+    const list = [];
+    snap.forEach(doc=>{
+      const d = doc.data() || {};
+      if (d.seed === true || d.visible === false) return; // 시드/비공개 제외
+      list.push({ id: doc.id, ...d });
+    });
+    all = list;
+    applyFilter(); // 최초 렌더 + 실시간 반영
+  }, (err)=>{
+    console.error('[notices onSnapshot]', err);
+    tbody.innerHTML = `<tr><td colspan="6" style="color:#c00">목록을 불러오지 못했습니다.</td></tr>`;
+    pagerEl.innerHTML = '';
+  });
+
+})();
+</script>
+
+
+
+<script src="admin-inline.js"></script>
+<link rel="stylesheet" href="admin-inline.css">
+
+</body>
+</html>
