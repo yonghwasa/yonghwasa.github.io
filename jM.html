@@ -1,4 +1,540 @@
-<!doctype html><html lang=ko><meta charset=UTF-8><meta content="IE=edge"http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1"name=viewport><title>용화사 사찰 웹사이트 | 종무행정</title><link href=https://unpkg.com/swiper/swiper-bundle.min.css rel=stylesheet><style>*{margin:0;padding:0;box-sizing:border-box}body,html{min-width:1280px;overflow-x:auto}body{font-family:'Noto Sans KR',sans-serif;background:#fafafa;color:#333;line-height:1.6}img,video{max-width:100%;display:block}a{text-decoration:none;color:inherit}#wrapper{width:clamp(1280px,100%,1920px);min-width:1280px;max-width:1440px;height:clamp(860px,100%,1080px);min-height:740px;max-height:1080px;margin:0 auto}.header-top{background:#fff;padding:.75rem 2rem;display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:1rem;color:#333;border-bottom:1px solid #eaeaea}.header-top img{justify-content:center;width:250px;height:105px}.header-top .divider{color:#ccc;margin:0 .75rem}.header-top .temple-name{font-weight:700}:root{--menu-width:1200px;--menu-gap:10rem}nav.main-nav{background:#fff;position:relative;padding:.5rem 2rem;overflow:visible}nav.main-nav>ul{display:flex;justify-content:center;flex-wrap:nowrap;list-style:none;gap:10rem;white-space:nowrap;font-weight:500;max-width:1200px;margin:0 auto;position:relative}nav.main-nav ul li{position:relative;padding:0}nav.main-nav>ul>li:not(:last-child)::after{content:"|";font-size:larger;position:absolute;right:-5rem;color:#333}nav.main-nav ul li>a{color:#333;white-space:nowrap;padding:1rem;transition:color .2s;font-size:larger}nav.main-nav ul li>a:hover{color:#b9a26a}nav.main-nav>ul.menu{max-width:var(--menu-width);margin:0 auto;gap:var(--menu-gap)}nav.main-nav>ul.menu>li+li::after{right:calc(-.5 * var(--menu-gap))}nav.main-nav .mega-submenu{left:50%;transform:translateX(-50%);width:var(--menu-width);max-width:var(--menu-width)}nav.main-nav .mega-submenu{display:grid;grid-template-columns:repeat(5,max-content);column-gap:8rem;position:absolute;top:100%;left:0;justify-content:center;width:100%;max-width:1920px;padding:2rem;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);box-sizing:border-box;opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .3s ease,transform .3s ease-out;z-index:50}nav.main-nav:hover .mega-submenu{opacity:1;pointer-events:auto;transform:translateY(0)}nav.main-nav .mega-submenu .group{text-align:left;padding:0 .25rem;box-sizing:border-box}nav.main-nav .mega-submenu .group ul{list-style:none;padding:0;margin:0}nav.main-nav .mega-submenu .group ul li+li{margin-top:.35rem;padding-left:0}nav.main-nav .mega-submenu .group a{color:#333;text-decoration:none;transition:color .2s}nav.main-nav .mega-submenu .group a:hover{color:#b9a26a}nav.main-nav:hover .mega-submenu{opacity:1;pointer-events:auto;transform:translateY(0)}@media (max-width:1360px){nav.main-nav .mega-submenu{grid-template-columns:repeat(5,1fr);gap:3.5rem}}.page-hero{position:relative;min-height:360px;background-image:var(--hero, url('/Users/junjun/Downloads/Project/2/003.png'));background-size:cover;background-position:center}.page-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08) 35%,rgba(0,0,0,.5) 100%)}.ph-inner{position:absolute;inset:0;left:50%;transform:translateX(-50%);max-width:var(--menu-width);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 1rem;color:#fff;text-align:center}.ph-title{font-size:clamp(1.8rem,2.4vw + 1rem,3rem);font-weight:800;letter-spacing:.03em;text-shadow:0 3px 12px rgba(0,0,0,.35);margin-bottom:.8rem}.breadcrumbs{display:flex;align-items:center;gap:.5rem;font-size:.95rem;opacity:.95;margin-bottom:.9rem}.breadcrumbs a{color:#fff}.breadcrumbs .sep{opacity:.6}.subnav{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1rem 2rem;max-width:var(--menu-width);padding:.25rem .75rem}.subnav li{list-style:none;position:relative}.subnav li+li::before{content:"•";position:absolute;left:-1.2rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.65)}.subnav a{color:#fff;padding:.35rem .6rem;border-radius:999px;transition:.2s ease;white-space:nowrap}.subnav a:hover{background:rgba(255,255,255,.12)}.subnav a.active{background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}.sheet{max-width:var(--menu-width);margin:2rem auto;padding:2rem;background:#fff;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.08);position:relative}.sheet::after{content:"";position:absolute;left:2rem;right:2rem;bottom:-10px;height:8px;border-radius:999px}.tab-panel{display:none}.tab-panel.is-active{display:block}.board-toolbar{display:flex;gap:.5rem;justify-content:flex-end;margin-bottom:.75rem}.input,.select{padding:.5rem .6rem;border:1px solid #ddd;border-radius:8px;background:#fff}.btn{display:inline-flex;align-items:center;padding:.5rem .9rem;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer}.btn:hover{border-color:#999}.board{width:100%;border-collapse:collapse;background:#fff;overflow:hidden;border-radius:8px}.board thead th{background:#faf7ef;border-bottom:2px solid #e9dcc2;padding:.75rem .75rem;text-align:left;white-space:nowrap}.board tbody td{border-bottom:1px solid #eee;padding:.75rem .75rem}.board .tag{display:inline-block;background:#e9dcc2;color:#7a5b1a;border-radius:999px;font-size:.78rem;padding:.2rem .55rem;margin-right:.5rem}.board .file{opacity:.55}.pager{display:flex;gap:.35rem;justify-content:center;margin:1rem 0}.pager .btn{padding:.4rem .7rem}.pager .btn.current{border-color:#b9a26a}@media(max-width:1360px){nav.main-nav .mega-submenu{column-gap:3.5rem}}@media(max-width:1024px){.page-hero{min-height:300px}.subnav{gap:.8rem 1.2rem}.subnav li+li::before{left:-1rem}}:root{--cal-head:#a99986;--cal-head-text:#fff;--cal-border:#e8e1d5;--cal-muted:#999;--cal-sun:#E86C00}.cal-wrap{max-width:var(--menu-width);margin:0 auto}.cal-header{display:flex;justify-content:center;align-items:center;gap:1rem;margin:.75rem 0 1rem}.cal-title{font-size:1.75rem;font-weight:700}.cal-nav{width:36px;height:36px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;line-height:34px;font-size:1.2rem}.cal-nav:hover{border-color:#bbb}.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--cal-border);background:#fff;overflow:hidden;border-radius:8px}.cal-cell{border-right:1px solid var(--cal-border);border-bottom:1px solid var(--cal-border)}.cal-cell.head{background:var(--cal-head);color:var(--cal-head-text);text-align:center;font-weight:600;padding:.75rem 0}.cal-day{min-height:140px;padding:8px 10px;position:relative;background:#fff}.cal-day.is-out{background:#fafafa}.cal-day .date{font-weight:600}.cal-day.sun .date{color:var(--cal-sun)}.cal-day.sat .date{color:#666}.cal-day.is-today{outline:2px solid rgba(185,162,106,.45);outline-offset:-2px}.cal-events{margin-top:6px;font-size:.92rem;color:#666;list-style:none}.cal-events li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cal-events li::before{content:"· ";color:#bbb}.cal-note{color:var(--cal-muted);margin-top:.6rem;font-size:.9rem}.footer-links{background:#b9a26a;padding:.75rem 1rem}.footer-links ul{display:flex;justify-content:flex-start;gap:.65rem;padding-left:.75rem;list-style:none;font-size:.95rem}.footer-links ul li{position:relative}.footer-links ul li:not(:last-child)::after{content:"/";margin:0 .75rem;color:rgba(255,255,255,.7)}.footer-links ul li a{color:#fff;transition:color .2s}.footer-links ul li a:hover{color:#333}.footer-info{background:#333;color:#fff;text-align:start;padding:1.5rem 1.5rem;line-height:1.4}.footer-info .account{color:#efc964;font-weight:600;margin-bottom:.75rem}.footer-info .address{font-size:.9rem;opacity:.85}.footer-info .name{text-align:right;padding-right:4rem;font-size:larger;font-style:italic;opacity:.6}.footer-bottom{background:#222;color:#ccc;display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;font-size:.85rem}#toTop{position:fixed;bottom:20px;right:20px;background:#fff;color:#222;padding:0;border-radius:50%;cursor:pointer;display:none;box-shadow:0 2px 6px rgba(0,0,0,.2);width:32px;height:32px;display:flex;align-items:center;justify-content:center}.admin-only{display:none!important}body.admin-logged-in .admin-only{display:initial!important}.admin-rail{position:fixed;right:16px;bottom:16px;z-index:9999;display:flex;gap:8px;align-items:center;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.08);padding:8px 10px}.admin-rail .btn{height:36px;padding:0 12px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer}.admin-rail .btn-primary{background:#b9a26a;color:#fff;border:0}body.is-editing [contenteditable=true]{outline:2px dashed #b9a26a;outline-offset:2px;border-radius:6px}.edit-actions{position:absolute;right:6px;top:6px;z-index:5;display:flex;gap:6px}.edit-actions .btn-mini{height:28px;padding:0 10px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:.9rem}.dialog{border:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);width:min(560px,90vw);padding:18px}.dialog::backdrop{background:rgba(0,0,0,.45)}.form-row{display:flex;flex-direction:column;gap:.35rem;margin:.5rem 0}.form-row input,.form-row textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px}.row{display:flex;gap:8px;align-items:center}</style><div class=wrapper><header><div class=header-top><a href=index.html><img alt="천태산 용화사 마크"src=./assets/img/logo.png> <span class=divider></span> <span class=temple-name></span></a></div><nav class=main-nav><ul class=menu><li><a href=yonghasa.html#greeting>천태산 용화사</a><li><a href=jM.html#notice>종무행정</a><li><a href=sI.html#events-photo>사찰소식</a><li><a href=bMG.html#weekend>법회 및 기도</a><li><a href=tMC.html#g-intro>불교 교실</a></ul><div class=mega-submenu><div class=group><ul><li><a href=yonghasa.html#greeting>주자스님 인사말</a><li><a href=yonghasa.html#heritage>성보 문화재</a><li><a href=yonghasa.html#visit>찾아오시는 길</a></ul></div><div class=group><ul><li><a href=jM.html#notice>공지사항</a><li><a href=jM.html#events>행사일정</a><li><a href=jM.html#regular>정기법회 안내</a></ul></div><div class=group><ul><li><a href=sI.html#events-photo>행사 사진</a><li><a href=sI.html#gallery>포토 갤러리</a></ul></div><div class=group><ul><li><a href=bMG.html#weekend>주말법회</a><li><a href=bMG.html#prayer>기도안내</a><li><a href=bMG.html#memorial>49제 및 제사</a><li><a href=bMG.html#sunday>일요법회</a></ul></div><div class=group><ul><li><a href=tMC.html#g-intro>불교 교실 소개</a><li><a href=tMC.html#g-schedule>강의 시간 안내</a></ul></div></div></nav></header><section class=page-hero style="--hero:url('assets/img/subheropic/subheropic 002.JPG')"><div class=ph-inner><h1 class=ph-title>종무행정</h1><nav class=breadcrumbs aria-label=breadcrumb><a href=index.html class=home aria-label=홈>HOME</a> <span class=sep>›</span> <a href=jM.html>종무행정</a> <span class=sep>›</span> <span class=current id=bc-current>공지사항</span></nav><ul class=subnav id=subnav role=tablist><li><a href=#notice data-panel=notice class=active>공지사항</a><li><a href=#events data-panel=events>행사일정</a><li><a href=#regular data-panel=regular>정기법회 안내</a></ul></div></section><main><section class="sheet tab-panel is-active"aria-labelledby=tab-notice id=notice><div class=board-toolbar><select class=select id=sel-notice><option value=all>전체<option value=공지>공지<option value=일반>일반</select> <input placeholder="제목 검색"class=input id=q-notice> <button class=btn id=btn-notice>검색</button></div><table class=board id=board-notice><thead><tr><th style=width:80px>번호<th>제목<th style=width:80px>파일<th style=width:120px>작성자<th style=width:140px>작성일<th style=width:90px><tbody id=noticeBody></table><div class=pager id=noticePager></div></section><section class="sheet tab-panel"aria-labelledby=tab-schedule id=events><div class=cal-wrap><div class=cal-header><button class="cal-nav prev"aria-label="이전 달">‹</button><h2 class=cal-title><span class=cal-year></span>년 <span class=cal-month></span>월</h2><button class="cal-nav next"aria-label="다음 달">›</button></div><div class=cal-grid id=calendar></div><p class=cal-note>· 일정은 예시 데이터입니다</div></section><section class="sheet tab-panel"aria-labelledby=tab-regular id=regular><div class=board-toolbar><select class=select id=sel-regular><option value="">전체<option value=weekend>주말법회<option value=prayer>기도안내<option value=memorial>49제 및 제사<option value=sunday>일요법회</select> <input placeholder="제목 검색"class=input id=q-regular> <button class=btn id=btn-regular>검색</button></div><table class=board id=board-regular><thead><tr><th style=width:130px>분류<th>제목<th style=width:80px>파일<th style=width:120px>작성자<th style=width:140px>작성일<tbody id=regularTbody></table><div class=pager><button class="btn current">1</button><button class=btn>2</button></div></section><div class="admin-only admin-rail"id=adminRail><span id=adminEmail style=color:#666;font-size:.95rem></span> <button class=btn id=btnToggleEdit>편집 모드</button> <button class=btn id=btnAddNotice>+ 공지</button> <button class=btn id=btnAddEvent>+ 일정</button> <button class=btn id=btnLogout>로그아웃</button></div><dialog class=dialog id=dlgNotice><form id=frmNotice method=dialog><h3>새 공지</h3><div class=form-row><label>제목<input name=title required></label></div><div class=form-row><label>링크(선택) <input name=fileUrl placeholder=https://...></label></div><div class=form-row><label>게시일(선택) <input name=date type=date></label></div><div class=row style=justify-content:flex-end;margin-top:8px><button class=btn value=cancel>취소</button> <button class="btn btn-primary"value=save>저장</button></div></form></dialog><dialog class=dialog id=dlgEvent><form id=frmEvent method=dialog><h3>새 일정</h3><div class=form-row><label>제목<input name=title required></label></div><div class=form-row><label>날짜<input name=date required type=date></label></div><div class=form-row><label>비고<textarea name=memo placeholder=선택 rows=3></textarea></label></div><div class=row style=justify-content:flex-end;margin-top:8px><button class=btn value=cancel>취소</button> <button class="btn btn-primary"value=save>저장</button></div></form></dialog><div id=toTop><img alt=TOP src=./assets/icons/top.png style=width:27px;height:27px></div><footer><div class=footer-links><ul><li><a href=index.html>홈</a><li><a href=yonghasa.html#greeting>사찰소개</a><li><a href=admin.html>관리자 로그인</a><li><a href=sI.html#events-photo>소식</a><li><a href=jM.html#notice>공지사항</a><li><a href=yonghasa.html#visit>오시는길</a></ul></div><div class=footer-info><p class=account>계좌번호: 기업 000000000 (예금주 : 용화사)<p class=name>대한불교 조계종 천태산 용화사<p class=address>(우:12531) 경기 양평군 청운면 하고론길 38<br>종무소: 031-773-1148</div><div class=footer-bottom><p class=copyright>© 2025 Yonghwasa. All rights reserved.</div></footer><script>// Back to Top Logic
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>용화사 사찰 웹사이트 | 종무행정</title>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+  <style>
+   /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-width: 1280px; overflow-x: auto; }
+    body { font-family:'Noto Sans KR',sans-serif; background:#fafafa; color:#333; line-height:1.6; }
+    img, video { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+    #wrapper { width: clamp(1280px, 100%, 1920px); min-width: 1280px; max-width: 1440px;
+               height: clamp(860px, 100%, 1080px ); min-height: 740px; max-height: 1080px; 
+               margin: 0 auto;}
+
+    /* Header */
+    .header-top { background:#fff; padding:0.75rem 2rem;
+              display:flex; align-items:center; justify-content:center;
+              gap:0.5rem; font-size: 1rem; color: #333;
+              border-bottom: 1px solid #eaeaea;
+            }
+    .header-top img{ justify-content: center; width: 250px; height: 105px;}
+    .header-top .divider {color: #ccc; margin: 0 0.75rem;}
+    .header-top .temple-name {font-weight: 700;}
+    :root { --menu-width: 1200px; --menu-gap: 10rem; }
+    nav.main-nav {
+      background:#fff; position: relative;
+      padding:0.5rem 2rem; overflow: visible;
+    }
+    nav.main-nav > ul { display:flex; justify-content: center; flex-wrap: nowrap;
+                        list-style:none; gap: 10rem; white-space: nowrap;
+                        font-weight: 500; max-width: 1200px; margin: 0 auto;
+                        position: relative;}
+    nav.main-nav ul li { position:relative; padding: 0; }
+    nav.main-nav > ul > li:not(:last-child)::after{
+      content: "|"; font-size: larger;
+      position: absolute;
+      right: -5rem;
+      color: #333;
+    }
+    nav.main-nav ul li > a{
+      color: #333; white-space: nowrap;
+      padding: 1rem;
+      transition: color 0.2s;
+      font-size: larger;
+    }
+    nav.main-nav ul li > a:hover{
+      color: #B9A26A;
+    }
+    nav.main-nav > ul.menu{
+  max-width: var(--menu-width);
+  margin: 0 auto;
+  gap: var(--menu-gap);                  
+}
+nav.main-nav > ul.menu > li + li::after{
+  right: calc(-0.5 * var(--menu-gap));   
+}
+nav.main-nav .mega-submenu{
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--menu-width);
+  max-width: var(--menu-width);          
+}
+
+
+    nav.main-nav .mega-submenu { display: grid; grid-template-columns: repeat(5, max-content);  column-gap: 8rem;                             
+                                 position: absolute; top: 100%; left: 0; justify-content: center;
+                                 width: 100%; max-width: 1920px; padding: 2rem;
+                                 background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box;
+                                 opacity: 0; pointer-events: none; transform: translateY(-10px);
+                                 transition: opacity 0.3s ease, transform 0.3s ease-out; z-index: 50;}
+
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    nav.main-nav .mega-submenu .group { text-align: left; padding: 0 0.25rem; box-sizing: border-box; }
+    nav.main-nav .mega-submenu .group ul { list-style: none; padding: 0; margin: 0; }
+    nav.main-nav .mega-submenu .group ul li + li { margin-top: 0.35rem;  padding-left: 0; }
+    nav.main-nav .mega-submenu .group a { color: #333; text-decoration: none; transition: color 0.2s; }
+    nav.main-nav .mega-submenu .group a:hover { color: #B9A26A; }
+    nav.main-nav:hover .mega-submenu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    @media (max-width: 1360px){
+  nav.main-nav .mega-submenu{ grid-template-columns: repeat(5, 1fr); gap: 3.5rem; }
+}
+
+    
+    .page-hero{
+      position:relative;min-height:360px;
+      background-image:var(--hero, url('/Users/junjun/Downloads/Project/2/003.png'));
+      background-size:cover;background-position:center;
+    }
+    .page-hero::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.08) 35%,rgba(0,0,0,.5) 100%);
+    }
+    .ph-inner{
+      position:absolute;inset:0;left:50%;transform:translateX(-50%);
+      max-width:var(--menu-width);display:flex;flex-direction:column;justify-content:center;align-items:center;
+      padding:2rem 1rem;color:#fff;text-align:center
+    }
+    .ph-title{
+      font-size:clamp(1.8rem,2.4vw + 1rem,3rem);font-weight:800;letter-spacing:.03em;
+      text-shadow:0 3px 12px rgba(0,0,0,.35);margin-bottom:.8rem
+    }
+    .breadcrumbs{display:flex;align-items:center;gap:.5rem;font-size:.95rem;opacity:.95;margin-bottom:.9rem}
+    .breadcrumbs a{color:#fff}.breadcrumbs .sep{opacity:.6}
+
+    
+    .subnav{
+      position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+      display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+      gap:1rem 2rem;max-width:var(--menu-width);padding:.25rem .75rem
+    }
+    .subnav li{list-style:none;position:relative}
+    .subnav li+li::before{content:"•";position:absolute;left:-1.2rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.65)}
+    .subnav a{color:#fff;padding:.35rem .6rem;border-radius:999px;transition:.2s ease;white-space:nowrap}
+    .subnav a:hover{background:rgba(255,255,255,.12)}
+    .subnav a.active{background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+
+    /* Tap Panel */
+    .sheet{max-width:var(--menu-width);margin:2rem auto;padding:2rem;background:#fff;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.08);position:relative}
+    .sheet::after{content:"";position:absolute;left:2rem;right:2rem;bottom:-10px;height:8px;border-radius:999px}
+    .tab-panel{display:none}
+    .tab-panel.is-active{display:block}
+
+    /* Boadrd Tool */
+    .board-toolbar{display:flex;gap:.5rem;justify-content:flex-end;margin-bottom:.75rem}
+    .select,.input{padding:.5rem .6rem;border:1px solid #ddd;border-radius:8px;background:#fff}
+    .btn{display:inline-flex;align-items:center;padding:.5rem .9rem;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer}
+    .btn:hover{border-color:#999}
+    .board{width:100%;border-collapse:collapse;background:#fff;overflow:hidden;border-radius:8px}
+    .board thead th{background:#faf7ef;border-bottom:2px solid #e9dcc2;padding:.75rem .75rem;text-align:left;white-space:nowrap}
+    .board tbody td{border-bottom:1px solid #eee;padding:.75rem .75rem}
+    .board .tag{display:inline-block;background:#e9dcc2;color:#7a5b1a;border-radius:999px;font-size:.78rem;padding:.2rem .55rem;margin-right:.5rem}
+    .board .file{opacity:.55}
+    .pager{display:flex;gap:.35rem;justify-content:center;margin:1rem 0}
+    .pager .btn{padding:.4rem .7rem}.pager .btn.current{border-color:#B9A26A}
+
+    
+    @media(max-width:1360px){nav.main-nav .mega-submenu{column-gap:3.5rem}}
+    @media(max-width:1024px){
+      .page-hero{min-height:300px}
+      .subnav{gap:.8rem 1.2rem}
+      .subnav li+li::before{left:-1rem}
+    }
+    /* Calendar */
+:root{
+  --cal-head:#a99986;      /* 요일 헤더 배경 */
+  --cal-head-text:#fff;
+  --cal-border:#e8e1d5;
+  --cal-muted:#999;
+  --cal-sun:#E86C00;
+}
+
+.cal-wrap{ max-width: var(--menu-width); margin: 0 auto; }
+.cal-header{
+  display:flex; justify-content:center; align-items:center; gap:1rem;
+  margin: .75rem 0 1rem;
+}
+.cal-title{ font-size:1.75rem; font-weight:700; }
+.cal-nav{
+  width:36px; height:36px; border-radius:50%; border:1px solid #ddd; background:#fff;
+  cursor:pointer; line-height:34px; font-size:1.2rem;
+}
+.cal-nav:hover{ border-color:#bbb; }
+
+.cal-grid{
+  display:grid; grid-template-columns: repeat(7, 1fr);
+  border:1px solid var(--cal-border); background:#fff; overflow:hidden;
+  border-radius:8px;
+}
+.cal-cell{ border-right:1px solid var(--cal-border); border-bottom:1px solid var(--cal-border); }
+.cal-cell.head{
+  background: var(--cal-head); color: var(--cal-head-text); text-align:center;
+  font-weight:600; padding:.75rem 0;
+}
+.cal-day{
+  min-height:140px; padding:8px 10px; position:relative; background:#fff;
+}
+.cal-day.is-out{ background:#fafafa; }
+.cal-day .date{ font-weight:600; }
+.cal-day.sun .date{ color: var(--cal-sun); }
+.cal-day.sat .date{ color:#666; }
+.cal-day.is-today{ outline:2px solid rgba(185,162,106,.45); outline-offset:-2px; }
+
+.cal-events{ margin-top:6px; font-size:.92rem; color:#666; list-style:none; }
+.cal-events li{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cal-events li::before{ content:"· "; color:#bbb; }
+
+.cal-note{ color: var(--cal-muted); margin-top:.6rem; font-size:.9rem; }
+
+    /* Footer Links Bar*/
+    .footer-links{
+      background: #B9A26A;
+      padding: 0.75rem 1rem;
+    }
+    .footer-links ul{
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.65rem;
+      padding-left: 0.75rem;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    .footer-links ul li{
+      position: relative;
+    }
+    .footer-links ul li:not(:last-child)::after{
+      content: "/";
+      margin: 0 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-links ul li a{
+      color: #fff;
+      transition:color 0.2s;
+    }
+    .footer-links ul li a:hover{
+      color: #333;
+    }
+
+    /*Footer Info */
+    .footer-info{
+      background: #333;
+      color: #fff;
+      text-align: start;
+      padding: 1.5rem 1.5rem;
+      line-height: 1.4;
+    }
+    .footer-info .account{
+      color: #efc964;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .footer-info .address{
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .footer-info .name{
+      text-align: right;
+      padding-right: 4rem;
+      font-size: larger;
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /*Footer Bottom */
+    .footer-bottom{
+      background: #222;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+
+    /* Back to Top */
+    #toTop { position:fixed; bottom:20px; right:20px;
+             background:#fff; color:#222; padding:0;
+             border-radius:50%; cursor:pointer; display:none;
+             box-shadow:0 2px 6px rgba(0,0,0,0.2); width: 32px; height: 32px;
+             display: flex; align-items: center; justify-content: center; }
+
+    /* admin-inline.css */
+.admin-only{display:none!important}
+body.admin-logged-in .admin-only{display:initial!important}
+
+/* 오른쪽 하단 툴바 */
+.admin-rail{
+  position:fixed; right:16px; bottom:16px; z-index:9999;
+  display:flex; gap:8px; align-items:center;
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08); padding:8px 10px;
+}
+.admin-rail .btn{height:36px; padding:0 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer}
+.admin-rail .btn-primary{background:#B9A26A; color:#fff; border:0}
+
+/* 편집 모드 시 시각화 */
+body.is-editing [contenteditable="true"]{
+  outline:2px dashed #B9A26A; outline-offset:2px; border-radius:6px;
+}
+.edit-actions{
+  position:absolute; right:6px; top:6px; z-index:5;
+  display:flex; gap:6px;
+}
+.edit-actions .btn-mini{
+  height:28px; padding:0 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:.9rem
+}
+
+/* dialog 기본 */
+.dialog{border:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);width:min(560px,90vw);padding:18px}
+.dialog::backdrop{background:rgba(0,0,0,.45)}
+.form-row{display:flex;flex-direction:column;gap:.35rem;margin:.5rem 0}
+.form-row input,.form-row textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px}
+.row{display:flex;gap:8px;align-items:center}
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+         <a href="index.html"> 
+          <img src="./assets/img/logo.png" alt="천태산 용화사 마크">  
+          <span class="divider"></span>
+          <span class="temple-name"></span>
+         </a>
+      </div>
+      <nav class="main-nav">
+        <ul class="menu">
+          <li><a href="yonghasa.html#greeting">천태산 용화사</a></li>
+          <li><a href="jM.html#notice">종무행정</a></li>
+          <li><a href="sI.html#events-photo">사찰소식</a></li>
+          <li><a href="bMG.html#weekend">법회 및 기도</a></li>
+          <li><a href="tMC.html#g-intro">불교 교실</a></li>
+        </ul>
+        <div class="mega-submenu">
+          <div class="group">
+            <ul>
+              <li><a href="yonghasa.html#greeting">주자스님 인사말</a></li>
+              <li><a href="yonghasa.html#heritage">성보 문화재</a></li>
+              <li><a href="yonghasa.html#visit">찾아오시는 길</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="jM.html#notice">공지사항</a></li>
+              <li><a href="jM.html#events">행사일정</a></li>
+              <li><a href="jM.html#regular">정기법회 안내</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="sI.html#events-photo">행사 사진</a></li>
+              <li><a href="sI.html#gallery">포토 갤러리</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="bMG.html#weekend">주말법회</a></li>
+              <li><a href="bMG.html#prayer">기도안내</a></li>
+              <li><a href="bMG.html#memorial">49제 및 제사</a></li>
+              <li><a href="bMG.html#sunday">일요법회</a></li>
+            </ul>
+          </div>
+          <div class="group">
+            <ul>
+              <li><a href="tMC.html#g-intro">불교 교실 소개</a></li>
+              <li><a href="tMC.html#g-schedule">강의 시간 안내</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+  <!-- 히어로 + 서브탭 -->
+  <section class="page-hero" style="--hero:url('./assets/img/subheropic/subheropic 002.JPG')">
+    <div class="ph-inner">
+      <h1 class="ph-title">종무행정</h1>
+
+      <nav class="breadcrumbs" aria-label="breadcrumb">
+        <a href="index.html" class="home" aria-label="홈">HOME</a>
+        <span class="sep">›</span>
+        <a href="jM.html">종무행정</a>
+        <span class="sep">›</span>
+        <span class="current" id="bc-current">공지사항</span>
+      </nav>
+
+      <ul class="subnav" role="tablist" id="subnav">
+        <li><a class="active" href="#notice" data-panel="notice">공지사항</a></li>
+        <li><a href="#events" data-panel="events">행사일정</a></li>
+        <li><a href="#regular" data-panel="regular">정기법회 안내</a></li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- 탭 패널들 (공지/행사/정기법회 동일한 표 틀) -->
+  <main>
+    <!-- 공지사항 -->
+    <section id="notice" class="sheet tab-panel is-active" aria-labelledby="tab-notice">
+      <div class="board-toolbar">
+        <select class="select" id="sel-notice">
+          <option value="all">전체</option><option value="공지">공지</option><option value="일반">일반</option>
+        </select>
+        <input class="input" id="q-notice" placeholder="제목 검색" />
+        <button class="btn" id="btn-notice">검색</button>
+      </div>
+
+      <table class="board" id="board-notice">
+  <thead>
+    <tr>
+      <th style="width:80px">번호</th>
+      <th>제목</th>
+      <th style="width:80px">파일</th>
+      <th style="width:120px">작성자</th>
+      <th style="width:140px">작성일</th>
+      <th style="width:90px"></th>
+    </tr>
+  </thead>
+  <tbody id="noticeBody"></tbody>
+</table>
+
+<!-- 페이지 버튼 들어갈 자리 -->
+<div class="pager" id="noticePager"></div>
+
+    </section>
+
+    <!-- 행사일정 (공지와 동일한 틀) -->
+    <section id="events" class="sheet tab-panel" aria-labelledby="tab-schedule">
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <button class="cal-nav prev" aria-label="이전 달">‹</button>
+      <h2 class="cal-title"><span class="cal-year"></span>년 <span class="cal-month"></span>월</h2>
+      <button class="cal-nav next" aria-label="다음 달">›</button>
+    </div>
+
+    <div class="cal-grid" id="calendar">
+      <!-- JS가 요일 헤더 + 날짜 셀을 렌더링합니다 -->
+    </div>
+
+    <p class="cal-note">· 일정은 예시 데이터입니다</p>
+  </div>
+</section>
+
+
+    <!-- 정기법회 안내 (공지와 동일한 틀) -->
+    <section id="regular" class="sheet tab-panel" aria-labelledby="tab-regular">
+      <div class="board-toolbar">
+  <select class="select" id="sel-regular">
+    <option value="">전체</option>
+    <option value="weekend">주말법회</option>
+    <option value="prayer">기도안내</option>
+    <option value="memorial">49제 및 제사</option>
+    <option value="sunday">일요법회</option>
+  </select>
+  <input class="input" id="q-regular" placeholder="제목 검색" />
+  <button class="btn" id="btn-regular">검색</button>
+</div>
+
+<table class="board" id="board-regular">
+  <thead>
+    <tr>
+      <th style="width:130px">분류</th>
+      <th>제목</th>
+      <th style="width:80px">파일</th>
+      <th style="width:120px">작성자</th>
+      <th style="width:140px">작성일</th>
+    </tr>
+  </thead>
+  <tbody id="regularTbody"></tbody>
+</table>
+
+      <div class="pager"><button class="btn current">1</button><button class="btn">2</button></div>
+    </section>
+
+    <!-- 관리자 툴바: 로그인 시에만 보임 -->
+<div class="admin-rail admin-only" id="adminRail">
+  <span id="adminEmail" style="color:#666;font-size:.95rem"></span>
+  <button class="btn" id="btnToggleEdit">편집 모드</button>
+  <button class="btn" id="btnAddNotice">+ 공지</button>
+  <button class="btn" id="btnAddEvent">+ 일정</button>
+  <button class="btn" id="btnLogout">로그아웃</button>
+</div>
+
+<!-- 공지 등록 다이얼로그 -->
+<dialog class="dialog" id="dlgNotice">
+  <form method="dialog" id="frmNotice">
+    <h3>새 공지</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>링크(선택) <input name="fileUrl" placeholder="https://..." /></label></div>
+    <div class="form-row"><label>게시일(선택) <input type="date" name="date" /></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 일정 등록 다이얼로그 (간단 버전) -->
+<dialog class="dialog" id="dlgEvent">
+  <form method="dialog" id="frmEvent">
+    <h3>새 일정</h3>
+    <div class="form-row"><label>제목<input name="title" required /></label></div>
+    <div class="form-row"><label>날짜<input type="date" name="date" required /></label></div>
+    <div class="form-row"><label>비고<textarea name="memo" rows="3" placeholder="선택"></textarea></label></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn" value="cancel">취소</button>
+      <button class="btn btn-primary" value="save">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Back to Top Button -->
+    <div id="toTop">
+      <img src="./assets/icons/top.png" alt="TOP" style="width: 27px; height: 27px;">
+    
+    </div>
+
+  
+<!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <ul>
+        <li><a href="index.html">홈</a></li>
+        <li><a href="yonghasa.html#greeting">사찰소개</a></li>
+        <li><a href="admin.html">관리자 로그인</a></li>
+        <li><a href="sI.html#events-photo">소식</a></li>
+        <li><a href="jM.html#notice">공지사항</a></li>
+        <li><a href="yonghasa.html#visit">오시는길</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <p class="account">계좌번호: 농협 351-1280-7275-33 (예금주 : 대한불교 조계종 용화사)</p>
+        <p class="name">대한불교 조계종 천태산 용화사</p>
+        <p class="address">
+          (우:12531) 경기 양평군 청운면 하고론길 38<br>
+          종무소: 031-773-1148
+        </p>
+
+      </div>
+     <div class="footer-bottom">
+       <p class="copyright">© 2025 Yonghwasa. All rights reserved.</p>
+      
+      </div>
+    </footer>
+
+
+<!-- ===== 스크립트: BackToTop + 탭 전환 + 각 탭 검색 ===== -->
+<script>
+// Back to Top Logic
       const toTopBtn = document.getElementById('toTop');
       window.addEventListener('scroll', () => {
         if (window.scrollY > 300) toTopBtn.style.display = 'block';
@@ -249,13 +785,23 @@
   // 행사일정 탭으로 직접 진입(#schedule)이면 활성화되도록(이미 탭 스크립트가 처리 중이긴 함)
   if(location.hash.replace('#','')==='schedule'){
     // 필요 시 추가 동작 가능
-  }</script><script>// 날짜 포맷 유틸
+  }
+
+</script>
+<script>
+
+  // 날짜 포맷 유틸
   function fmtDate(d){
     const y = d.getFullYear();
     const m = String(d.getMonth()+1).padStart(2,'0');
     const day = String(d.getDate()).padStart(2,'0');
     return `${y}-${m}-${day}`;
-  }</script><script>(function(){
+  }
+</script>
+<script>
+
+
+(function(){
   var sub=document.getElementById('subnav'); if(!sub) return;
   function activate(id){
     sub.querySelectorAll('a').forEach(a=>a.classList.remove('active'));
@@ -269,7 +815,10 @@
   // ⬇️ 이 한 줄에서 해시를 읽어 초기 탭을 정함
   var init = location.hash ? location.hash.slice(1) : 'notice';
   if(document.getElementById(init)) activate(init);
-})();</script><script>(function(){
+})();
+  </script>
+  <script>
+(function(){
   var sub = document.getElementById('subnav'); if(!sub) return;
 
   function activate(id){
@@ -290,9 +839,18 @@
 
   window.addEventListener('hashchange', activateFromHash);     // 해시 바뀔 때마다
   document.addEventListener('DOMContentLoaded', activateFromHash); // 첫 로드
-})();</script><script>// ===== 공통 Firebase 초기화 =====
+})();
+</script>
+
+<script>
+  // ===== 공통 Firebase 초기화 =====
   const DEMO_MODE = false; // 데모 모드면 true (백엔드 없이 버튼 테스트 가능)  
-  const ts   = firebase.firestore.FieldValue.serverTimestamp;</script><script>// 대시보드와 같은 설정
+  const ts   = firebase.firestore.FieldValue.serverTimestamp;
+</script>
+
+
+<script>
+  // 대시보드와 같은 설정
   
   if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   
@@ -305,7 +863,15 @@
       const y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
       return `${y}.${m}.${da}`;
     }catch(_){ return '-'; }
-  }</script><script src=https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js></script><script src=https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js></script><script src=https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js></script><script>const firebaseConfig = {
+  }
+</script>
+<!-- (1) SDK: 단 한 번만 -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
     apiKey:"AIzaSyDgOnt9M8Fgc10ppDc2X_HHFJZ3MY7ZcBY",
     authDomain:"yonghwasa-web.firebaseapp.com",
     projectId:"yonghwasa-web",
@@ -365,7 +931,11 @@ db.collection('regulars').orderBy('createdAt','desc').get().then(snap=>{
                 <a class="item-link">${x.title||''}</a>
               </div>`;
     }).join('');
-});</script><script>(function(){
+});
+
+</script>
+<script>
+(function(){
   // ===== 유틸 =====
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
@@ -583,7 +1153,10 @@ db.collection('regulars').orderBy('createdAt','desc').get().then(snap=>{
 
   // ===== 최초 로드 =====
   Promise.all([loadNotices(), loadMonthEvents(cur), loadRegular()]);
-})();</script><script>// ===== 공지사항: 실시간 로드 + 검색 + 페이징 =====
+})();
+</script>
+<script>
+// ===== 공지사항: 실시간 로드 + 검색 + 페이징 =====
 (function(){
   const PAGE_SIZE = 16;
 
@@ -723,4 +1296,13 @@ db.collection('regulars').orderBy('createdAt','desc').get().then(snap=>{
     pagerEl.innerHTML = '';
   });
 
-})();</script><script src=admin-inline.js></script><link href=admin-inline.css rel=stylesheet>
+})();
+</script>
+
+
+
+<script src="admin-inline.js"></script>
+<link rel="stylesheet" href="admin-inline.css">
+
+</body>
+</html>
